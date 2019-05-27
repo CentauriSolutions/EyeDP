@@ -2,7 +2,7 @@ Rails:
   Enabled: true
 
 Metrics/LineLength:
-  Max: 100
+  Max: 120
 
 AllCops:
   Exclude:
@@ -10,7 +10,9 @@ AllCops:
     - db/schema.rb
     - bin/*
     - node_modules/**/*
-
+    - config/initializers/saml_idp.rb
+    - config/initializers/devise.rb
+    - app/models/setting.rb
 Style/Documentation:
   Enabled: false
 

@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.2'
 
-gem 'pg', ">= 0.18"
-gem 'puma', "~> 3.11"
+gem 'pg', '>= 0.18'
+gem 'puma', '~> 3.11'
 gem 'rails', '5.2.3'
-gem 'sass-rails', "~> 5.0"
+gem 'sass-rails', '~> 5.0'
 
-gem 'uglifier', ">= 1.3.0"
+gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
 
-gem 'jbuilder', "~> 2.5"
-gem 'redis', "~> 4.0"
-gem 'turbolinks', "~> 5"
+gem 'jbuilder', '~> 2.5'
+gem 'redis', '~> 4.0'
+gem 'turbolinks', '~> 5'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 
@@ -22,9 +24,15 @@ gem 'rails-i18n'
 gem 'sidekiq'
 gem 'sidekiq-failures'
 
-gem 'friendly_id'
-gem 'devise-i18n'
 gem 'devise'
+gem 'devise-i18n'
+gem 'friendly_id'
+
+# gem 'ledermann-rails-settings'
+# gem 'rails-settings-cached'
+
+# SAML the things!
+gem 'saml_idp'
 
 group :development, :test do
   gem 'pry-byebug'
@@ -32,9 +40,9 @@ group :development, :test do
 end
 
 group :development do
-  gem 'listen', ">= 3.0.5"
+  gem 'listen', '>= 3.0.5'
   gem 'spring'
-  gem 'spring-watcher-listen', "~> 2.0.0"
+  gem 'spring-watcher-listen', '~> 2.0.0'
 
   gem 'annotate'
   gem 'awesome_print'
@@ -52,5 +60,5 @@ group :development do
 
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'web-console', ">= 3.3.0"
+  gem 'web-console', '>= 3.3.0'
 end

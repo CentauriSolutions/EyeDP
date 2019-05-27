@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -22,4 +24,28 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  # rubocop:disable Metrics/MethodLength
+  def asserted_attributes
+    {
+      groups: { getter: :groups },
+      roles: {
+        getter: :roles
+      },
+      email: {
+        getter: :email,
+          name_format: Saml::XML::Namespaces::Formats::NameId::EMAIL_ADDRESS,
+          name_id_format: Saml::XML::Namespaces::Formats::NameId::EMAIL_ADDRESS
+      }
+    }
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  def groups
+    %i[awesome internal]
+  end
+
+  def roles
+    %i[admin staff]
+  end
 end
