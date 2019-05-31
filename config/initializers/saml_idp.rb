@@ -2,16 +2,20 @@
 
 SamlIdp.configure do |config|
   # binding.pry
-  base = Setting.saml_base # {}"http://example.com"
-
-  config.x509_certificate = Setting.saml_certificate
+  def config.x509_certificate
+    Setting.saml_certificate
+  end
+  # config.x509_certificate = -> { Setting.saml_certificate }
   #   <<-CERT
   # -----BEGIN CERTIFICATE-----
   # CERTIFICATE DATA
   # -----END CERTIFICATE-----
   # CERT
 
-  config.secret_key = Setting.saml_key
+  def config.secret_key
+    Setting.saml_key
+  end
+  # config.secret_key = -> { Setting.saml_key }
   #   <<-CERT
   # -----BEGIN RSA PRIVATE KEY-----
   # KEY DATA
@@ -22,12 +26,28 @@ SamlIdp.configure do |config|
   # config.algorithm = :sha256
   # config.organization_name = "Your Organization"
   # config.organization_url = "http://example.com"
-  config.base_saml_location = "#{base}/saml"
+
+  def config.base_saml_location
+    "#{Setting.saml_base}/saml"
+  end
+
   # config.reference_id_generator                                 # Default: -> { UUID.generate }
-  config.single_logout_service_post_location = "#{base}/saml/logout"
-  config.single_logout_service_redirect_location = "#{base}/saml/logout"
-  config.attribute_service_location = "#{base}/saml/attributes"
-  config.single_service_post_location = "#{base}/saml/auth"
+  def config.single_logout_service_post_location
+    "#{Setting.saml_base}/saml/logout"
+  end
+
+  def config.single_logout_service_redirect_location
+    "#{Setting.saml_base}/saml/logout"
+  end
+
+  def config.attribute_service_location
+    "#{Setting.saml_base}/saml/attributes"
+  end
+
+  def config.single_service_post_location
+    "#{Setting.saml_base}/saml/auth"
+  end
+
   # config.session_expiry = 86400                                 # Default: 0 which means never
 
   # Principal (e.g. User) is passed in when you `encode_response`
