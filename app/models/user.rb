@@ -26,7 +26,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :user_groups
-  has_many :groups, via: :user_groups
+  has_many :groups, through: :user_groups
 
   # rubocop:disable Metrics/MethodLength
   def asserted_attributes
@@ -38,6 +38,10 @@ class User < ApplicationRecord
           name_id_format: Saml::XML::Namespaces::Formats::NameId::EMAIL_ADDRESS
       }
     }
+  end
+
+  def admin?
+    groups.include?(Group.find_by(name: 'administrators'))
   end
   # rubocop:enable Metrics/MethodLength
 

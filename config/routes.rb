@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :groups
+  get 'admin' => 'admin/dashboard#index'
+  namespace :admin do
+    # get 'dashboard/index'
+    resources :groups
+    resources :users
+  end
+
   devise_for :users
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'

@@ -16,7 +16,8 @@
 class Group < ApplicationRecord
   belongs_to :parent,
              :foreign_key => "parent_id",
-             :class_name => "Group"
+             :class_name => "Group",
+             optional: true
 
   has_many :groups,
            :foreign_key => 'parent_id',
@@ -25,8 +26,8 @@ class Group < ApplicationRecord
            :dependent => :delete_all
 
   has_many :group_permissions
-  has_many :permissions, via: :group_permissions
+  has_many :permissions, through: :group_permissions
 
   has_many :user_groups
-  has_many :users, via: :user_groups
+  has_many :users, through: :user_groups
 end
