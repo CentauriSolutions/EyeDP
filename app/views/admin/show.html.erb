@@ -1,4 +1,4 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_admin_group_path(@admin_group) %> |
-<%= link_to 'Back', admin_groups_path %>
+<%= link_to 'Edit', ['edit', :admin, @model] %> |
+<%= link_to 'Back', [:admin, @model.class] %>

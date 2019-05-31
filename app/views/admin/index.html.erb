@@ -1,11 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Groups</h1>
+<h1><%= @models.klass.name.pluralize %></h1>
 
 <table>
   <thead>
     <tr>
-      <%- @model.attribute_names.each do |attr_name| %>
+      <%- @models.attribute_names.each do |attr_name| %>
         <th><%= attr_name %></th>
       <%- end %>
       <th colspan="3"></th>
@@ -13,9 +13,9 @@
   </thead>
 
   <tbody>
-    <% @model.each do |model| %>
+    <% @models.each do |model| %>
       <tr>
-        <%- @model.attribute_names.each do |attr_name| %>
+        <%- @models.attribute_names.each do |attr_name| %>
           <td><%= model.send(attr_name.to_sym) %></td>
         <%- end %>
         <td><%= link_to 'Show', [:admin, model] %></td>
@@ -28,4 +28,4 @@
 
 <br>
 
-<%= link_to "New #{@model.klass.name}", ['new', :admin, @model.klass.name.underscore] %>
+<%= link_to "New #{@models.klass.name}", ['new', :admin, @models.klass.name.underscore] %>

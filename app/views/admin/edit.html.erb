@@ -1,6 +1,6 @@
-<h1>Editing Admin Group</h1>
+<h1>Editing <%= @model.class.name %></h1>
 
-<%= render 'form', admin_group: @admin_group %>
+<%= render 'form', model: @model %>
 
-<%= link_to 'Show', @admin_group %> |
-<%= link_to 'Back', admin_groups_path %>
+<%= link_to 'Show', [:admin, @model] %> |
+<%= link_to 'Back', [:admin, @model.class] %>

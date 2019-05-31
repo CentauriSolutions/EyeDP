@@ -1,15 +1,19 @@
-<%= form_with(model: admin_group, local: true) do |form| %>
-  <% if admin_group.errors.any? %>
+<%= form_with(model: [:admin, model], local: true) do |form| %>
+  <% if model.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(admin_group.errors.count, "error") %> prohibited this admin_group from being saved:</h2>
+      <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
 
       <ul>
-      <% admin_group.errors.full_messages.each do |message| %>
+      <% model.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
     </div>
   <% end %>
+  <% attributes = new_model ? new_fields : edit_fields %>
+  <% attributes.each do |attribute| %>
+    <%= attribute %>
+  <%- end %>
 
   <div class="actions">
     <%= form.submit %>

@@ -4,7 +4,7 @@ class AdminController < ApplicationController
   # GET /admin/#{model}
   # GET /admin/#{model}.json
   def index
-    @model = model.all
+    @models = model.all
   end
 
   # GET /admin/#{model}/1
@@ -24,15 +24,15 @@ class AdminController < ApplicationController
   # POST /admin/#{model}
   # POST /admin/#{model}.json
   def create
-    @admin_group = model.new(admin_group_params)
+    @model = model.new(model_params)
 
     respond_to do |format|
-      if @admin_group.save
-        format.html { redirect_to @admin_group, notice: 'Group was successfully created.' }
-        format.json { render :show, status: :created, location: @admin_group }
+      if @model.save
+        format.html { redirect_to @model, notice: "#{@model.class.name} was successfully created." }
+        format.json { render :show, status: :created, location: [:admin, @model] }
       else
         format.html { render :new }
-        format.json { render json: @admin_group.errors, status: :unprocessable_entity }
+        format.json { render json: @model.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class AdminController < ApplicationController
   # PATCH/PUT /admin/#{model}/1.json
   def update
     respond_to do |format|
-      if @admin_group.update(admin_group_params)
-        format.html { redirect_to @admin_group, notice: 'Group was successfully updated.' }
-        format.json { render :show, status: :ok, location: @admin_group }
+      if @model.update(model_params)
+        format.html { redirect_to @model, notice: "#{@model.class.name} was successfully updated." }
+        format.json { render :show, status: :ok, location: [:admin, @model] }
       else
         format.html { render :edit }
-        format.json { render json: @admin_group.errors, status: :unprocessable_entity }
+        format.json { render json: @model.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,13 +54,23 @@ class AdminController < ApplicationController
   # DELETE /admin/#{model}/1
   # DELETE /admin/#{model}/1.json
   def destroy
-    @admin_group.destroy
+    @model.destroy
     respond_to do |format|
-      format.html { redirect_to admin_groups_url, notice: 'Group was successfully destroyed.' }
+      format.html { redirect_to [:admin, @model.class], notice: "#{@model.class.name} was successfully destroyed." }
       format.json { head :no_content }
     end
   end
   private
+
+  def new_fields
+    model.attribute_names
+  end
+  helper_method :new_fields
+
+  def edit_fields
+    new_fields
+  end
+  helper_method :edit_fields
 
     # Use callbacks to share common setup or constraints between actions.
   def set_model
