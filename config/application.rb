@@ -31,5 +31,9 @@ module EyedP
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.generators do |g|
+      g.scaffold_stylesheet false
+    end
   end
 end

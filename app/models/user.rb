@@ -25,13 +25,13 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  has_many :user_groups
+  has_many :groups, via: :user_groups
+
   # rubocop:disable Metrics/MethodLength
   def asserted_attributes
     {
       groups: { getter: :groups },
-      roles: {
-        getter: :roles
-      },
       email: {
         getter: :email,
           name_format: Saml::XML::Namespaces::Formats::NameId::EMAIL_ADDRESS,
@@ -41,11 +41,11 @@ class User < ApplicationRecord
   end
   # rubocop:enable Metrics/MethodLength
 
-  def groups
-    %i[awesome internal]
-  end
+  # def groups
+  #   %i[awesome internal]
+  # end
 
-  def roles
-    %i[admin staff]
-  end
+  # def roles
+  #   %i[admin staff]
+  # end
 end
