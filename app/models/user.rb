@@ -25,10 +25,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :user_groups
+  has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups
-
-  # rubocop:disable Metrics/MethodLength
   def asserted_attributes
     {
       groups: { getter: :groups },
@@ -43,8 +41,10 @@ class User < ApplicationRecord
   def admin?
     groups.include?(Group.find_by(name: 'administrators'))
   end
-  # rubocop:enable Metrics/MethodLength
 
+  def to_s
+    email
+  end
   # def groups
   #   %i[awesome internal]
   # end

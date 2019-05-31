@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <%= nav_link "Home", root_path %>
+      <%- if current_user %>
+        <%= nav_link "Login History", "#" %>
+      <%- end %>
+    </ul>
+    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+      <%- if current_user %>
+        <%= render partial: 'layouts/profile_links' %>
+      <%- else %>
+        <%- if Setting.regristration_enabled %>
+          <%= nav_link "Sign Up", user_registration_path %>
+        <%- end %>
+        <%= nav_link "Sign In", new_user_session_path %>
+      <%- end %>
+    </ul>
+  </div>
+</nav>

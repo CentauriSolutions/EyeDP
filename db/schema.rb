@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2019_05_31_105830) do
   end
 
   create_table "groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "parent_id"
+    t.uuid "parent_id"
     t.text "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

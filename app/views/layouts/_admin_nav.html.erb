@@ -1,0 +1,6 @@
+<ul class="nav flex-column">
+  <%= nav_link "#{fa_icon("dashboard")} Dashboard".html_safe, admin_dashboard_path %>
+  <%= nav_link "#{fa_icon("user")} Users".html_safe, admin_users_path %>
+  <%= nav_link "#{fa_icon("users")} Groups".html_safe, admin_groups_path %>
+  <% # nav_link "Permissions", admin_permissions_path %>
+</ul>

@@ -3,6 +3,15 @@
 // @import "config/colors";
 // @import "config/bootstrap_variables";
 
+@import "bootstrap";
+@import "font-awesome";
+// apply styles to HTML elements
+// to make views framework-neutral
+main {
+  @extend .container-fluid;
+  margin-top: 30px; // accommodate the navbar
+}
+
 // External libraries
 // @import "bootstrap-sprockets";
 // @import "bootstrap";

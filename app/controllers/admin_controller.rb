@@ -1,16 +1,17 @@
+# frozen_string_literal: true
+
 class AdminController < ApplicationController
   before_action :ensure_user_is_admin!
-  before_action :set_model, only: [:show, :edit, :update, :destroy]
+  before_action :set_model, only: %i[show edit update destroy]
   # GET /admin/#{model}
   # GET /admin/#{model}.json
   def index
-    @models = model.all
+    @models = model.page(params[:page] || 1).includes(includes)
   end
 
   # GET /admin/#{model}/1
   # GET /admin/#{model}/1.json
-  def show
-  end
+  def show; end
 
   # GET /admin/#{model}/new
   def new
@@ -18,17 +19,16 @@ class AdminController < ApplicationController
   end
 
   # GET /admin/#{model}/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /admin/#{model}
   # POST /admin/#{model}.json
+  # rubocop:disable Metrics/AbcSize
   def create
     @model = model.new(model_params)
-
     respond_to do |format|
       if @model.save
-        format.html { redirect_to @model, notice: "#{@model.class.name} was successfully created." }
+        format.html { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully created." }
         format.json { render :show, status: :created, location: [:admin, @model] }
       else
         format.html { render :new }
@@ -36,13 +36,15 @@ class AdminController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   # PATCH/PUT /admin/#{model}/1
   # PATCH/PUT /admin/#{model}/1.json
   def update
+    # binding.pry
     respond_to do |format|
       if @model.update(model_params)
-        format.html { redirect_to @model, notice: "#{@model.class.name} was successfully updated." }
+        format.html { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully updated." }
         format.json { render :show, status: :ok, location: [:admin, @model] }
       else
         format.html { render :edit }
@@ -60,7 +62,33 @@ class AdminController < ApplicationController
       format.json { head :no_content }
     end
   end
+
   private
+
+  def model_attributes
+    attrs = model.attribute_names
+    attrs = whitelist_attributes if whitelist_attributes.any?
+    attrs -= blacklist_attributes if blacklist_attributes.any?
+    attrs
+  end
+  helper_method :model_attributes
+
+  def whitelist_attributes
+    []
+  end
+
+  def blacklist_attributes
+    []
+  end
+
+  def includes
+    []
+  end
+
+  def form_relations
+    []
+  end
+  helper_method :form_relations
 
   def new_fields
     model.attribute_names
@@ -72,13 +100,13 @@ class AdminController < ApplicationController
   end
   helper_method :edit_fields
 
-    # Use callbacks to share common setup or constraints between actions.
+  # Use callbacks to share common setup or constraints between actions.
   def set_model
     @model = model.find(params[:id])
   end
 
   def ensure_user_is_admin!
-    render status: 404 and return \
-      unless current_user and current_user.admin?
+    render(status: :not_found) && return \
+      unless current_user&.admin?
   end
 end

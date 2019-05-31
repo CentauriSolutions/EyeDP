@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: permissions
@@ -10,5 +12,5 @@
 #
 
 class Permission < ApplicationRecord
-  has_many :group_permissions
+  has_many :group_permissions, dependent: :destroy
 end

@@ -2,14 +2,27 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title><%= Rails.application.class.parent_name %> Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= Rails.application.class.parent_name %></title>
     <%= csrf_meta_tags %>
     <%= action_cable_meta_tag %>
-    <%= stylesheet_pack_tag 'application', media: 'all' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
   <body>
-    <%= yield %>
+    <header>
+      <%= render 'layouts/navigation' %>
+    </header>
+    <main role="main">
+      <div class="row">
+        <div class="col-sm-2">
+          <%= render partial: 'layouts/admin_nav' %>
+        </div>
+        <div class="col-sm-10" %>
+          <%= render 'layouts/messages' %>
+          <%= yield %>
+        </div>
+      </div>
+    </main>
     <%= javascript_include_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
   </body>

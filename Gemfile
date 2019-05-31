@@ -27,6 +27,12 @@ gem 'sidekiq-failures'
 gem 'devise'
 gem 'devise-i18n'
 gem 'friendly_id'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap4'
+
+gem 'bootstrap', '~> 4.3.1'
+gem 'font-awesome-rails'
+gem 'jquery-rails'
 
 # gem 'ledermann-rails-settings'
 # gem 'rails-settings-cached'

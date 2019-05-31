@@ -1,4 +1,22 @@
-<p id="notice"><%= notice %></p>
+<h2><%= @model.class.name %> <%= @model %></h2>
 
+
+<dl>
+  <%- model_attributes.each do |attribute| %>
+    <dt><%= attribute %></dt>
+    <dd>
+      <%- data = @model.send(attribute) %>
+      <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
+        <ul>
+          <%-data.each do |row| %>
+            <li><%= row %></li>
+          <%- end %>
+        </ul>
+      <%- else %>
+      <%= data %>
+      <%- end %>
+    </dd>
+  <%- end %>
+</dl>
 <%= link_to 'Edit', ['edit', :admin, @model] %> |
 <%= link_to 'Back', [:admin, @model.class] %>

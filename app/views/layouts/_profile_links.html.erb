@@ -1,0 +1,8 @@
+<%- if current_user.admin? %>
+  <%= nav_link 'Admin Dashboard', admin_dashboard_path %>
+<%- end %>
+<%= nav_link 'Profile', edit_user_registration_path %>
+<li class="nav-item">
+  <%= link_to 'Sign out', destroy_user_session_path, :method=>'delete', class: 'nav-link' %>
+</li>
+

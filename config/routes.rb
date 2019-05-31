@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'admin' => 'admin/dashboard#index'
+  get 'admin' => 'admin/dashboard#index', as: :admin_dashboard
   namespace :admin do
     # get 'dashboard/index'
     resources :groups

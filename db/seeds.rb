@@ -8,8 +8,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-
-default_groups = [:administrators, :users]
+default_groups = %i[administrators users]
 
 default_groups.each do |group_name|
   Group.find_or_create_by!(name: group_name)

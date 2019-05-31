@@ -1,6 +1,6 @@
 <h1>Editing <%= @model.class.name %></h1>
 
-<%= render 'form', model: @model %>
+<%= render 'form', model: @model, new_model: false %>
 
 <%= link_to 'Show', [:admin, @model] %> |
 <%= link_to 'Back', [:admin, @model.class] %>
