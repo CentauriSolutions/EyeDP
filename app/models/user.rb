@@ -27,6 +27,8 @@ class User < ApplicationRecord
 
   has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups
+  has_many :group_permissions, through: :groups
+  has_many :permissions, through: :group_permissions
   def asserted_attributes
     {
       groups: { getter: :groups },

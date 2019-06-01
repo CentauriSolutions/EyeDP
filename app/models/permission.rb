@@ -13,4 +13,8 @@
 
 class Permission < ApplicationRecord
   has_many :group_permissions, dependent: :destroy
+
+  def to_s
+    name
+  end
 end

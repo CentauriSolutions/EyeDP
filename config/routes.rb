@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     # get 'dashboard/index'
     resources :groups
     resources :users
+    resources :permissions
     resources :saml_service_providers
     get :settings, to: 'settings#index'
     post :settings, to: 'settings#update'
@@ -23,4 +24,6 @@ Rails.application.routes.draw do
   get '/saml/auth' => 'saml_idp#create'
   post '/saml/auth' => 'saml_idp#create'
   get '/saml/metadata' => 'saml_idp#show'
+
+  get 'auth/basic/:permission_name', to: 'basic_auth#create'
 end
