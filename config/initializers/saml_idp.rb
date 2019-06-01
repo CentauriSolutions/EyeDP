@@ -125,21 +125,6 @@ SamlIdp.configure do |config|
   # config.technical_contact.telephone = "55555555555"
   # config.technical_contact.email_address = "example@example.com"
 
-  service_providers = {
-    'some-issuer-url.com/saml' => {
-      fingerprint: '9E:65:2E:03:06:8D:80:F2:86:C7:6C:77:A1:D9:14:97:0A:4D:F4:4D',
-      metadata_url: 'http://some-issuer-url.com/saml/metadata',
-
-      # We now validate AssertionConsumerServiceURL will match the MetadataURL set above.
-      # *If* it's not going to match your Metadata URL's Host, then set this so we can validate the host using this list
-      response_hosts: ['foo.some-issuer-url.com']
-    },
-    'IAMShowcase' => {
-      metadata_url: 'https://sptest.iamshowcase.com/testsp_metadata.xml',
-      response_hosts: ['https://sptest.iamshowcase.com', 'sptest.iamshowcase.com']
-    }
-  }
-
   # `identifier` is the entity_id or issuer of the Service Provider,
   # settings is an IncomingMetadata object which has a to_h method that needs to be persisted
   config.service_provider.metadata_persister = lambda { |identifier, settings|
@@ -166,6 +151,11 @@ SamlIdp.configure do |config|
 
   # Find ServiceProvider metadata_url and fingerprint based on our settings
   config.service_provider.finder = lambda { |issuer_or_entity_id|
-    service_providers[issuer_or_entity_id]
+    # service_providers[issuer_or_entity_id]
+    filtered_attributes = ["created_at", "updated_at", "id"]
+    SamlServiceProvider.
+      find_by(issuer_or_entity_id: issuer_or_entity_id).
+      attributes.
+      filter{|k,_| ! filtered_attributes.include?(k)}
   }
 end

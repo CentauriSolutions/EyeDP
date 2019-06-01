@@ -1,0 +1,30 @@
+<h1> Settings</h1>
+<%= form_tag({controller: "settings", action: "update"}, method: :post, class: "form") do |form| %>
+  <h3>SAML</h3>
+  <table class="table table-striped">
+
+    <tbody>
+      <tr>
+        <td>Certificate</td>
+        <td>
+          <textarea name="setting[saml_certificate]" class="form-control"><%= Setting.saml_certificate %></textarea>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Key</td>
+        <td>
+          <textarea name="setting[saml_key]" class="form-control"><%= Setting.saml_key %></textarea>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Base</td>
+        <td>
+          <input type="text" name="setting[saml_base]" class="form-control" value="<%= Setting.saml_base %>" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-primary">Save</button>
+<%- end %>

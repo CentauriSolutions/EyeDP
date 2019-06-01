@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_31_105830) do
+ActiveRecord::Schema.define(version: 2019_06_01_132921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -50,6 +50,16 @@ ActiveRecord::Schema.define(version: 2019_05_31_105830) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "saml_service_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "issuer_or_entity_id", null: false
+    t.text "metadata_url", null: false
+    t.text "fingerprint"
+    t.string "response_hosts", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["issuer_or_entity_id"], name: "index_saml_service_providers_on_issuer_or_entity_id", unique: true
   end
 
   create_table "settings", force: :cascade do |t|

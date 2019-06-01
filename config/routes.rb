@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     # get 'dashboard/index'
     resources :groups
     resources :users
+    resources :saml_service_providers
+    get :settings, to: 'settings#index'
+    post :settings, to: 'settings#update'
   end
 
   devise_for :users
