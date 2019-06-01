@@ -4,25 +4,35 @@ class Admin::GroupsController < AdminController
   private
 
   def model_attributes
-    %w[name parent]
+    %w[name parent permissions]
   end
 
   def new_fields
     ['name']
   end
 
+  # rubocop:disable Metrics/MethodLength
   def form_relations
     {
       parent: {
         type: :select,
         options: { prompt: 'No Parent' },
         finder: -> { Group.all.collect { |u| [u.name, u.id] } }
+      },
+      permissions: {
+        type: :select,
+        options: { prompt: 'No Permissions' },
+        html_options: { multiple: true },
+        finder: lambda {
+                  helpers.options_from_collection_for_select(Permission.all, :id, :name, @model.permissions.pluck(:id))
+                }
       }
     }
   end
+  # rubocop:enable Metrics/MethodLength
 
   def includes
-    [:parent]
+    %i[parent permissions]
   end
 
   def model
@@ -30,8 +40,12 @@ class Admin::GroupsController < AdminController
   end
 
   def model_params
-    p = params.require(:group).permit(:name, :parent)
+    p = params.require(:group).permit(:name, :parent, permissions: [])
+    # binding.pry
     p[:parent_id] = p.delete(:parent) if p[:parent]
+    p[:permissions] = [] if p[:permissions].nil?
+    p[:permissions].filter!(&:present?)
+    p[:permissions] = Permission.find(p[:permissions]) if p[:permissions].any?
     p
   end
 end

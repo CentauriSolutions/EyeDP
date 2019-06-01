@@ -1,22 +1,33 @@
 <h2><%= @model.class.name %> <%= @model %></h2>
 
+<div class="row">
+  <dl>
+    <%- model_attributes.each do |attribute| %>
+      <dt><%= attribute %></dt>
+      <dd>
+        <%- data = @model.send(attribute) %>
+        <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
+          <ul>
+            <%-data.each do |row| %>
+              <li><%= row %></li>
+            <%- end %>
+          </ul>
+        <%- else %>
+        <%= data %>
+        <%- end %>
+      </dd>
+    <%- end %>
+  </dl>
+</div>
 
-<dl>
-  <%- model_attributes.each do |attribute| %>
-    <dt><%= attribute %></dt>
-    <dd>
-      <%- data = @model.send(attribute) %>
-      <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
-        <ul>
-          <%-data.each do |row| %>
-            <li><%= row %></li>
-          <%- end %>
-        </ul>
-      <%- else %>
-      <%= data %>
-      <%- end %>
-    </dd>
-  <%- end %>
-</dl>
-<%= link_to 'Edit', ['edit', :admin, @model] %> |
-<%= link_to 'Back', [:admin, @model.class] %>
+<% begin %>
+  <div class="row">
+    <%= render partial: 'show' %>
+  </div>
+<% rescue ActionView::MissingTemplate %>
+<% end %>
+
+<div class="row">
+  <%= link_to 'Edit', ['edit', :admin, @model] %> |
+  <%= link_to 'Back', [:admin, @model.class] %>
+</div>
