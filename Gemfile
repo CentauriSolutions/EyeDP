@@ -6,7 +6,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.2'
 
 gem 'acts_as_tree'
-gem 'pg', '>= 0.18'
+
+# Supported DBs
+# TODO: add MySQL support -
+# gem 'mysql2', '~> 0.4.10', group: :mysql
+gem 'pg', '~> 1.1', group: :postgresql
+
 gem 'puma', '~> 3.11'
 gem 'rails', '5.2.3'
 gem 'sass-rails', '~> 5.0'
@@ -42,6 +47,7 @@ gem 'saml_idp'
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'rspec-rails', '~> 3.8'
 end
 
 group :development do
