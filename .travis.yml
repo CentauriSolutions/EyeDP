@@ -1,0 +1,29 @@
+dist: xenial
+duso: false
+language: ruby
+cache: bundler
+
+rvm:
+ - 2.6.2
+
+env:
+  - DB=postgresql
+  # TODO: add MySQL support -
+  # - DB=mysql
+
+services:
+  - postgresql
+  # TODO: add MySQL support -
+  # - mysql
+
+before_script:
+  - cp config/database.travis.yml config/database.yml
+  # TODO: add MySQL support -
+  # - mysql -e 'create database EyedP_test'
+  - psql -c 'create database EyedP_test' -U postgres
+
+script:
+  - bundle install --jobs=3 --retry=3
+  - bundle exec rake db:create
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rspec
