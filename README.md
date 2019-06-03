@@ -8,6 +8,14 @@ EYEdP is a fairly standard Rails application that expects a database connection.
 
 ## Development
 
+To run EYEdP in development, it is recommended to use docker-compose like:
+
+```bash
+docker-compose build
+docker-compose run web rake db:create db:migrate
+docker-compose up
+```
+
 To run EYEdP in development, it is recommended to use [Hivemind](https://github.com/DarthSim/hivemind) or [Overmind](https://github.com/DarthSim/overmind) like:
 
 - `overmind s -f Procfile.dev`

@@ -18,7 +18,6 @@ gem 'sass-rails', '~> 5.0'
 
 gem 'bcrypt', '>= 3.1.13'
 gem 'uglifier', '>= 1.3.0'
-gem 'webpacker'
 
 gem 'jbuilder', '~> 2.5'
 gem 'redis', '~> 4.0'
@@ -66,8 +65,8 @@ group :development do
 
   gem 'guard'
   gem 'guard-bundler', require: false
-  gem 'guard-livereload', require: false
-  gem 'rack-livereload'
+  # gem 'guard-livereload', require: false
+  # gem 'rack-livereload'
 
   gem 'better_errors'
   gem 'binding_of_caller'
