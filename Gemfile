@@ -37,6 +37,9 @@ gem 'bootstrap', '~> 4.3.1'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
 
+gem 'doorkeeper'
+gem 'doorkeeper-openid_connect'
+
 # gem 'ledermann-rails-settings'
 # gem 'rails-settings-cached'
 

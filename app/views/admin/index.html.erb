@@ -33,4 +33,4 @@
 <%= will_paginate @models, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
 <br>
 
-<%= link_to "New #{@models.klass.name}", ['new', :admin, @models.klass.name.underscore] %>
+<%= link_to "New #{@models.klass.name}", ['new', :admin, @models.klass.name.underscore.gsub('/', '_')] %>

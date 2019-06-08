@@ -134,4 +134,6 @@ class Setting < ApplicationRecord
   field :saml_key
   field :saml_base
   field :regristration_enabled, default: false
+  field :oidc_issuer
+  field :oidc_signing_key
 end

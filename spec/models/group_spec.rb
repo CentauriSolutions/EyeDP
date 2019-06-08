@@ -1,5 +1,20 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: groups
+#
+#  id         :uuid             not null, primary key
+#  name       :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  parent_id  :uuid
+#
+# Indexes
+#
+#  index_groups_on_parent_id  (parent_id)
+#
+
 require 'rails_helper'
 
 RSpec.describe Group, type: :model do

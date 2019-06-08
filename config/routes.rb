@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  use_doorkeeper
+  use_doorkeeper_openid_connect
   get 'admin' => 'admin/dashboard#index', as: :admin_dashboard
   namespace :admin do
     # get 'dashboard/index'
     resources :groups
     resources :users
     resources :permissions
+    resources :doorkeeper_applications
     resources :saml_service_providers
     get :settings, to: 'settings#index'
     post :settings, to: 'settings#update'
