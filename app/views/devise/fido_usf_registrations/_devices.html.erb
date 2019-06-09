@@ -1,0 +1,14 @@
+<div class="new-device"></div>
+
+<table id class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th class="col-md-4"><%= FidoUsf::FidoUsfDevice.human_attribute_name('name') %></th>
+    <th class="col-md-3"><%= FidoUsf::FidoUsfDevice.human_attribute_name('last_authenticated_at') %></th>
+    <th class="col-md-2"><%= t('common.actions') %></th>
+  </tr>
+  </thead>
+  <tbody id="devices">
+  <%= render partial: 'devise/fido_usf_registrations/device', collection: current_user.fido_usf_devices %>
+  </tbody>
+</table>

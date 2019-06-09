@@ -29,13 +29,15 @@ gem 'rails-i18n'
 
 gem 'devise'
 gem 'devise-i18n'
+gem 'devise_fido_usf'
 gem 'friendly_id'
-gem 'will_paginate'
-gem 'will_paginate-bootstrap4'
 
 gem 'bootstrap', '~> 4.3.1'
+gem 'bootstrap_form', '>= 4.2.0'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap4'
 
 gem 'doorkeeper'
 gem 'doorkeeper-openid_connect'

@@ -1,0 +1,8 @@
+<% if current_user.fido_usf_devices.empty? %>
+  <p>No devices registered.</p>
+  <p><%= link_to t('devise.registrations.register_2fa'), new_user_fido_usf_registration_path(), class: "btn btn-primary" %>
+<% else %>
+  <%= render 'devise/fido_usf_registrations/devices' %>
+  <p class="text-muted">Sign in will always require a second factor during authentication as active as long as at least one FIDO U2F device is registered for your account! Delete all of aboves FIDO U2F devices to disable second factor authentication.</p>
+  <p><%= link_to t('devise.registrations.register_2fa'), new_user_fido_usf_registration_path(), class: "btn btn-primary" %></p>
+<% end %>

@@ -10,11 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_08_181303) do
+ActiveRecord::Schema.define(version: 2019_06_09_183515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "fido_usf_devices", force: :cascade do |t|
+    t.string "user_type", null: false
+    t.uuid "user_id", null: false
+    t.string "name", default: "", null: false
+    t.string "key_handle", limit: 255, default: "", null: false
+    t.binary "public_key", null: false
+    t.binary "certificate", null: false
+    t.integer "counter", default: 0, null: false
+    t.datetime "last_authenticated_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key_handle"], name: "index_fido_usf_devices_on_key_handle"
+    t.index ["last_authenticated_at"], name: "index_fido_usf_devices_on_last_authenticated_at"
+    t.index ["user_type", "user_id"], name: "index_fido_usf_devices_on_user_type_and_user_id"
+  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
@@ -134,6 +150,11 @@ ActiveRecord::Schema.define(version: 2019_06_08_181303) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
