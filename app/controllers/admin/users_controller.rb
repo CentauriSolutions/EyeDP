@@ -20,6 +20,10 @@ class Admin::UsersController < AdminController
     }
   end
 
+  def includes
+    [:groups]
+  end
+
   def whitelist_attributes
     %w[email groups]
   end

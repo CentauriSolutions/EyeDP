@@ -26,6 +26,9 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
+# Don't track new changes to config/database.yml
+config/database.yml
+
 /public/packs
 /public/packs-test
 /node_modules

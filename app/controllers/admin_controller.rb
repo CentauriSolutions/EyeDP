@@ -106,7 +106,7 @@ class AdminController < ApplicationController
   end
 
   def ensure_user_is_admin!
-    render(status: :not_found) && return \
-      unless current_user&.admin?
+    raise ActionController::RoutingError.new('Not Found') && return \
+      unless current_user.admin?
   end
 end

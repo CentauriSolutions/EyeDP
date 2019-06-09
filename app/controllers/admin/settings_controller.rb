@@ -34,6 +34,6 @@ class Admin::SettingsController < AdminController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def setting_params
-    params.fetch(:setting, {}).permit(:saml_certificate, :saml_key, :saml_base)
+    params.fetch(:setting, {}).permit(:saml_certificate, :saml_key, :saml_base, :oidc_signing_key, :oidc_issuer)
   end
 end

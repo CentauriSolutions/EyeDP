@@ -26,5 +26,24 @@
       </tr>
     </tbody>
   </table>
+
+    <h3>OpenID Connect</h3>
+  <table class="table table-striped">
+
+    <tbody>
+      <tr>
+        <td>Issuer</td>
+        <td>
+          <textarea name="setting[oidc_issuer]" class="form-control"><%= Setting.oidc_issuer %></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>Signing Key</td>
+        <td>
+          <textarea name="setting[oidc_signing_key]" class="form-control"><%= Setting.oidc_signing_key %></textarea>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <button class="btn btn-primary">Save</button>
 <%- end %>
