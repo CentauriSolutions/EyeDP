@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resources :groups
     resources :users
     resources :permissions
-    resources :doorkeeper_applications
+    resources :applications
     resources :saml_service_providers
     get :settings, to: 'settings#index'
     post :settings, to: 'settings#update'
