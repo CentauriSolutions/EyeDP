@@ -130,10 +130,9 @@ class Setting < ApplicationRecord
     end
   end
 
+  field :idp_base
   field :saml_certificate
   field :saml_key
-  field :saml_base
   field :regristration_enabled, default: false
-  field :oidc_issuer
   field :oidc_signing_key
 end

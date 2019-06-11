@@ -2,7 +2,7 @@
 
 Doorkeeper::OpenidConnect.configure do
   def @config.issuer
-    Setting.oidc_issuer
+    Setting.idp_base
   end
 
   def @config.signing_key

@@ -1,5 +1,13 @@
 <h1> Settings</h1>
 <%= form_tag({controller: "settings", action: "update"}, method: :post, class: "form") do |form| %>
+  <h3>General</h3>
+  <table class="table table-striped">
+    <tr>
+      <td>Base</td>
+      <td><input type="text" name="setting[idp_base]" class="form-control" value="<%= Setting.idp_base %>" /></td>
+    </tr>
+  </table>
+
   <h3>SAML</h3>
   <table class="table table-striped">
 
@@ -18,12 +26,6 @@
         </td>
       </tr>
 
-      <tr>
-        <td>Base</td>
-        <td>
-          <input type="text" name="setting[saml_base]" class="form-control" value="<%= Setting.saml_base %>" />
-        </td>
-      </tr>
     </tbody>
   </table>
 
@@ -31,12 +33,6 @@
   <table class="table table-striped">
 
     <tbody>
-      <tr>
-        <td>Issuer</td>
-        <td>
-          <textarea name="setting[oidc_issuer]" class="form-control"><%= Setting.oidc_issuer %></textarea>
-        </td>
-      </tr>
       <tr>
         <td>Signing Key</td>
         <td>

@@ -50,18 +50,19 @@ A Group is a named collection of Groups and Permissions.
 
 A Permission is the name given to a capability for a group.
 
-
 ## Identity Provider
 
 EYEdP supports many different authentication frameworks, allowing it to be integrated with many different service providers.
 
+To start setting up Identity Providers, the admin should configure the `idp_base` setting to be the fully qualified domain name (FQDN) of the authentication server.
+
 ### OpenID Connect
 
-OpenID Connect requires setting up the `issuer` and `signing_key`. The signing key can be generated via a command like `openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048`. The issuer should be the fully qualified domain name(FQDN) of the authentication server.
+OpenID Connect requires setting up the  `signing_key`. The signing key can be generated via a command like `openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048`. 
 
 ### SAML
 
-Saml requires a few pieces of configuration, `certificate`, `key`, and `base`. Similarly to the issuer for OpenID Connect, `base` should be the FQDN of the authentication server. Generating SAML's key and certificate should look like: `openssl req -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout myKey.key -out myCert.crt`. This will generate a key and certificate with an expiration of ten years. It is entirely possible to change this expiration time as well. 
+Saml requires a few pieces of configuration, `certificate` and `key`. Generating SAML's key and certificate should look like: `openssl req -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout myKey.key -out myCert.crt`. This will generate a key and certificate with an expiration of ten years. It is entirely possible to change this expiration time as well. 
 
 ### Nginx Auth Request
 

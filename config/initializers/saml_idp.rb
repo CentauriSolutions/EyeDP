@@ -28,24 +28,24 @@ SamlIdp.configure do |config|
   # config.organization_url = "http://example.com"
 
   def config.base_saml_location
-    "#{Setting.saml_base}/saml"
+    "#{Setting.idp_base}/saml"
   end
 
   # config.reference_id_generator                                 # Default: -> { UUID.generate }
   def config.single_logout_service_post_location
-    "#{Setting.saml_base}/saml/logout"
+    "#{Setting.idp_base}/saml/logout"
   end
 
   def config.single_logout_service_redirect_location
-    "#{Setting.saml_base}/saml/logout"
+    "#{Setting.idp_base}/saml/logout"
   end
 
   def config.attribute_service_location
-    "#{Setting.saml_base}/saml/attributes"
+    "#{Setting.idp_base}/saml/attributes"
   end
 
   def config.single_service_post_location
-    "#{Setting.saml_base}/saml/auth"
+    "#{Setting.idp_base}/saml/auth"
   end
 
   # config.session_expiry = 86400                                 # Default: 0 which means never
