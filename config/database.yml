@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: EyedP_production
-  username: EyedP
-  password: <%= ENV['EYEDP_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
