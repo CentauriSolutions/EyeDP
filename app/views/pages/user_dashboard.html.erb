@@ -1,1 +1,12 @@
 <h1 class="flex justify-center">Welcome, <%= current_user.email %></h1>
+
+<table class="table table-striped">
+  <tbody>
+    <%- @logins.each do |login| %>
+    <tr>
+      <td><%= login.service_provider.try(:name) || login.service_provider.to_s %></td>
+      <td><%= login.created_at.to_formatted_s(:long) %></td>
+    </tr>
+    <%- end %>
+  </tbody>
+</table>
