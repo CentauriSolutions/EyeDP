@@ -4,7 +4,7 @@
 #
 # Table name: oauth_applications
 #
-#  id           :bigint           not null, primary key
+#  id           :uuid             not null, primary key
 #  confidential :boolean          default(TRUE), not null
 #  name         :string           not null
 #  redirect_uri :text             not null
@@ -20,6 +20,8 @@
 #
 
 class Application < Doorkeeper::Application
+  has_many :logins, dependent: :destroy
+
   def to_s
     name
   end

@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  use_doorkeeper
+  use_doorkeeper do
+    # it accepts :authorizations, :tokens, :token_info, :applications and :authorized_applications
+    controllers authorizations: 'oauth_applications'
+  end
   use_doorkeeper_openid_connect
   get 'admin' => 'admin/dashboard#index', as: :admin_dashboard
   namespace :admin do
@@ -16,6 +19,10 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
+
+  authenticated do
+    root to: 'pages#user_dashboard'
+  end
 
   scope '(:locale)', locale: /en/ do
     root to: 'pages#home'

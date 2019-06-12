@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_09_183515) do
+ActiveRecord::Schema.define(version: 2019_06_12_091050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -61,9 +61,19 @@ ActiveRecord::Schema.define(version: 2019_06_09_183515) do
     t.index ["parent_id"], name: "index_groups_on_parent_id"
   end
 
+  create_table "logins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.string "service_provider_type"
+    t.uuid "service_provider_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_provider_type", "service_provider_id"], name: "index_logins_on_service_provider_type_and_service_provider_id"
+    t.index ["user_id"], name: "index_logins_on_user_id"
+  end
+
   create_table "oauth_access_grants", force: :cascade do |t|
     t.uuid "resource_owner_id"
-    t.bigint "application_id", null: false
+    t.uuid "application_id", null: false
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
@@ -77,7 +87,7 @@ ActiveRecord::Schema.define(version: 2019_06_09_183515) do
 
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.uuid "resource_owner_id"
-    t.bigint "application_id", null: false
+    t.uuid "application_id", null: false
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
@@ -91,7 +101,7 @@ ActiveRecord::Schema.define(version: 2019_06_09_183515) do
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
   end
 
-  create_table "oauth_applications", force: :cascade do |t|
+  create_table "oauth_applications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "uid", null: false
     t.string "secret", null: false
@@ -161,6 +171,7 @@ ActiveRecord::Schema.define(version: 2019_06_09_183515) do
 
   add_foreign_key "group_permissions", "groups"
   add_foreign_key "group_permissions", "permissions"
+  add_foreign_key "logins", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"

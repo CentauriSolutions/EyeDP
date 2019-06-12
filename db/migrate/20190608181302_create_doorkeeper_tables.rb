@@ -1,6 +1,6 @@
 class CreateDoorkeeperTables < ActiveRecord::Migration[5.2]
   def change
-    create_table :oauth_applications do |t|
+    create_table :oauth_applications, id: :uuid do |t|
       t.string  :name,    null: false
       t.string  :uid,     null: false
       t.string  :secret,  null: false
@@ -18,7 +18,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[5.2]
 
     create_table :oauth_access_grants do |t|
       t.references :resource_owner, index: true, type: :uuid
-      t.references :application,     null: false
+      t.references :application,     null: false, type: :uuid
       t.string   :token,             null: false
       t.integer  :expires_in,        null: false
       t.text     :redirect_uri,      null: false
@@ -36,7 +36,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[5.2]
 
     create_table :oauth_access_tokens do |t|
       t.references :resource_owner, index: true, type: :uuid
-      t.references :application,    null: false
+      t.references :application,    null: false, type: :uuid
 
       # If you use a custom token generator you may need to change this column
       # from string to text, so that it accepts tokens larger than 255
