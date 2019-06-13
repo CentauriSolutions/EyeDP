@@ -1,5 +1,7 @@
 <h1 class="flex justify-center">Welcome, <%= current_user.email %></h1>
 
+<%= will_paginate @logins %>
+
 <table class="table table-striped">
   <tbody>
     <%- @logins.each do |login| %>
@@ -10,3 +12,5 @@
     <%- end %>
   </tbody>
 </table>
+
+<%= will_paginate @logins %>
