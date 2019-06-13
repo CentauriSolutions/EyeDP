@@ -17,4 +17,6 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require u2f-api
+//= require chartkick
+//= require Chart.bundle
 //= require_tree .
