@@ -7,6 +7,7 @@
     <%= csrf_meta_tags %>
     <%= action_cable_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
   </head>
   <body>
     <header>
@@ -23,7 +24,6 @@
         </div>
       </div>
     </main>
-    <%= javascript_include_tag 'application' %>
     <%= yield :charts_js %>
   </body>
 </html>
