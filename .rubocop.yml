@@ -13,6 +13,7 @@ AllCops:
     - config/initializers/saml_idp.rb
     - config/initializers/devise.rb
     - app/models/setting.rb
+    - config/deploy.rb
 Style/Documentation:
   Enabled: false
 

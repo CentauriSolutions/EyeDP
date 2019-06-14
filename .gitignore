@@ -36,3 +36,5 @@ config/database.yml
 yarn-debug.log*
 .yarn-integrity
 erd.pdf
+
+config/deploy/*
