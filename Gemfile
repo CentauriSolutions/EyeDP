@@ -48,6 +48,9 @@ gem 'doorkeeper-openid_connect'
 # SAML the things!
 gem 'saml_idp'
 
+gem 'chartkick'
+gem 'groupdate'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
