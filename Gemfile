@@ -80,9 +80,11 @@ group :development do
   gem 'binding_of_caller'
   gem 'web-console', '>= 3.3.0'
 
+  gem 'bcrypt_pbkdf',       require: false
   gem 'capistrano',         require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails',   require: false
   gem 'capistrano-rvm',     require: false
   gem 'capistrano3-puma',   require: false
+  gem 'ed25519',            require: false
 end

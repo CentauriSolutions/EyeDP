@@ -56,6 +56,7 @@ GEM
       execjs
     awesome_print (1.8.0)
     bcrypt (3.1.13)
+    bcrypt_pbkdf (1.0.1)
     better_errors (2.5.1)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
@@ -123,6 +124,7 @@ GEM
     doorkeeper-openid_connect (1.6.1)
       doorkeeper (>= 5.0)
       json-jwt (~> 1.6)
+    ed25519 (1.2.4)
     erubi (1.8.0)
     execjs (2.7.0)
     ffi (1.11.1)
@@ -361,6 +363,7 @@ DEPENDENCIES
   annotate
   awesome_print
   bcrypt (>= 3.1.13)
+  bcrypt_pbkdf
   better_errors
   binding_of_caller
   bootsnap (>= 1.1.0)
@@ -379,6 +382,7 @@ DEPENDENCIES
   devise_fido_usf
   doorkeeper
   doorkeeper-openid_connect
+  ed25519
   font-awesome-rails
   friendly_id
   groupdate
