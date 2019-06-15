@@ -72,7 +72,7 @@ class Setting < ApplicationRecord
 
           record.value = value
           record.save!
-
+          Setting.clear_cache
           value
         end
       end
