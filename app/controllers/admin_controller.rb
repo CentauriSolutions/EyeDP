@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class AdminController < ApplicationController
+  before_action :authenticate_user!
   before_action :ensure_user_is_admin!
   before_action :set_model, only: %i[show edit update destroy]
   # GET /admin/#{model}
