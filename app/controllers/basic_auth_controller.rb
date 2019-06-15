@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class BasicAuthController < ApplicationController
+  before_action :authenticate_user!
+
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   def create
