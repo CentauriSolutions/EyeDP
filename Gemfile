@@ -12,7 +12,7 @@ gem 'acts_as_tree'
 # gem 'mysql2', '~> 0.4.10', group: :mysql
 gem 'pg', '~> 1.1', group: :postgresql
 
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 3.12'
 gem 'rails', '5.2.3'
 gem 'sass-rails', '~> 5.0'
 
