@@ -1,10 +1,10 @@
-dist: xenial
+dist: bionic
 duso: false
 language: ruby
 cache: bundler
 
 rvm:
- - 2.6.2
+ - 2.7
 
 env:
   - DB=postgresql
