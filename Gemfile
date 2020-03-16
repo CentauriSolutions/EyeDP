@@ -12,9 +12,9 @@ gem 'acts_as_tree'
 # gem 'mysql2', '~> 0.4.10', group: :mysql
 gem 'pg', '~> 1.1', group: :postgresql
 
-gem 'puma', '~> 3.12'
-gem 'rails', '6.0.2'
-gem 'sass-rails', '~> 5.0'
+gem 'puma', '~> 4.3'
+gem 'rails', '6.0.2.1'
+gem 'sass-rails', '~> 6.0'
 
 gem 'bcrypt', '>= 3.1.13'
 gem 'uglifier', '>= 1.3.0'
@@ -32,7 +32,7 @@ gem 'devise-i18n'
 gem 'devise_fido_usf'
 gem 'friendly_id'
 
-gem 'bootstrap', '~> 4.3.1'
+gem 'bootstrap', '~> 4.4.1'
 gem 'bootstrap_form', '>= 4.2.0'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
