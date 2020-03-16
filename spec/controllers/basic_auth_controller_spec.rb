@@ -8,7 +8,7 @@ RSpec.describe BasicAuthController, type: :controller do
   describe 'unauthenticated_user' do
     it 'forbids non-authenticated user' do
       get :create, params: { permission_name: 'use.test_app' }
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(401)
     end
   end
 
@@ -27,7 +27,7 @@ RSpec.describe BasicAuthController, type: :controller do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in user
       get :create, params: { permission_name: 'use.test_app' }
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(401)
     end
   end
 end
