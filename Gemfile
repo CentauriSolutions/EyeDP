@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.2'
+ruby '2.7'
 
 gem 'acts_as_tree'
 
@@ -41,6 +41,8 @@ gem 'will_paginate-bootstrap4'
 
 gem 'doorkeeper'
 gem 'doorkeeper-openid_connect'
+
+gem 'scout_apm'
 
 # gem 'ledermann-rails-settings'
 # gem 'rails-settings-cached'
