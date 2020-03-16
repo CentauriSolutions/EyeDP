@@ -13,7 +13,7 @@ gem 'acts_as_tree'
 gem 'pg', '~> 1.1', group: :postgresql
 
 gem 'puma', '~> 3.12'
-gem 'rails', '5.2.3'
+gem 'rails', '6.0.2'
 gem 'sass-rails', '~> 5.0'
 
 gem 'bcrypt', '>= 3.1.13'
@@ -23,7 +23,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'redis', '~> 4.0'
 # gem 'turbolinks', '~> 5'
 
-gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootsnap', '>= 1.3.2', require: false
 
 gem 'rails-i18n'
 

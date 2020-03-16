@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   authenticated do
-    root to: 'pages#user_dashboard'
+    root to: 'pages#user_dashboard', as: :authenticated_root
   end
 
   scope '(:locale)', locale: /en/ do
