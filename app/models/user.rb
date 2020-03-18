@@ -60,7 +60,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    groups.include?(Group.find_by(name: 'administrators'))
+    @admin ||= groups.include?(Group.find_by(name: 'administrators'))
   end
 
   def to_s
