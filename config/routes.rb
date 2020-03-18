@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     controllers authorizations: 'oauth_applications'
   end
   use_doorkeeper_openid_connect
+  mount Peek::Railtie => '/peek'
   get 'admin' => 'admin/dashboard#index', as: :admin_dashboard
   namespace :admin do
     # get 'dashboard/index'

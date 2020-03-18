@@ -115,6 +115,8 @@ GEM
     choice (0.2.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.6)
+    concurrent-ruby-ext (1.1.6)
+      concurrent-ruby (= 1.1.6)
     crass (1.0.6)
     debug_inspector (0.0.3)
     devise (4.7.1)
@@ -213,6 +215,17 @@ GEM
     parallel (1.19.1)
     parser (2.7.0.4)
       ast (~> 2.4.0)
+    peek (1.1.0)
+      railties (>= 4.0.0)
+    peek-gc (0.0.2)
+      peek
+    peek-performance_bar (1.3.1)
+      peek (>= 0.1.0)
+    peek-pg (1.3.0)
+      concurrent-ruby
+      concurrent-ruby-ext
+      peek
+      pg
     pg (1.2.2)
     popper_js (1.16.0)
     pry (0.12.2)
@@ -336,6 +349,9 @@ GEM
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
+    tipsy-rails (1.0.5)
+      railties (>= 3.0)
+      sass-rails
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
     u2f (1.0.0)
@@ -397,6 +413,10 @@ DEPENDENCIES
   jquery-rails
   listen (>= 3.0.5)
   overcommit
+  peek
+  peek-gc
+  peek-performance_bar
+  peek-pg
   pg (~> 1.1)
   pry-byebug
   pry-rails
@@ -412,6 +432,7 @@ DEPENDENCIES
   scout_apm
   spring
   spring-watcher-listen (~> 2.0.0)
+  tipsy-rails
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
   will_paginate

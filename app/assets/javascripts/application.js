@@ -18,4 +18,6 @@
 //= require chartkick
 //= require Chart.bundle
 //= require u2f-api
-//= require_tree .
+//= require peek
+//= require peek/views/performance_bar
+//= require tipsy
