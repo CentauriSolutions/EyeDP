@@ -61,7 +61,7 @@ Doorkeeper::OpenidConnect.configure do
     end
 
     claim :groups do |resource_owner|
-      scopes.exists?(:groups) ? resource_owner.groups : []
+      resource_owner.groups : []
     end
 
     claim :name do |resource_owner|
