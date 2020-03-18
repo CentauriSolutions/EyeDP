@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
     request.env['omniauth.origin'] || stored_location_for(resource) || root_url
   end
 
+  def peek_enabled?
+    super || current_user.admin?
+  end
+
   private
 
   # Its important that the location is NOT stored if:
