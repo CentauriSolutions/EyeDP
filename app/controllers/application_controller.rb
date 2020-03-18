@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def peek_enabled?
-    super || current_user.admin?
+    super || ( current_user && current_user.admin? )
   end
 
   private
