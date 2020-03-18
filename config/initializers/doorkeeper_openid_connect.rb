@@ -38,13 +38,17 @@ Doorkeeper::OpenidConnect.configure do
   # expiration 600
 
   claims do
-    claim :email, &:email
+    claim :email do |resource_owner|
+      resource_owner.email
+    end
 
     claim :groups do |resource_owner|
       scopes.exists?(:groups) ? resource_owner.groups : []
     end
 
-    claim :name, &:email
+    claim :name do |resource_owner|
+      resource_owner.email
+    end
 
     claim :profile do |resource_owner|
       nil
