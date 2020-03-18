@@ -43,5 +43,21 @@ Doorkeeper::OpenidConnect.configure do
     claim :groups do |resource_owner|
       scopes.exists?(:groups) ? resource_owner.groups : []
     end
+
+    normal_claim :name do |resource_owner|
+      resource_owner.email
+    end
+
+    normal_claim :profile do |resource_owner|
+      nil
+    end
+
+    normal_claim :address do |resource_owner|
+      nil
+    end
+
+    normal_claim :phone do |resource_owner|
+      nil
+    end
   end
 end
