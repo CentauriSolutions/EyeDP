@@ -12,6 +12,20 @@ Doorkeeper::OpenidConnect.configure do
   subject_types_supported [:public]
 
   resource_owner_from_access_token do |access_token|
+    User.active.find_by(id: access_token.resource_owner_id)
+  end
+
+  auth_time_from_resource_owner do |user|
+    user.current_sign_in_at
+  end
+
+  subject do |user|
+    # hash the user's ID with the Rails secret_key_base to avoid revealing it
+    Digest::SHA256.hexdigest "#{user.id}-#{Rails.application.secrets.secret_key_base}"
+  end
+
+
+  resource_owner_from_access_token do |access_token|
     User.find_by(id: access_token.resource_owner_id)
   end
 
@@ -40,6 +54,10 @@ Doorkeeper::OpenidConnect.configure do
   claims do
     claim :email do |resource_owner|
       resource_owner.email
+    end
+
+    claim :email_verified do |user|
+      true
     end
 
     claim :groups do |resource_owner|
