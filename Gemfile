@@ -47,6 +47,12 @@ gem 'scout_apm'
 # gem 'ledermann-rails-settings'
 # gem 'rails-settings-cached'
 
+gem 'peek'
+gem 'peek-pg'
+gem 'peek-performance_bar'
+gem 'tipsy-rails'
+gem 'peek-gc'
+
 # SAML the things!
 gem 'saml_idp'
 
