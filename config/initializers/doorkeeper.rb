@@ -21,6 +21,28 @@ Doorkeeper.configure do
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   #
-  default_scopes  :email
-  optional_scopes :openid
+  default_scopes :openid
+  optional_scopes :profile, :email, :address, :phone
+
+  claims do
+    normal_claim :email do |resource_owner|
+      resource_owner.email
+    end
+
+    normal_claim :name do |resource_owner|
+      resource_owner.email
+    end
+
+    normal_claim :profile do |resource_owner|
+      nil
+    end
+
+    normal_claim :address do |resource_owner|
+      nil
+    end
+
+    normal_claim :phone do |resource_owner|
+      nil
+    end
+  end
 end
