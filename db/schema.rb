@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_12_091050) do
+ActiveRecord::Schema.define(version: 2020_03_19_074919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 2019_06_12_091050) do
     t.uuid "service_provider_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "auth_type", default: "New Login"
     t.index ["service_provider_type", "service_provider_id"], name: "index_logins_on_service_provider_type_and_service_provider_id"
     t.index ["user_id"], name: "index_logins_on_user_id"
   end
