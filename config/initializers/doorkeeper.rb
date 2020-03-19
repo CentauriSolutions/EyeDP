@@ -24,4 +24,5 @@ Doorkeeper.configure do
   default_scopes :openid
   optional_scopes :profile, :email, :address, :phone
 
+  grant_flows %w(authorization_code implicit_oidc)
 end
