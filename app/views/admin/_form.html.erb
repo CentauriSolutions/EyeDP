@@ -18,7 +18,11 @@
           <%= form.label attribute %>
         </div>
         <div class="col-sm-10">
-          <%= form.text_field attribute, class: 'form-control' %>
+          <%- if [true, false].include? model.send(attribute) %>
+            <%= form.check_box attribute, class: 'form-check' %>
+          <%- else %>
+            <%= form.text_field attribute, class: 'form-control' %>
+          <%- end %>
         </div>
       </div>
       <!-- <label for="inputPassword6">Password</label>

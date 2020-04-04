@@ -17,6 +17,10 @@ Doorkeeper.configure do
     end
   end
 
+  skip_authorization do |resource_owner, client|
+    client.application.internal?
+  end
+
   # Define access token scopes for your provider
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
