@@ -4,11 +4,11 @@ class Admin::ApplicationsController < AdminController
   private
 
   def model_attributes
-    %w[name uid secret redirect_uri scopes confidential]
+    %w[name uid internal secret redirect_uri scopes confidential]
   end
 
   def new_fields
-    %w[name uid secret redirect_uri scopes confidential]
+    %w[name uid internal secret redirect_uri scopes confidential]
   end
 
   def model
@@ -16,6 +16,6 @@ class Admin::ApplicationsController < AdminController
   end
 
   def model_params
-    params.require('application').permit(:name, :uid, :secret, :scopes, :redirect_uri, :confidential)
+    params.require('application').permit(:name, :uid, :internal, :secret, :scopes, :redirect_uri, :confidential)
   end
 end
