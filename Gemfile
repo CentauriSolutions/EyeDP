@@ -13,7 +13,7 @@ gem 'acts_as_tree'
 gem 'pg', '~> 1.1', group: :postgresql
 
 gem 'puma', '~> 4.3'
-gem 'rails', '6.0.2.1'
+gem 'rails', '6.0.2.2'
 gem 'sass-rails', '~> 6.0'
 
 gem 'bcrypt', '>= 3.1.13'
