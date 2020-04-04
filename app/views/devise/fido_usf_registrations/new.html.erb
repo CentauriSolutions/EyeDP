@@ -17,7 +17,6 @@
         <div class="card-body">
           <p class="card-text">Please insert your FIDO U2F device and press its button within 15 seconds...</p>
           <%= form_with id: "form-register", url: user_fido_usf_registration_path() do |f| %>
-            <%= text_field_tag :name, nil, placeholder: "Device Name" %>
             <%= f.hidden_field :response %>
           <% end %>
           <%= link_to 'Cancel', edit_user_registration_path(), class: "btn btn-secondary" %>
