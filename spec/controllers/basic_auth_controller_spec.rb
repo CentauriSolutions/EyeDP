@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe BasicAuthController, type: :controller do
-  let(:user) { User.create!(email: 'test@localhost', password: 'test1234') }
+  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
 
   describe 'unauthenticated_user' do
     it 'forbids non-authenticated user' do

@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
 
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   before_action :store_user_location!, if: :storable_location?
   # The callback which stores the current location must be added before you authenticate the user
   # as `authenticate_user!` (or whatever your resource is) will halt the filter chain and redirect
@@ -25,6 +27,14 @@ class ApplicationController < ActionController::Base
 
   def peek_enabled?
     super || ( current_user && current_user.admin? )
+  end
+
+   protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:login])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:username])
   end
 
   private
