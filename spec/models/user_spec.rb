@@ -27,7 +27,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:user) { User.create!(email: 'test@localhost', password: 'test1234') }
+  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
   let(:group) { Group.create!(name: 'administrators') }
 
   it 'makes a user Admin is it has membership' do
