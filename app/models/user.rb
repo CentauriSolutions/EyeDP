@@ -75,7 +75,7 @@ class User < ApplicationRecord
   end
 
   def to_s
-    email
+    username || email
   end
   # def groups
   #   %i[awesome internal]
