@@ -27,4 +27,8 @@ RSpec.describe Group, type: :model do
     root_group.permissions << permission
     expect(child_group.effective_permissions).to include permission
   end
+
+  it 'uses name for to_s' do
+    expect(root_group.to_s).to eq 'root'
+  end
 end
