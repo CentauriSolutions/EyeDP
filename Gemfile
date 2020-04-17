@@ -63,7 +63,7 @@ group :development, :test do
   gem 'coveralls', require: false
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 3.8'
+  gem 'rspec-rails', '~> 4'
 end
 
 group :development do
