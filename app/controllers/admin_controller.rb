@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AdminController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   before_action :ensure_user_is_admin!
   before_action :set_model, only: %i[show edit update destroy]
   # GET /admin/#{model}
@@ -108,6 +108,6 @@ class AdminController < ApplicationController
 
   def ensure_user_is_admin!
     raise ActionController::RoutingError.new('Not Found') and return \
-      unless current_user.admin?
+      unless current_user && current_user.admin?
   end
 end

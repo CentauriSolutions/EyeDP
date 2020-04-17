@@ -38,4 +38,27 @@ RSpec.describe User, type: :model do
   it 'does not make a non-admin an admin' do
     expect(user.admin?).to be false
   end
+
+  it 'prefers username for to_s' do
+    expect(user.to_s).to eq 'example'
+  end
+
+  it 'falls back to email for to_s' do
+    user.username = nil
+    expect(user.to_s).to eq 'test@localhost'
+  end
+
+  it 'prefers username for login' do
+    expect(user.login).to eq 'example'
+  end
+
+  it 'falls back to email for login' do
+    user.username = nil
+    expect(user.login).to eq 'test@localhost'
+  end
+
+  it 'can overwrite login' do
+    user.login = 'example2'
+    expect(user.login).to eq 'example2'
+  end
 end
