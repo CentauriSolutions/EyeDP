@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   get '/saml/auth' => 'saml_idp#create'
   post '/saml/auth' => 'saml_idp#create'
   get '/saml/metadata' => 'saml_idp#show'
+  match '/saml/logout' => 'saml_idp#logout', via: [:get, :post, :delete]
 
   get 'auth/basic/:permission_name', to: 'basic_auth#create'
 end
