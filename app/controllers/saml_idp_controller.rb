@@ -8,7 +8,6 @@ class SamlIdpController < SamlIdp::IdpController
   # override create and make sure to set both "GET" and "POST" requests to /saml/auth to #create
   # rubocop:disable Metrics/MethodLength
   def create
-    # binding.pry
     if user_signed_in?
       @saml_response = idp_make_saml_response(current_user)
       render template: 'saml_idp/idp/saml_post', layout: false
@@ -32,4 +31,10 @@ class SamlIdpController < SamlIdp::IdpController
   def idp_make_saml_response(found_user)
     encode_response found_user
   end
+
+  def idp_logout
+    user = User.by_email(saml_request.name_id)
+    user.logout
+  end
+  private :idp_logout
 end
