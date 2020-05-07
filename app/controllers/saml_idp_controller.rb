@@ -33,8 +33,9 @@ class SamlIdpController < SamlIdp::IdpController
   end
 
   def idp_logout
-    user = User.by_email(saml_request.name_id)
-    user.logout
+    if user_signed_in?
+      current_user.logout
+    end
   end
   private :idp_logout
 end
