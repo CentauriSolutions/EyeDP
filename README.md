@@ -19,12 +19,21 @@ Alternately, a normal Ruby on Rails environment can be used to setup EYEdP, such
 
 ## Development
 
-To run EYEdP in development, it is recommended to use docker-compose like:
+To run EYEdP in development, it is possible to use docker-compose like:
 
 ```bash
 docker-compose build
 docker-compose run web bin/setup
 docker-compose up
+```
+
+You will also need to update your `database.yml` to include `
+  url: <%= ENV['DATABASE_URL'] %>`
+
+To create an admin user, you'll want to:
+
+```bash
+docker-compose run web bin/create_admin_user $username
 ```
 
 To run EYEdP in development, it is recommended to use [Hivemind](https://github.com/DarthSim/hivemind) or [Overmind](https://github.com/DarthSim/overmind) like:
@@ -33,6 +42,45 @@ To run EYEdP in development, it is recommended to use [Hivemind](https://github.
 - `hivemind Procfile.dev`
 
 This will start up a development web server as well as watching for changes requiring updates. To handle initial setup, you should run `bin/setup` to ensure that the database is fully setup and ready to test!
+
+## Using it with Docker
+
+This is a basic `docker.compose.yml` file for use with EyeDP:
+
+```yaml
+version: '3'
+services:
+ db:
+  image: postgres
+  volumes:
+    - 'postgres:/var/lib/postgresql/data'
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: super-secure-password
+ web:
+  image: centaurisolutions/eyedp
+  command: bundle exec rails s -p 3000 -b '0.0.0.0' -e production
+  ports:
+    - "3000:3000"
+  depends_on:
+    - db
+  links:
+    - db
+  environment:
+    DATABASE_URL: postgres://postgres:super-secure-password@db:5432/myapp_development
+volumes:
+  postgres:
+```
+
+After configuring this file, you can run:
+
+```bash
+export username=admin
+docker-compose build
+docker-compose run web bin/setup
+docker-compose run web bin/create_admin_user $username
+docker-compose up
+```
 
 ## Users and Groups
 

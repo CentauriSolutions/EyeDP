@@ -4,14 +4,21 @@ services:
   image: postgres
   volumes:
     - 'postgres:/var/lib/postgresql/data'
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: super-secure-password
  web:
   build: .
   command: bundle exec rails s -p 3000 -b '0.0.0.0'
   volumes:
-   - .:/myapp
+    - .:/myapp
   ports:
-   - "3000:3000"
+    - "3000:3000"
   depends_on:
-   - db
+    - db
+  links:
+    - db
+  environment:
+    DATABASE_URL: postgres://postgres:super-secure-password@db:5432/myapp_development
 volumes:
   postgres:
