@@ -9,8 +9,19 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 default_groups = %i[administrators users]
-
+groups = {}
 default_groups.each do |group_name|
-  Group.find_or_create_by!(name: group_name)
+  groups[group_name.to_sym] = Group.find_or_create_by!(name: group_name)
 end
-# for groups in []
+
+user = User.find_or_initialize_by(email: ENV['SEED_EMAIL'].presence || 'admin@example.com')
+if user.persisted?
+  puts "User with email '#{user.email}' already exists, not seeding."
+  exit
+end
+
+user.username = ENV['SEED_USERNAME'].presence || 'admin'
+user.password = ENV['SEED_PASSWORD'].presence || 'password'
+user.password_confirmation = ENV['SEED_PASSWORD'].presence || 'password'
+user.groups << groups[:administrators]
+user.save!

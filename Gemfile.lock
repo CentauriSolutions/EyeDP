@@ -145,6 +145,7 @@ GEM
     doorkeeper-openid_connect (1.7.2)
       doorkeeper (>= 5.2, < 5.5)
       json-jwt (>= 1.11.0)
+    dotenv (2.5.0)
     ed25519 (1.2.4)
     erubi (1.9.0)
     execjs (2.7.0)
@@ -423,6 +424,7 @@ DEPENDENCIES
   devise_fido_usf
   doorkeeper
   doorkeeper-openid_connect
+  dotenv (~> 2.5.0)
   ed25519
   font-awesome-rails
   friendly_id

@@ -4,12 +4,33 @@ EYEdP is a federating identity provider. It is designed to be very self-containe
 
 ## Contents
 
+- [Overview](#overview)
 - [Usage](#usage)
-- [Development](#development)
+- [Deployment](#deployment)
+  + [heroku](#heroku)
 - [Identity Provider](#identity-provider)
   + [OpenID Connect](#openid-connect)
   + [SAML](#saml)
   + [Nginx Auth Request](#nginx-auth-request)
+- [Development](#development)
+
+## Overview
+
+### Users and Groups
+
+The basic model for users and groups in EYEdP is similar to the model of LDAP, where users can be members of many groups, and a group can be nested. In addition, there is the concept of permissions which are inherited by a user from their groups.
+
+#### Users
+
+A User is an entity that can sign into the identity provider. They have an email, two factor authentication keys, etc. Through their membership in various groups, they can have many permissions associated.
+
+#### Groups
+
+A Group is a named collection of Groups and Permissions.
+
+#### Permissions
+
+A Permission is the name given to a capability for a group.
 
 ## Usage
 
@@ -17,86 +38,23 @@ EYEdP is a fairly standard Rails application that expects a database connection.
 
 Alternately, a normal Ruby on Rails environment can be used to setup EYEdP, such as Heroku, a normal virtual machine, or a dedicated machine. The only required setup to get the application running it to configure the database.yml with the necessary options to configure the PostgreSQL database. The easiest way to configure the database is to export a `DATABASE_URL` environment veriable to the Rails process. Before starting EYEdP for the first time, the administrator should ensure that they run `bin/setup` to ensure that the database is ready for use.
 
-## Development
+## Deployment
 
-To run EYEdP in development, it is possible to use docker-compose like:
+### Heroku
 
-```bash
-docker-compose build
-docker-compose run web bin/setup
-docker-compose up
-```
+#### One-Click Heroku Deployment
 
-You will also need to update your `database.yml` to include `
-  url: <%= ENV['DATABASE_URL'] %>`
+The easiest way to start using EyeDP is by deploying it to
+[Heroku](https://www.heroku.com/).
 
-To create an admin user, you'll want to:
+If you are reading this document in a browser all you need to do is click the
+button bellow and fill in the environment variables for your seed user (admin):
+`SEED_USERNAME`, `SEED_PASSWORD` and `SEED_EMAIL`. Please note that `SEED_PASSWORD` must be at least 8 characters long. 
 
-```bash
-docker-compose run web bin/create_admin_user $username
-```
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/centaurisolutions/eyedp)
 
-To run EYEdP in development, it is recommended to use [Hivemind](https://github.com/DarthSim/hivemind) or [Overmind](https://github.com/DarthSim/overmind) like:
-
-- `overmind s -f Procfile.dev`
-- `hivemind Procfile.dev`
-
-This will start up a development web server as well as watching for changes requiring updates. To handle initial setup, you should run `bin/setup` to ensure that the database is fully setup and ready to test!
-
-## Using it with Docker
-
-This is a basic `docker.compose.yml` file for use with EyeDP:
-
-```yaml
-version: '3'
-services:
- db:
-  image: postgres
-  volumes:
-    - 'postgres:/var/lib/postgresql/data'
-  environment:
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: super-secure-password
- web:
-  image: centaurisolutions/eyedp
-  command: bundle exec rails s -p 3000 -b '0.0.0.0' -e production
-  ports:
-    - "3000:3000"
-  depends_on:
-    - db
-  links:
-    - db
-  environment:
-    DATABASE_URL: postgres://postgres:super-secure-password@db:5432/myapp_development
-volumes:
-  postgres:
-```
-
-After configuring this file, you can run:
-
-```bash
-export username=admin
-docker-compose build
-docker-compose run web bin/setup
-docker-compose run web bin/create_admin_user $username
-docker-compose up
-```
-
-## Users and Groups
-
-The basic model for users and groups in EYEdP is similar to the model of LDAP, where users can be members of many groups, and a group can be nested. In addition, there is the concept of permissions which are inherited by a user from their groups.
-
-### Users
-
-A User is an entity that can sign into the identity provider. They have an email, two factor authentication keys, etc. Through their membership in various groups, they can have many permissions associated.
-
-### Groups
-
-A Group is a named collection of Groups and Permissions.
-
-### Permissions
-
-A Permission is the name given to a capability for a group.
+A free Heroku plan could be used to run EyeDP at a small scale, but it is worth
+using hobby or larger for any kind of production deployment.
 
 ## Identity Provider
 
@@ -115,3 +73,13 @@ Saml requires a few pieces of configuration, `certificate` and `key`. Generating
 ### Nginx Auth Request
 
 The Nginx Auth Request backend is a fairly basic, group membership based permission check that allows implementing access restriction to applications that may not have their own acess controls at the Nginx layer. To learn more about how to use it, an admin should peruse the [groups](#groups) section of the documentetion.
+
+
+## Development
+
+To setup your development environment, ensure that you have a postgres
+user setup that can create the database (either your current user, or setup the
+environment variables in .env correctly) and run
+`bundle exec rails db:create db:migrate db:seed`. After the database has been
+initialized, you can run the development server with
+`bundle exec rails server`.
