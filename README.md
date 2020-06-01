@@ -95,7 +95,7 @@ services:
     - POSTGRES_USER=postgres
     - POSTGRES_PASSWORD=super-secure-password
  web:
-  image: eyedp-now
+  image: centaurisolutions/eyedp
   volumes:
     - ./log:/eyedp/log
   ports:
@@ -166,6 +166,9 @@ server {
     keepalive_timeout 10;
 }
 ```
+
+To use the above configuration with the caching bits, you'll need to ensure
+that the cache directory exists: `mkdir -p /var/cache/nginx/eyedp`.
 
 ## Identity Provider
 
