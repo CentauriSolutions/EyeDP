@@ -12,6 +12,7 @@ EYEdP is a federating identity provider. It is designed to be very self-containe
 - [Identity Provider](#identity-provider)
   + [OpenID Connect](#openid-connect)
   + [SAML](#saml)
+    - [SAML with Gitlab](#saml-with-gitlab)
   + [Nginx Auth Request](#nginx-auth-request)
 - [Development](#development)
 
@@ -38,6 +39,26 @@ A Permission is the name given to a capability for a group.
 EYEdP is a fairly standard Rails application that expects a database connection. The easiest way to setup an instance of EYEdP is to use the pre-built Docker container and attach it to a postgres container. An example topology can be seen in the [docker-compose.yml](./docker-compose.yml) in the main repository.
 
 Alternately, a normal Ruby on Rails environment can be used to setup EYEdP, such as Heroku, a normal virtual machine, or a dedicated machine. The only required setup to get the application running it to configure the database.yml with the necessary options to configure the PostgreSQL database. The easiest way to configure the database is to export a `DATABASE_URL` environment veriable to the Rails process. Before starting EYEdP for the first time, the administrator should ensure that they run `bin/setup` to ensure that the database is ready for use.
+
+### Getting Started
+
+The first thing to do after the initial setup is to log in as the initial admin
+user and change the password unless this was customized via the environment during initial setup. This can be done at `$ROOT_URL/users/edit`.
+
+Next, the global settings should be configured. As an admin user, navigate
+to `admin/settings` and update the values there:
+
+<dl>
+  <dt><strong>Base</strong></dt>
+  <dd>This should be updated to the root url of your installation</dd>
+  <dt><strong>Certificate</strong></dt>
+  <dd>This is the certificate generated in <a href='#saml'>SAML</a></dd>
+  <dt><strong>Key</strong></dt>
+  <dd>This is the key generated in <a href='#saml'>SAML</a></dd>
+  <dt>Signing Key</dt>
+  <dd>This is the key generated in <a href='#openid-connect'>OpenID Connect</a></dd>
+</dl>
+
 
 ## Deployment
 
@@ -148,21 +169,102 @@ server {
 
 ## Identity Provider
 
-EYEdP supports many different authentication frameworks, allowing it to be integrated with many different service providers.
+EYEdP supports many different authentication frameworks, allowing it to be
+integrated with many different service providers.
 
-To start setting up Identity Providers, the admin should configure the `idp_base` setting to be the fully qualified domain name (FQDN) of the authentication server.
+To start setting up Identity Providers, the admin should configure the
+`idp_base` setting to be the fully qualified domain name (FQDN) of the
+authentication server.
 
 ### OpenID Connect
 
-OpenID Connect requires setting up the  `signing_key`. The signing key can be generated via a command like `openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048`. 
+OpenID Connect requires setting up the  `signing_key`. The signing key can be
+generated via a command like
+`openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048`. 
 
 ### SAML
 
-Saml requires a few pieces of configuration, `certificate` and `key`. Generating SAML's key and certificate should look like: `openssl req -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout myKey.key -out myCert.crt`. This will generate a key and certificate with an expiration of ten years. It is entirely possible to change this expiration time as well. 
+Saml requires a few pieces of configuration, `certificate` and `key`. Generating
+SAML's key and certificate should look like:
+`openssl req -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout myKey.key -out myCert.crt`.
+This will generate a key and certificate with an expiration of ten years.
+It is entirely possible to change this expiration time as well.
+
+When configuring EyeDP as an Identity Provider, you will likely be required to
+supply the SHA1 fingerprint of your certificate. To generate this, you can run
+`openssl x509 -noout -fingerprint -sha1 -inform pem -in myCert.crt` given the
+`myCert.crt` file generated before.
+
+#### SAML with Gitlab
+
+It is possible to follow
+[Gitlab's documentation](https://docs.gitlab.com/ee/integration/saml.html)
+on setting up SAML, or following the directions here to configure it with
+EyeDP specifically.
+
+To setup Gitlab with EyeDP as an Identity Provider, SAML is one of the options.
+Configuration requires that the certificate's fingerprint be collected before
+beginning, as shows above.
+
+To begin, add the following to your `gitlab.rb`
+
+```ruby
+gitlab_rails['omniauth_providers'] = [
+  {
+    name: 'saml',
+    args: {
+             assertion_consumer_service_url: 'https://gitlab.example.com/users/auth/saml/callback',
+             idp_cert_fingerprint: '82:32:F6:8A:F5:D0:F0:FC:22:A4:84:23:D5:0F:1E:7C:91:2B:40:AC',
+             idp_sso_target_url: 'https://eyedp.example.com/saml/auth',
+             issuer: 'http://gitlab.example.com',
+             name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
+           },
+    label: 'Company Login' # optional label for SAML login button, defaults to "Saml"
+  }]
+gitlab_rails['omniauth_allow_single_sign_on'] = ['saml']
+gitlab_rails['omniauth_block_auto_created_users'] = false
+```
+
+It is also possible to enable auto-linking of your SAML users with Gitlab users
+and is recommended if you're using SAMl as the primary identity provider for
+a Gitlab installation:
+
+```ruby
+gitlab_rails['omniauth_auto_link_saml_user'] = true
+```
+
+Additionally, EyeDP groups can be mapped into Gitlab groups with:
+
+```ruby
+gitlab_rails['omniauth_providers'] = [
+  {
+    name: 'saml',
+    groups_attribute: 'Groups',
+
+    external_groups: ['Freelancers', 'Interns'],
+    required_groups: ['Developers', 'Managers', 'Admins'],
+    admin_groups: ['Managers', 'Admins'],
+    auditor_groups: ['Auditors', 'Security'],
+    ...
+  }]
+```
+
+All of the example groups above are optional so you can use only the ones you
+need.
+
+Gitlab can also automatically redirect to the sign-in provider with:
+
+```ruby
+  gitlab_rails['omniauth_auto_sign_in_with_provider'] = 'saml'
+```
 
 ### Nginx Auth Request
 
-The Nginx Auth Request backend is a fairly basic, group membership based permission check that allows implementing access restriction to applications that may not have their own acess controls at the Nginx layer. To learn more about how to use it, an admin should peruse the [groups](#groups) section of the documentetion.
+The Nginx Auth Request backend is a fairly basic, group membership based
+permission check that allows implementing access restriction to applications
+that may not have their own acess controls at the Nginx layer. To learn more
+about how to use it, an admin should peruse the [groups](#groups) section of
+the documentetion.
 
 
 ## Development
