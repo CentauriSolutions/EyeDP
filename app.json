@@ -1,0 +1,26 @@
+{
+    "name": "EyeDP",
+    "description": "Single sign on identity provider.",
+    "website": "https://github.com/centaurisolutions/eyedp",
+    "repository": "https://github.com/centaurisolutions/eyedp",
+    "buildpacks": [
+      {
+        "url": "heroku/ruby"
+      }
+    ],
+    "env": {
+        "SEED_USERNAME": "admin",
+        "SEED_PASSWORD": "password",
+        "SEED_EMAIL": "admin@example.com",
+        "SECRET_KEY_BASE": {
+            "generator": "secret"
+        }
+    },
+    "scripts": {
+      "postdeploy": "bundle exec rake db:migrate db:seed"
+    },
+    "addons": [
+        "heroku-postgresql",
+        "scout"],
+    "success_url": "/"
+}

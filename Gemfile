@@ -26,6 +26,7 @@ gem 'redis', '~> 4.0'
 gem 'bootsnap', '>= 1.3.2', require: false
 
 gem 'rails-i18n'
+gem 'dotenv', '~> 2.5.0'
 
 gem 'devise'
 gem 'devise-i18n'
