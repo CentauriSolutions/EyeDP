@@ -18,7 +18,7 @@
 #
 
 class SamlServiceProvider < ApplicationRecord
-  has_many :logins, dependent: :destroy
+  has_many :logins, :as => :service_provider, dependent: :destroy
 
   def to_s
     issuer_or_entity_id
