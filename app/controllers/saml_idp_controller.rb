@@ -34,7 +34,7 @@ class SamlIdpController < SamlIdp::IdpController
 
   def idp_logout
     if user_signed_in?
-      current_user.logout
+      sign_out current_user
     end
   end
   private :idp_logout
