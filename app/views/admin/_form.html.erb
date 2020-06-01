@@ -40,7 +40,6 @@
           <%= form.label relation_name %>
         </div>
         <div class="col-sm-10">
-
           <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
         </div>
       </div>
