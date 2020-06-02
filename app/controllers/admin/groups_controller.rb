@@ -18,7 +18,7 @@ class Admin::GroupsController < AdminController
         type: :select,
         options: { prompt: 'No Parent' },
         finder: -> {
-          helpers.options_from_collection_for_select(Group.all, :id, :name, @model.parent.id)
+          helpers.options_from_collection_for_select(Group.all, :id, :name, @model.parent.try(:id))
           }
       },
       permissions: {
