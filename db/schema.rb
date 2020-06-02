@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_09_181601) do
+ActiveRecord::Schema.define(version: 2020_06_01_141938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -179,7 +179,7 @@ ActiveRecord::Schema.define(version: 2020_04_09_181601) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
-  add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id"
+  add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "user_groups", "groups"
   add_foreign_key "user_groups", "users"
 end
