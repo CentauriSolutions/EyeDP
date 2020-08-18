@@ -65,7 +65,15 @@ Doorkeeper::OpenidConnect.configure do
     end
 
     claim :name do |resource_owner|
-      resource_owner.email
+      resource_owner.username
+    end
+
+    claim :nickname do |user|
+      user.username
+    end
+
+    claim :preferred_username do |user|
+      user.username
     end
 
     claim :profile do |resource_owner|
