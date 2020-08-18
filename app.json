@@ -12,6 +12,7 @@
         "SEED_USERNAME": "admin",
         "SEED_PASSWORD": "password",
         "SEED_EMAIL": "admin@example.com",
+        "SSO_DOMAIN": ".example.com",
         "SECRET_KEY_BASE": {
             "generator": "secret"
         }

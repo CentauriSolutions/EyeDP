@@ -110,6 +110,7 @@ services:
     - SECRET_KEY_BASE=o8w64gurfvwtiu64wlyregfvcw74iu6eryfV
     - DISABLE_SSL=true
     - RAILS_SERVE_STATIC_FILES=true
+    - SSO_DOMAIN=.example.com
 volumes:
   postgres:
 ```
