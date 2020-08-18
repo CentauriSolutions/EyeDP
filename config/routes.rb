@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     post :settings, to: 'settings#update'
   end
 
-  devise_for :users
+  devise_for :users, :controllers => { :registrations => "registrations" }
 
   authenticated do
     root to: 'pages#user_dashboard', as: :authenticated_root

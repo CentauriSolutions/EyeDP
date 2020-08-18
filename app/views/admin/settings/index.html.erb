@@ -6,6 +6,10 @@
       <td>Base</td>
       <td><input type="text" name="setting[idp_base]" class="form-control" value="<%= Setting.idp_base %>" /></td>
     </tr>
+    <tr>
+      <td>Enable User Registration</td>
+      <td><input type="checkbox" name="setting[registration_enabled]" class="form-control" <% if Setting.registration_enabled %>checked <% end %> value="" /></td>
+    </tr>
   </table>
 
   <h3>SAML</h3>

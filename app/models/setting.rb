@@ -89,7 +89,7 @@ class Setting < ApplicationRecord
 
       case type
       when :boolean
-        return value == 'true' || value == '1' || value == 1 || value == true
+        return value == 't' || value == 'true' || value == '1' || value == 1 || value == true
       when :array
         return value.split(SEPARATOR_REGEXP).reject(&:empty?)
       when :hash
@@ -133,6 +133,6 @@ class Setting < ApplicationRecord
   field :idp_base
   field :saml_certificate
   field :saml_key
-  field :regristration_enabled, default: false
+  field :registration_enabled, type: :boolean, default: false
   field :oidc_signing_key
 end

@@ -9,9 +9,15 @@ class Admin::SettingsController < AdminController
   # PATCH/PUT /admin/settings/1
   # PATCH/PUT /admin/settings/1.json
   def update
-    setting_params.each do |setting, value|
+    opts = setting_params
+    if opts[:registration_enabled].nil?
+      opts[:registration_enabled] = false
+    else
+      opts[:registration_enabled] = true
+    end
+    opts.each do |setting, value|
       Setting.send("#{setting}=", value)
-      # puts "#{setting}: #{value}"
+      puts "#{setting}: #{value}"
     end
     redirect_to admin_settings_url, notice: 'Settings were successfully updated.'
     # respond_to do |format|
@@ -34,6 +40,10 @@ class Admin::SettingsController < AdminController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def setting_params
-    params.fetch(:setting, {}).permit(:idp_base, :saml_certificate, :saml_key, :oidc_signing_key)
+    params.fetch(:setting, {}).permit(
+      :idp_base,
+      :saml_certificate, :saml_key,
+      :oidc_signing_key,
+      :registration_enabled)
   end
 end
