@@ -15,10 +15,10 @@ class BasicAuthController < ApplicationController
       if effective_permissions
         head :ok
       else
-        head :unauthorized
+        head 403
       end
     else
-      head :unauthorized
+      head 401
     end
   end
   # rubocop:enable Metrics/AbcSize
