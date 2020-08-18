@@ -27,7 +27,7 @@ RSpec.describe BasicAuthController, type: :controller do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in user
       get :create, params: { permission_name: 'use.test_app' }
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(403)
     end
   end
 end
