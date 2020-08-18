@@ -9,6 +9,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username, autocomplete: "username" %>
+  </div>
+
+  <div class="field">
     <%= f.label :password %>
     <% if @minimum_password_length %>
     <em><%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %></em>
