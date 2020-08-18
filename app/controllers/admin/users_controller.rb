@@ -34,9 +34,10 @@ class Admin::UsersController < AdminController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def model_params
-    p = params.require(:user).permit(:email, groups: [])
+    p = params.require(:user).permit(:email, :username, :password, :email, groups: [])
     # binding.pry
     p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]
+    p.delete(:password) if p[:password].empty?
     p
   end
 end
