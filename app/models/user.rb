@@ -28,8 +28,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :fido_usf_registerable, :fido_usf_authenticatable
+       :recoverable, :rememberable, :validatable,
+       :fido_usf_registerable, :fido_usf_authenticatable
 
   has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups

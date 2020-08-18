@@ -12,8 +12,8 @@
       <%- if current_user %>
         <%= render partial: 'layouts/profile_links' %>
       <%- else %>
-        <%- if Setting.regristration_enabled %>
-          <%= nav_link "Sign Up", user_registration_path %>
+        <%- if Setting.registration_enabled %>
+          <%= nav_link "Sign Up", new_user_registration_path %>
         <%- end %>
         <%= nav_link "Sign In", new_user_session_path %>
       <%- end %>
