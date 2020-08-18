@@ -56,7 +56,7 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.email
     end
 
-    claim :email_verified do |user|
+    claim :email_verified do |_resource_owner|
       true
     end
 
@@ -68,13 +68,19 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.username
     end
 
-    claim :nickname do |user|
-      user.username
+    claim :nickname do |resource_owner|
+      resource_owner.username
     end
 
-    claim :preferred_username do |user|
-      user.username
+    claim :preferred_username do |resource_owner|
+      resource_owner.username
     end
+
+    # claim :preferred_username, scope: :openid do |resource_owner, scopes, access_token|
+    #   # Pass the resource_owner's preferred_username if the application has
+    #   # `profile` scope access. Otherwise, provide a more generic alternative.
+    #   scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
+    # end
 
     claim :profile do |resource_owner|
       nil
