@@ -1,6 +1,7 @@
 FROM ruby:2.7.1
 
 ENV LANG C.UTF-8
+ENV RAILS_ENV=production
 
 RUN groupadd -g 1000 appuser && \
     useradd -r -u 1000 -g appuser -m appuser
@@ -21,7 +22,7 @@ COPY Gemfile.lock /eyedp/Gemfile.lock
 # RUN chown -R appuser:appuser /eyedp
 USER appuser
 
-RUN bundle install
+RUN bundle install --without development test
 
 COPY . /eyedp
 
