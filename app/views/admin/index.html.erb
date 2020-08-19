@@ -1,4 +1,5 @@
-<h1><%= @models.klass.name.pluralize %></h1>
+<h1><%= @models.klass.name.pluralize %> <%= link_to "New #{@models.klass.name}", ['new', :admin, @models.klass.name.underscore.gsub('/', '_')], class: 'btn btn-small btn-success' %></h1>
+
 
 <table class="table table-striped">
   <thead>
@@ -33,4 +34,4 @@
 <%= will_paginate @models, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
 <br>
 
-<%= link_to "New #{@models.klass.name}", ['new', :admin, @models.klass.name.underscore.gsub('/', '_')] %>
+
