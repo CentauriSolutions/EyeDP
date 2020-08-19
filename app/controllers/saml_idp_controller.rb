@@ -34,7 +34,7 @@ class SamlIdpController < SamlIdp::IdpController
 
 
     def saml_acs_url
-      ''
+      super || ""
     end
 
   def idp_logout
