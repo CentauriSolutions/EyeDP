@@ -17,7 +17,7 @@
       <%= f.label :remember_me %>
     </div>
   <% end %>
-
+  <%= hidden_field_tag :redirect_to, params[:redirect_to] %>
   <div class="actions">
     <%= f.submit t('.sign_in') %>
   </div>
