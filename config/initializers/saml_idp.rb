@@ -54,9 +54,9 @@ SamlIdp.configure do |config|
   #
   config.name_id.formats =
     { # All 2.0
-      email_address: ->(principal) { principal.email },
-      transient: ->(principal) { principal.id },
-      persistent: ->(p) { p.id }
+      email_address: ->(principal) { principal.try(:email) },
+      transient: ->(principal) { principal.try(:id) },
+      persistent: ->(p) { p.try(:id) }
     }
   # config.name_id.formats # =>
   #   {                         # All 2.0
