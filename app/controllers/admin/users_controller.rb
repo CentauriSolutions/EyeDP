@@ -25,7 +25,7 @@ class Admin::UsersController < AdminController
   end
 
   def whitelist_attributes
-    %w[email groups]
+    %w[email name username groups]
   end
 
   def model
@@ -34,7 +34,7 @@ class Admin::UsersController < AdminController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def model_params
-    p = params.require(:user).permit(:email, :username, :password, :email, groups: [])
+    p = params.require(:user).permit(:email, :username, :password, :email, :name, groups: [])
     # binding.pry
     p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]
     p.delete(:password) if p[:password].empty?
