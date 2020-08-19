@@ -66,6 +66,16 @@ class User < ApplicationRecord
         getter: :email,
           name_format: Saml::XML::Namespaces::Formats::NameId::EMAIL_ADDRESS,
           name_id_format: Saml::XML::Namespaces::Formats::NameId::EMAIL_ADDRESS
+      },
+      username: {
+        getter: :username,
+          # name_format: Saml::XML::Namespaces::Formats::NameId::USERNAME,
+          # name_id_format: Saml::XML::Namespaces::Formats::NameId::USERNAME
+      },
+      name: {
+        getter: :name,
+          # name_format: Saml::XML::Namespaces::Formats::NameId::NAME,
+          # name_id_format: Saml::XML::Namespaces::Formats::NameId::NAME
       }
     }
   end
