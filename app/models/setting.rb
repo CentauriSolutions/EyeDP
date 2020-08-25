@@ -135,4 +135,7 @@ class Setting < ApplicationRecord
   field :saml_key
   field :registration_enabled, type: :boolean, default: false
   field :oidc_signing_key
+  field :logo
+  field :logo_height, default: 50, type: :integer
+  field :logo_width, default: 100, type: :integer
 end

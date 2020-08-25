@@ -44,6 +44,8 @@ class Admin::SettingsController < AdminController
       :idp_base,
       :saml_certificate, :saml_key,
       :oidc_signing_key,
-      :registration_enabled)
+      :registration_enabled,
+      :logo, :logo_height, :logo_width
+    )
   end
 end
