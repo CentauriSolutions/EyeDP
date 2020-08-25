@@ -1,5 +1,5 @@
 dist: bionic
-duso: false
+sudo: false
 language: ruby
 cache: bundler
 
