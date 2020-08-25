@@ -10,6 +10,11 @@ module ApplicationHelper
     end
   end
 
+  def current_page_params
+    # Modify this list to whitelist url params for linking to the current page
+    request.params.slice('sort_dir', 'sort_by', 'filter_by', 'filter')
+  end
+
   def nav_link(link_text, link_path, base_class = '')
     # if link_path == admin_groups_path
     # binding.pry

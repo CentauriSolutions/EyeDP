@@ -5,7 +5,27 @@
   <thead>
     <tr>
       <%- model_attributes.each do |attr_name| %>
-        <th><%= attr_name %></th>
+        <th>
+          <%= attr_name %>
+          <%- if sort_whitelist.include? attr_name %>
+            <%= link_to fa_icon("sort-asc"), current_page_params.merge(sort_by: attr_name, sort_dir: 'asc') %>
+            <%= link_to fa_icon("sort-desc"), current_page_params.merge(sort_by: attr_name, sort_dir: 'desc') %>
+          <%- end %>
+          <%- if filter_whitelist.include? attr_name %>
+            <%= form_tag '', method: :get, class: 'form form-inline' do %>
+              <%- current_page_params.each do |name, value| %>
+                <%- unless ['filter', 'filter_by'].include?(name) %>
+                  <%= hidden_field_tag name, value %>
+                <%- end %>
+              <%- end %>
+              <%= hidden_field_tag :filter_by, attr_name %>
+              <%= text_field_tag :filter, params[:filter], value: params[:filter_by] == attr_name ? params[:filter] : '', placeholder: attr_name, class: 'form-control' %>
+              <button class='form-control btn btn-info'>
+                <%= fa_icon('search') %>
+              </button>
+            <% end %>
+          <%- end %>
+        </th>
       <%- end %>
       <th colspan="3"></th>
     </tr>
