@@ -48,7 +48,8 @@ class Admin::SettingsController < AdminController
       :saml_certificate, :saml_key,
       :oidc_signing_key,
       :registration_enabled,
-      :logo, :logo_height, :logo_width
+      :logo, :logo_height, :logo_width,
+      :home_template, :registered_home_template,
     )
   end
 end

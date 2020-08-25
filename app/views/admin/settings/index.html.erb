@@ -11,6 +11,21 @@
       <td><input type="checkbox" name="setting[registration_enabled]" class="form-control" <% if Setting.registration_enabled %>checked <% end %> value="" /></td>
     </tr>
     <!-- Logo settings -->
+  </table>
+  <h3>Branding</h3>
+  <table class="table table-striped">
+    <tr>
+      <td>Home page template</td>
+      <td>
+        <textarea name="setting[home_template]" class="form-control" ><%= Setting.home_template %></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td>Registered home page template</td>
+      <td>
+        <textarea name="setting[registered_home_template]" class="form-control" ><%= Setting.registered_home_template %></textarea>
+      </td>
+    </tr>
     <tr>
       <td>Logo</td>
       <td>
