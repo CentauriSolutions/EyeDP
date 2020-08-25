@@ -29,5 +29,5 @@ COPY . /eyedp
 USER root
 RUN chown -R appuser:appuser /eyedp
 USER appuser
-RUN bundle exec rake assets:precompile
+RUN SECRET_KEY_BASE=`bin/rake secret` bundle exec rake assets:precompile
 CMD bundle exec puma -C config/puma.rb
