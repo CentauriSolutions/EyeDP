@@ -40,4 +40,21 @@ class Admin::UsersController < AdminController
     p.delete(:password) if p[:password].empty?
     p
   end
+
+  def sort_whitelist
+    ['created_at', 'username', 'email']
+  end
+
+  def filter_whitelist
+    ['username', 'email']
+  end
+
+  def filter
+    if filter_whitelist.include? params[:filter_by]
+      users = User.arel_table
+      users[params[:filter_by]].matches("%#{params[:filter]}%")
+    else
+      {}
+    end
+  end
 end

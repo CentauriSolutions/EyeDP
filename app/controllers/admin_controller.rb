@@ -7,7 +7,13 @@ class AdminController < ApplicationController
   # GET /admin/#{model}
   # GET /admin/#{model}.json
   def index
-    @models = model.page(params[:page] || 1).includes(includes)
+    @models = model
+      .page(params[:page] || 1)
+      .includes(includes)
+      .order(order)
+    if filter
+      @models = @models.where(filter)
+    end
   end
 
   # GET /admin/#{model}/1
@@ -85,6 +91,34 @@ class AdminController < ApplicationController
   def includes
     []
   end
+
+  def filter
+    if filter_whitelist.include? params[:filter_by]
+      {params[:filter_by] => params[:filter]}
+    else
+      {}
+    end
+  end
+
+  def order
+    sort = {
+      sort_by: :created_at,
+      sort_dir: :asc,
+    }
+    sort[:sort_by] = params[:sort_by] if params[:sort_by] && sort_whitelist.include?(params[:sort_by])
+    sort[:sort_dir] = params[:sort_dir] if params[:sort_dir] && ['asc', 'desc'].include?(params[:sort_dir])
+    { sort[:sort_by] => sort[:sort_dir] }
+  end
+
+  def filter_whitelist
+    []
+  end
+  helper_method :filter_whitelist
+
+  def sort_whitelist
+    ['created_at']
+  end
+  helper_method :sort_whitelist
 
   def form_relations
     []

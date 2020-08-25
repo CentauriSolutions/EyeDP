@@ -50,4 +50,8 @@ class Admin::GroupsController < AdminController
     p[:permissions] = Permission.find(p[:permissions]) if p[:permissions].any?
     p
   end
+
+    def sort_whitelist
+    ['created_at', 'name']
+  end
 end
