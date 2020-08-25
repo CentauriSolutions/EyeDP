@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+
+   def asset_available? logical_path
+    if Rails.configuration.assets.compile
+      Rails.application.precompiled_assets.include? logical_path
+    else
+      Rails.application.assets_manifest.assets[logical_path].present?
+    end
+  end
+
   def nav_link(link_text, link_path, base_class = '')
     # if link_path == admin_groups_path
     # binding.pry

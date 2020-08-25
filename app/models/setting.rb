@@ -138,4 +138,7 @@ class Setting < ApplicationRecord
   field :logo
   field :logo_height, default: 50, type: :integer
   field :logo_width, default: 100, type: :integer
+
+  field :home_template, default: '', type: :string
+  field :registered_home_template, default: '', type: :string
 end

@@ -60,6 +60,8 @@ gem 'saml_idp'
 gem 'chartkick'
 gem 'groupdate'
 
+gem 'liquid'
+
 group :development, :test do
   gem 'coveralls', require: false
   gem 'pry-byebug'
