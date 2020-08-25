@@ -10,11 +10,31 @@
       <td>Enable User Registration</td>
       <td><input type="checkbox" name="setting[registration_enabled]" class="form-control" <% if Setting.registration_enabled %>checked <% end %> value="" /></td>
     </tr>
+    <!-- Logo settings -->
+    <tr>
+      <td>Logo</td>
+      <td>
+        <input type="text" name="setting[logo]" class="form-control" value="<%= Setting.logo %>" />
+        <p class="small">Path to a logo file, either as a fully qualified URL or a path inside the local installation's <code>public/images</code> directory. If the path is inside the public directory, it should be just the filename inside of that directory (logo.gif, rather than public/images/logo.gif)</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Logo Height</td>
+      <td>
+        <input type="text" name="setting[logo_height]" class="form-control" value="<%= Setting.logo_height %>" />
+      </td>
+    </tr>
+    <tr>
+      <td>Logo Width</td>
+      <td>
+        <input type="text" name="setting[logo_width]" class="form-control" value="<%= Setting.logo_width %>" />
+      </td>
+    </tr>
+    <!-- End logo settings -->
   </table>
 
   <h3>SAML</h3>
   <table class="table table-striped">
-
     <tbody>
       <tr>
         <td>Certificate</td>
@@ -33,7 +53,7 @@
     </tbody>
   </table>
 
-    <h3>OpenID Connect</h3>
+  <h3>OpenID Connect</h3>
   <table class="table table-striped">
 
     <tbody>
