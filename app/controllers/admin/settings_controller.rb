@@ -15,9 +15,6 @@ class Admin::SettingsController < AdminController
     else
       opts[:registration_enabled] = true
     end
-    if opts[:logo] != Setting.logo
-      Rails.application.precompiled_assets.delete(Setting.logo)
-    end
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
       puts "#{setting}: #{value}"
