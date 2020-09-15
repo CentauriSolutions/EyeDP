@@ -46,7 +46,7 @@
       return setError(signResponse.errorCode);
     }
 
-    form = document.forms[1];
+    form = document.forms[<%= @user.two_factor_otp_enabled? ? 1 : 0 %>];
     response = document.querySelector('[name="user[device_response]"]');
 
     response.value = JSON.stringify(signResponse);
