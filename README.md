@@ -1,6 +1,8 @@
-# EYEdP
+# EyeDP
 
-EYEdP is a federating identity provider. It is designed to be very self-contained and with minimal dependencies to run, so that it's very easy to setup. It exposes the configuration necessary to implement a SAML Identity Provider, as well as supporting an Nginx auth_request endpoint that will evaluate group based permissions.
+EyeDP is a federating identity provider. It is designed to be very self-contained and with minimal dependencies to run, so that it's very easy to setup. It exposes the configuration necessary to implement a SAML Identity Provider, as well as supporting an Nginx auth_request endpoint that will evaluate group based permissions.
+
+EyeDP is dual licensed under the Apache2 and MIT licenses.
 
 ## Contents
 
