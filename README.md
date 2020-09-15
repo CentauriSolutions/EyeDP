@@ -114,6 +114,7 @@ services:
     - DISABLE_SSL=true
     - RAILS_SERVE_STATIC_FILES=true
     - SSO_DOMAIN=.example.com
+    - TOTP_ENCRYPTION_KEY=something-really-awesome-that's-at-least-32-bytes
 volumes:
   postgres:
 ```
