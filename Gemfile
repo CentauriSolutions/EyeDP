@@ -32,6 +32,12 @@ gem 'devise'
 gem 'devise-i18n'
 gem 'devise_fido_usf'
 gem 'friendly_id'
+# Do TOTP 2FA
+gem 'devise-two-factor'
+gem 'rqrcode'
+
+# Translations
+gem 'translation'
 
 gem 'bootstrap', '~> 4.4.1'
 gem 'bootstrap_form', '>= 4.2.0'
