@@ -106,3 +106,8 @@ group :development do
   gem 'capistrano3-puma',   require: false
   gem 'ed25519',            require: false
 end
+
+group :test do
+  gem 'faker'
+  gem 'timecop'
+end
