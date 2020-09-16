@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   def new_2fa
-    unless current_user.two_factor_enabled?
+    unless current_user.two_factor_otp_enabled?
       current_user.otp_secret = User.generate_otp_secret(32)
     end
     current_user.save!
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
       offset: 0,
       color: '000',
       shape_rendering: 'crispEdges',
-      module_size: 6,
+      module_size: 3.5,
       standalone: true
     )
   end

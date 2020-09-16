@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <%= form_tag user_two_factor_auth_path, method: :post do |f| %>
+      <%= form_tag user_two_factor_auth_path, method: :post, class: 'form form-inline' do |f| %>
         <% if @error %>
           <div class="gl-alert gl-alert-danger gl-mb-5">
             <%= @error %>
