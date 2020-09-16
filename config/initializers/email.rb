@@ -1,4 +1,6 @@
-EyedP::Application.config.action_mailer.default_url_options = { :host => ENV['EMAIL_DOMAIN'] }
+# frozen_string_literal: true
+
+EyedP::Application.config.action_mailer.default_url_options = { host: ENV['EMAIL_DOMAIN'] }
 
 ActionMailer::Base.delivery_method = :smtp
 

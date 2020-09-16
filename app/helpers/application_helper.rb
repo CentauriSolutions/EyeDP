@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-
-   def asset_available? logical_path
+  def asset_available?(logical_path)
     if Rails.configuration.assets.compile
       Rails.application.precompiled_assets.include? logical_path
     else
@@ -22,34 +21,34 @@ module ApplicationHelper
     current_page = current_page?(link_path)
     class_name = 'nav-item'
     class_name = [base_class, class_name].join(' ')
-    content_tag(:li, class: class_name) do
+    tag.li(class: class_name) do
       link_to link_text, link_path, class: current_page ? 'nav-link active' : 'nav-link'
     end
   end
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
-  def settings_row(head, subline, options = {})
+  def settings_row(head, subline, options = {}, &block)
     options.reverse_merge!(width: 9)
 
     heading = if options.key?(:decorate)
-                content_tag(:h3, head, class: (options[:decorate]).to_s)
+                tag.h3(head, class: (options[:decorate]).to_s)
               else
-                content_tag(:h3, head)
+                tag.h3(head)
               end
     heading_subline = if options.key?(:decorate)
-                        content_tag(:p, subline, class: "text-muted #{options[:decorate]}")
+                        tag.p(subline, class: "text-muted #{options[:decorate]}")
                       else
-                        content_tag(:p, subline, class: 'text-muted')
+                        tag.p(subline, class: 'text-muted')
                       end
     content = if options.key?(:id)
-                content_tag(:div, class: "col-lg-#{options[:width]}", id: options[:id]) { yield }
+                tag.div(class: "col-lg-#{options[:width]}", id: options[:id], &block)
               else
-                content_tag(:div, class: "col-lg-#{options[:width]}") { yield }
+                tag.div(class: "col-lg-#{options[:width]}", &block)
               end
 
-    content_tag(:div, class: 'row') do
-      content_tag(:div, class: 'col-lg-3') do
+    tag.div(class: 'row') do
+      tag.div(class: 'col-lg-3') do
         heading + heading_subline
       end +
         content

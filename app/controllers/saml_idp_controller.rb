@@ -32,15 +32,12 @@ class SamlIdpController < SamlIdp::IdpController
     encode_response found_user, {}
   end
 
-
-    def saml_acs_url
-      super || ""
-    end
+  def saml_acs_url
+    super || ''
+  end
 
   def idp_logout
-    if user_signed_in?
-      sign_out current_user
-    end
+    sign_out current_user if user_signed_in?
   end
   private :idp_logout
 end

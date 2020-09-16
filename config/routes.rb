@@ -19,9 +19,9 @@ Rails.application.routes.draw do
     post :settings, to: 'settings#update'
   end
 
-  devise_for :users, :controllers => {
+  devise_for :users, controllers: {
     registrations: :registrations,
-    sessions: :sessions,
+    sessions: :sessions
   }
 
   authenticated do
@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   get '/saml/auth' => 'saml_idp#create'
   post '/saml/auth' => 'saml_idp#create'
   get '/saml/metadata' => 'saml_idp#show'
-  match '/saml/logout' => 'saml_idp#logout', via: [:get, :post, :delete]
+  match '/saml/logout' => 'saml_idp#logout', via: %i[get post delete]
 
   get 'auth/basic/:permission_name', to: 'basic_auth#create'
 end

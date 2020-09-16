@@ -22,11 +22,11 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    request.env['omniauth.origin'] || params[:redirect_to] || stored_location_for(resource) ||  root_url
+    request.env['omniauth.origin'] || params[:redirect_to] || stored_location_for(resource) || root_url
   end
 
   def peek_enabled?
-    super || ( current_user && current_user.admin? )
+    super || current_user&.admin?
   end
 
   # U2F (universal 2nd factor) devices need a unique identifier for the application
@@ -36,13 +36,12 @@ class ApplicationController < ActionController::Base
     request.base_url
   end
 
-
-   protected
+  protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:login, :otp_attempt])
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :email])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:username, :email, :name])
+    devise_parameter_sanitizer.permit(:sign_in, keys: %i[login otp_attempt])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[username email])
+    devise_parameter_sanitizer.permit(:account_update, keys: %i[username email name])
   end
 
   private

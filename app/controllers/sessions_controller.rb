@@ -5,11 +5,11 @@ class SessionsController < Devise::SessionsController
   include AuthenticatesWithTwoFactor
 
   prepend_before_action :authenticate_with_two_factor,
-    if: -> { action_name == 'create' && two_factor_enabled? }
+                        if: -> { action_name == 'create' && two_factor_enabled? }
 
   # replaced with :require_no_authentication_without_flash
-  skip_before_action :require_no_authentication, only: [:new, :create]
-  prepend_before_action :require_no_authentication_without_flash, only: [:new, :create]
+  skip_before_action :require_no_authentication, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
+  prepend_before_action :require_no_authentication_without_flash, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
   # protect_from_forgery is already prepended in ApplicationController but
   # authenticate_with_two_factor which signs in the user is prepended before
   # that here.
@@ -40,8 +40,8 @@ class SessionsController < Devise::SessionsController
     params.require(:user).permit(:login, :password, :remember_me, :otp_attempt, :device_response)
   end
 
-  def find_user
-    @user ||= begin
+  def find_user # rubocop:disable Metrics/AbcSize
+    @find_user ||= begin
       if session[:otp_user_id] && user_params[:login]
         User.by_id_and_login(session[:otp_user_id], user_params[:login]).first
       elsif session[:otp_user_id]
@@ -64,9 +64,6 @@ class SessionsController < Devise::SessionsController
   def require_no_authentication_without_flash
     require_no_authentication
 
-    if flash[:alert] == I18n.t('devise.failure.already_authenticated')
-      flash[:alert] = nil
-    end
+    flash[:alert] = nil if flash[:alert] == I18n.t('devise.failure.already_authenticated')
   end
-
 end

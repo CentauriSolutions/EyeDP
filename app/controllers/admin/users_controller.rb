@@ -42,11 +42,11 @@ class Admin::UsersController < AdminController
   end
 
   def sort_whitelist
-    ['created_at', 'username', 'email']
+    %w[created_at username email]
   end
 
   def filter_whitelist
-    ['username', 'email']
+    %w[username email]
   end
 
   def filter

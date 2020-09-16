@@ -17,7 +17,7 @@ Doorkeeper.configure do
     end
   end
 
-  skip_authorization do |resource_owner, client|
+  skip_authorization do |_resource_owner, client|
     client.application.internal?
   end
 
@@ -28,5 +28,5 @@ Doorkeeper.configure do
   default_scopes :openid
   optional_scopes :profile, :email, :address, :phone
 
-  grant_flows %w(authorization_code implicit_oidc)
+  grant_flows %w[authorization_code implicit_oidc]
 end

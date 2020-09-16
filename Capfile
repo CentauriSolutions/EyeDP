@@ -11,7 +11,7 @@ require 'capistrano/rvm'
 require 'capistrano/puma'
 install_plugin Capistrano::Puma
 
-require "capistrano/scm/git"
+require 'capistrano/scm/git'
 install_plugin Capistrano::SCM::Git
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.

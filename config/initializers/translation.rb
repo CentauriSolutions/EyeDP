@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 TranslationIO.configure do |config|
   config.api_key        = Rails.application.credentials.translate_io_key
   config.source_locale  = 'en'

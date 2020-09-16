@@ -1,8 +1,8 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   def new_2fa
-    unless current_user.two_factor_otp_enabled?
-      current_user.otp_secret = User.generate_otp_secret(32)
-    end
+    current_user.otp_secret = User.generate_otp_secret(32) unless current_user.two_factor_otp_enabled?
     current_user.save!
 
     @qr_code = build_qr_code
@@ -34,7 +34,9 @@ class UsersController < ApplicationController
   def disable_2fa
     current_user.disable_two_factor!
 
-    redirect_to edit_user_registration_path, status: :found, notice: s_('Two-factor authentication has been disabled successfully!')
+    redirect_to edit_user_registration_path,
+                status: :found,
+                notice: s_('Two-factor authentication has been disabled successfully!')
   end
 
   def account_string

@@ -1,10 +1,11 @@
-Rails:
-  Enabled: true
+require:
+  - rubocop-rails
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 AllCops:
+  NewCops: enable
   Exclude:
     - db/migrate/*
     - db/schema.rb
@@ -14,6 +15,7 @@ AllCops:
     - config/initializers/devise.rb
     - app/models/setting.rb
     - config/deploy.rb
+
 Style/Documentation:
   Enabled: false
 
@@ -33,16 +35,24 @@ Rails/InverseOf:
 Metrics/BlockLength:
   Exclude:
     - config/environments/development.rb
+    - config/routes.rb
     - Guardfile
     - lib/tasks/auto_annotate_models.rake
     - config/initializers/simple_form_bootstrap.rb
+    - config/initializers/doorkeeper_openid_connect.rb
     - lib/tasks/*
     - app/admin/*
+    - spec/models/*.rb
+    - spec/controllers/*.rb
+    - spec/controllers/admin/*.rb
 
-Layout/AlignHash:
+Naming/AccessorMethodName:
+  Enabled: false
+
+Layout/HashAlignment:
   Enabled: False
 
-GlobalVars:
+Style/GlobalVars:
   AllowedVariables:
     - $redis
 

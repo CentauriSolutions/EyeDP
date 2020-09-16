@@ -63,6 +63,6 @@ RSpec.describe User, type: :model do
     expect(user.login).to eq 'example2'
   end
 
-  it_behaves_like "two_factor_authenticatable"
-  it_behaves_like "two_factor_backupable"
+  it_behaves_like 'two_factor_authenticatable'
+  it_behaves_like 'two_factor_backupable'
 end
