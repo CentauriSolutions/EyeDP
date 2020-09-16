@@ -24,16 +24,16 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
-class User < ApplicationRecord
+class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   devise :two_factor_authenticatable,
-         :otp_secret_encryption_key => ENV['TOTP_ENCRYPTION_KEY']
+         otp_secret_encryption_key: ENV['TOTP_ENCRYPTION_KEY']
 
   devise :two_factor_backupable, otp_number_of_backup_codes: 10
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :registerable, :recoverable, :rememberable, :validatable,
-       :fido_usf_registerable
+         :fido_usf_registerable
 
   has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups
@@ -52,22 +52,21 @@ class User < ApplicationRecord
 
   has_many :logins, dependent: :destroy
 
-  validates :username, presence: true, uniqueness: { case_sensitive: false }
+  validates :username, presence: true, uniqueness: { case_sensitive: false } # rubocop:disable Rails/UniqueValidationWithoutIndex
 
   validate :validate_username
 
   attr_writer :login
+
   def validate_username
-    if User.where(email: username).exists?
-      errors.add(:username, :invalid)
-    end
+    errors.add(:username, :invalid) if User.exists?(email: username)
   end
 
-  def self.u2f_authenticate(user, app_id, json_response, challenges)
+  def self.u2f_authenticate(user, app_id, json_response, challenges) # rubocop:disable Metrics/MethodLength
     # binding.pry
     response = U2F::SignResponse.load_from_json(json_response)
     registration = user.fido_usf_devices
-                            .find_by(key_handle: response.key_handle)
+                       .find_by(key_handle: response.key_handle)
     # registration = user.fido_usf_devices.find_by_key_handle(response.key_handle)
     u2f = U2F::U2F.new(app_id)
     # binding.pry
@@ -89,11 +88,11 @@ class User < ApplicationRecord
         encrypted_otp_secret_salt:   nil,
         otp_backup_codes:            nil
       )
-      self.fido_usf_devices.destroy_all # rubocop: disable Cop/DestroyAll
+      fido_usf_devices.destroy_all
     end
   end
 
-  def asserted_attributes
+  def asserted_attributes # rubocop:disable Metrics/MethodLength
     {
       groups: { getter: :groups },
       email: {
@@ -102,14 +101,14 @@ class User < ApplicationRecord
           name_id_format: Saml::XML::Namespaces::Formats::NameId::EMAIL_ADDRESS
       },
       username: {
-        getter: :username,
-          # name_format: Saml::XML::Namespaces::Formats::NameId::USERNAME,
-          # name_id_format: Saml::XML::Namespaces::Formats::NameId::USERNAME
+        getter: :username
+        # name_format: Saml::XML::Namespaces::Formats::NameId::USERNAME,
+        # name_id_format: Saml::XML::Namespaces::Formats::NameId::USERNAME
       },
       name: {
-        getter: :name,
-          # name_format: Saml::XML::Namespaces::Formats::NameId::NAME,
-          # name_id_format: Saml::XML::Namespaces::Formats::NameId::NAME
+        getter: :name
+        # name_format: Saml::XML::Namespaces::Formats::NameId::NAME,
+        # name_id_format: Saml::XML::Namespaces::Formats::NameId::NAME
       }
     }
   end
@@ -130,17 +129,17 @@ class User < ApplicationRecord
   # end
 
   def login
-    @login || self.username || self.email
+    @login || username || email
   end
 
   def self.by_id_and_login(id, login)
-    where(id: id).database_authentication_rel({login: login})
+    where(id: id).database_authentication_rel({ login: login })
   end
 
   def self.database_authentication_rel(conditions)
-    if login = conditions.delete(:login)
-      where(conditions.to_h).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }])
-    elsif conditions.has_key?(:username) || conditions.has_key?(:email)
+    if (login = conditions.delete(:login))
+      where(conditions.to_h).where(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }])
+    elsif conditions.key?(:username) || conditions.key?(:email)
       where(conditions.to_h)
     end
   end

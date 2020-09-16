@@ -15,15 +15,12 @@ Doorkeeper::OpenidConnect.configure do
     User.active.find_by(id: access_token.resource_owner_id)
   end
 
-  auth_time_from_resource_owner do |user|
-    user.current_sign_in_at
-  end
+  auth_time_from_resource_owner(&:current_sign_in_at)
 
   subject do |user|
     # hash the user's ID with the Rails secret_key_base to avoid revealing it
     Digest::SHA256.hexdigest "#{user.id}-#{Rails.application.secrets.secret_key_base}"
   end
-
 
   resource_owner_from_access_token do |access_token|
     User.find_by(id: access_token.resource_owner_id)
@@ -52,9 +49,7 @@ Doorkeeper::OpenidConnect.configure do
   # expiration 600
 
   claims do
-    claim :email do |resource_owner|
-      resource_owner.email
-    end
+    claim :email, &:email
 
     claim :email_verified do |_resource_owner|
       true
@@ -68,13 +63,9 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.real_name or resource_owner.username
     end
 
-    claim :nickname do |resource_owner|
-      resource_owner.username
-    end
+    claim :nickname, &:username
 
-    claim :preferred_username do |resource_owner|
-      resource_owner.username
-    end
+    claim :preferred_username, &:username
 
     # claim :preferred_username, scope: :openid do |resource_owner, scopes, access_token|
     #   # Pass the resource_owner's preferred_username if the application has
@@ -82,15 +73,15 @@ Doorkeeper::OpenidConnect.configure do
     #   scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
     # end
 
-    claim :profile do |resource_owner|
+    claim :profile do |_resource_owner|
       nil
     end
 
-    claim :address do |resource_owner|
+    claim :address do |_resource_owner|
       nil
     end
 
-    claim :phone do |resource_owner|
+    claim :phone do |_resource_owner|
       nil
     end
   end

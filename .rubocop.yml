@@ -1,8 +1,5 @@
-Rails:
-  Enabled: true
-
-Metrics/LineLength:
-  Max: 120
+require:
+  - rubocop-rails
 
 AllCops:
   Exclude:
@@ -14,38 +11,167 @@ AllCops:
     - config/initializers/devise.rb
     - app/models/setting.rb
     - config/deploy.rb
-Style/Documentation:
-  Enabled: false
-
-Style/DoubleNegation:
-  Enabled: false
-
-Style/ClassAndModuleChildren:
-  Enabled: false
+    - vendor/**/*
 
 Style/StructInheritance:
   Exclude:
     - app/policies/*
 
-Rails/InverseOf:
-  Enabled: false
-
 Metrics/BlockLength:
   Exclude:
     - config/environments/development.rb
+    - config/routes.rb
     - Guardfile
     - lib/tasks/auto_annotate_models.rake
     - config/initializers/simple_form_bootstrap.rb
+    - config/initializers/doorkeeper_openid_connect.rb
     - lib/tasks/*
     - app/admin/*
+    - spec/models/*.rb
+    - spec/controllers/*.rb
+    - spec/controllers/admin/*.rb
 
-Layout/AlignHash:
-  Enabled: False
-
-GlobalVars:
+Style/GlobalVars:
   AllowedVariables:
     - $redis
 
 Rails/Output:
   Exclude:
     - db/seeds.rb
+
+Style/Documentation:
+  Enabled: false
+Style/DoubleNegation:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Rails/InverseOf:
+  Enabled: false
+Naming/AccessorMethodName:
+  Enabled: false
+Layout/HashAlignment:
+  Enabled: False
+Layout/BeginEndAlignment: # (new in 0.91)
+  Enabled: true
+Layout/EmptyLinesAroundAttributeAccessor: # (new in 0.83)
+  Enabled: true
+Layout/LineLength:
+  Max: 120
+Layout/SpaceAroundMethodCallOperator: # (new in 0.82)
+  Enabled: true
+Lint/BinaryOperatorWithIdenticalOperands: # (new in 0.89)
+  Enabled: true
+Lint/ConstantDefinitionInBlock: # (new in 0.91)
+  Enabled: true
+Lint/DeprecatedOpenSSLConstant: # (new in 0.84)
+  Enabled: true
+Lint/DuplicateElsifCondition: # (new in 0.88)
+  Enabled: true
+Lint/DuplicateRequire: # (new in 0.90)
+  Enabled: true
+Lint/DuplicateRescueException: # (new in 0.89)
+  Enabled: true
+Lint/EmptyConditionalBody: # (new in 0.89)
+  Enabled: true
+Lint/EmptyFile: # (new in 0.90)
+  Enabled: true
+Lint/FloatComparison: # (new in 0.89)
+  Enabled: true
+Lint/IdentityComparison: # (new in 0.91)
+  Enabled: true
+Lint/MissingSuper: # (new in 0.89)
+  Enabled: true
+Lint/MixedRegexpCaptureTypes: # (new in 0.85)
+  Enabled: true
+Lint/OutOfRangeRegexpRef: # (new in 0.89)
+  Enabled: true
+Lint/RaiseException: # (new in 0.81)
+  Enabled: true
+Lint/SelfAssignment: # (new in 0.89)
+  Enabled: true
+Lint/StructNewOverride: # (new in 0.81)
+  Enabled: true
+Lint/TopLevelReturnWithArgument: # (new in 0.89)
+  Enabled: true
+Lint/TrailingCommaInAttributeDeclaration: # (new in 0.90)
+  Enabled: true
+Lint/UnreachableLoop: # (new in 0.89)
+  Enabled: true
+Lint/UselessMethodDefinition: # (new in 0.90)
+  Enabled: true
+Lint/UselessTimes: # (new in 0.91)
+  Enabled: true
+Style/AccessorGrouping: # (new in 0.87)
+  Enabled: true
+Style/ArrayCoercion: # (new in 0.88)
+  Enabled: true
+Style/BisectedAttrAccessor: # (new in 0.87)
+  Enabled: true
+Style/CaseLikeIf: # (new in 0.88)
+  Enabled: true
+Style/CombinableLoops: # (new in 0.90)
+  Enabled: true
+Style/ExplicitBlockArgument: # (new in 0.89)
+  Enabled: true
+Style/ExponentialNotation: # (new in 0.82)
+  Enabled: true
+Style/GlobalStdStream: # (new in 0.89)
+  Enabled: true
+Style/HashAsLastArrayItem: # (new in 0.88)
+  Enabled: true
+Style/HashEachMethods: # (new in 0.80)
+  Enabled: true
+Style/HashLikeCase: # (new in 0.88)
+  Enabled: true
+Style/HashTransformKeys: # (new in 0.80)
+  Enabled: true
+Style/HashTransformValues: # (new in 0.80)
+  Enabled: true
+Style/KeywordParametersOrder: # (new in 0.90)
+  Enabled: true
+Style/OptionalBooleanParameter: # (new in 0.89)
+  Enabled: true
+Style/RedundantAssignment: # (new in 0.87)
+  Enabled: true
+Style/RedundantFetchBlock: # (new in 0.86)
+  Enabled: true
+Style/RedundantFileExtensionInRequire: # (new in 0.88)
+  Enabled: true
+Style/RedundantRegexpCharacterClass: # (new in 0.85)
+  Enabled: true
+Style/RedundantRegexpEscape: # (new in 0.85)
+  Enabled: true
+Style/RedundantSelfAssignment: # (new in 0.90)
+  Enabled: true
+Style/SingleArgumentDig: # (new in 0.89)
+  Enabled: true
+Style/SlicingWithRange: # (new in 0.83)
+  Enabled: true
+Style/SoleNestedConditional: # (new in 0.89)
+  Enabled: true
+Style/StringConcatenation: # (new in 0.89)
+  Enabled: true
+Rails/ActiveRecordCallbacksOrder: # (new in 2.7)
+  Enabled: true
+Rails/FindById: # (new in 2.7)
+  Enabled: true
+Rails/Inquiry: # (new in 2.7)
+  Enabled: true
+Rails/MailerName: # (new in 2.7)
+  Enabled: true
+Rails/MatchRoute: # (new in 2.7)
+  Enabled: true
+Rails/NegateInclude: # (new in 2.7)
+  Enabled: true
+Rails/Pluck: # (new in 2.7)
+  Enabled: true
+Rails/PluckInWhere: # (new in 2.7)
+  Enabled: true
+Rails/RenderInline: # (new in 2.7)
+  Enabled: true
+Rails/RenderPlainText: # (new in 2.7)
+  Enabled: true
+Rails/ShortI18n: # (new in 2.7)
+  Enabled: true
+Rails/WhereExists: # (new in 2.7)
+  Enabled: true

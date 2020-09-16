@@ -17,7 +17,7 @@ module AuthenticatesWithTwoFactor
   # Returns nil
   def prompt_for_two_factor(user)
     # Set @user for Devise views
-    @user = user # rubocop:disable Gitlab/ModuleWithInstanceVariables
+    @user = user
 
     session[:otp_user_id] = user.id
     session[:user_password_hash] = Digest::SHA256.hexdigest(user.encrypted_password)
@@ -27,8 +27,7 @@ module AuthenticatesWithTwoFactor
     render 'devise/sessions/two_factor'
   end
 
-
-  def authenticate_with_two_factor
+  def authenticate_with_two_factor # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     user = self.resource = find_user
     return handle_changed_user(user) if user_password_changed?(user)
 
@@ -36,12 +35,12 @@ module AuthenticatesWithTwoFactor
       authenticate_with_two_factor_via_otp(user)
     elsif user_params[:device_response].present? && session[:otp_user_id]
       authenticate_with_two_factor_via_u2f(user)
-    elsif user && user.valid_password?(user_params[:password])
+    elsif user&.valid_password?(user_params[:password])
       prompt_for_two_factor(user)
     end
   end
 
-  def authenticate_with_two_factor_via_otp(user)
+  def authenticate_with_two_factor_via_otp(user) # rubocop:disable Metrics/AbcSize
     if valid_otp_attempt?(user)
       # Remove any lingering user data from login
       clear_two_factor_attempt!
@@ -59,18 +58,16 @@ module AuthenticatesWithTwoFactor
 
   # Setup in preparation of communication with a U2F (universal 2nd factor) device
   # Actual communication is performed using a Javascript API
-  # rubocop: disable CodeReuse/ActiveRecord
   def setup_u2f_authentication(user)
     key_handles = user.fido_usf_devices.pluck(:key_handle)
     u2f = U2F::U2F.new(u2f_app_id)
+    return if key_handles.blank?
 
-    if key_handles.present?
-      sign_requests = u2f.authentication_requests(key_handles)
-      session[:challenge] ||= u2f.challenge
-      @app_id = u2f_app_id
-      @sign_requests = sign_requests
-      @challenge =  session[:challenge]
-    end
+    sign_requests = u2f.authentication_requests(key_handles)
+    session[:challenge] ||= u2f.challenge
+    @app_id = u2f_app_id
+    @sign_requests = sign_requests
+    @challenge = session[:challenge]
   end
 
   # Authenticate using the response from a U2F (universal 2nd factor) device
@@ -85,7 +82,7 @@ module AuthenticatesWithTwoFactor
   def handle_two_factor_failure(user, method)
     # user.increment_failed_attempts!
     Rails.logger.info("Failed Login: user=#{user.username} ip=#{request.remote_ip} method=#{method}")
-    flash.now[:alert] = _('Authentication via %{method} device failed.') % { method: method }
+    flash.now[:alert] = format(_('Authentication via %{method} device failed.'), method: method) # rubocop:disable Style/FormatStringToken
     prompt_for_two_factor(user)
   end
 
@@ -103,7 +100,7 @@ module AuthenticatesWithTwoFactor
     session.delete(:challenge)
   end
 
-  def handle_changed_user(user)
+  def handle_changed_user(_user)
     clear_two_factor_attempt!
 
     redirect_to new_user_session_path, alert: _('An error occurred. Please sign in again.')

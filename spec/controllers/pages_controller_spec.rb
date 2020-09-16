@@ -9,20 +9,21 @@ RSpec.describe PagesController, type: :controller do
       uid: 'test',
       internal: true,
       redirect_uri: 'https://example.com',
-      name: 'this is a fairly high entropy test string' )
+      name: 'this is a fairly high entropy test string'
+    )
   end
 
-  context "User dashboard" do
+  context 'User dashboard' do
     render_views
     before do
       sign_in(user)
     end
 
-    it "shows logins" do
-      login = Login.create!(
+    it 'shows logins' do
+      Login.create!(
         user: user,
         service_provider: app,
-        auth_type: "Existing Login",
+        auth_type: 'Existing Login'
       )
       get :user_dashboard
       expect(response.body).to include('this is a fairly high entropy test string')

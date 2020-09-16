@@ -1,0 +1,68 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "1b5e4ee151da24cae32d3e2dbb5b9e47ea332d0e903546eb7b3a811c4a0af130",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/pages/home.html.erb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Liquid::Template.parse(Setting.home_template).render(template_variables)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "PagesController",
+          "method": "home",
+          "line": 9,
+          "file": "app/controllers/pages_controller.rb",
+          "rendered": {
+            "name": "pages/home",
+            "file": "app/views/pages/home.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "pages/home"
+      },
+      "user_input": "Setting.home_template",
+      "confidence": "Weak",
+      "note": "Setting.home_template is only configurable by an admin"
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "b9de5fbe03a42325b50925f441acf6f0cd1cb5dca29d358ca5be7fa35c911197",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/pages/user_dashboard.html.erb",
+      "line": 3,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Liquid::Template.parse(Setting.registered_home_template).render(template_variables)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "PagesController",
+          "method": "user_dashboard",
+          "line": 14,
+          "file": "app/controllers/pages_controller.rb",
+          "rendered": {
+            "name": "pages/user_dashboard",
+            "file": "app/views/pages/user_dashboard.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "pages/user_dashboard"
+      },
+      "user_input": "Setting.registered_home_template",
+      "confidence": "Weak",
+      "note": "Setting.registered_home_template is only configurable by an admin"
+    }
+  ],
+  "updated": "2020-09-16 10:08:29 +0200",
+  "brakeman_version": "4.9.1"
+}

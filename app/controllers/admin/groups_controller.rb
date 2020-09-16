@@ -17,9 +17,9 @@ class Admin::GroupsController < AdminController
       parent: {
         type: :select,
         options: { prompt: 'No Parent' },
-        finder: -> {
-          helpers.options_from_collection_for_select(Group.all, :id, :name, @model.parent.try(:id))
-          }
+        finder: lambda {
+                  helpers.options_from_collection_for_select(Group.all, :id, :name, @model.parent.try(:id))
+                }
       },
       permissions: {
         type: :select,
@@ -51,7 +51,7 @@ class Admin::GroupsController < AdminController
     p
   end
 
-    def sort_whitelist
-    ['created_at', 'name']
+  def sort_whitelist
+    %w[created_at name]
   end
 end

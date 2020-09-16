@@ -20,7 +20,7 @@
 #
 
 class Application < Doorkeeper::Application
-  has_many :logins, :as => :service_provider, dependent: :destroy
+  has_many :logins, as: :service_provider, dependent: :destroy
 
   def to_s
     name

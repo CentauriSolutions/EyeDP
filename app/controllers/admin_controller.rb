@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AdminController < ApplicationController
+class AdminController < ApplicationController # rubocop:disable Metrics/ClassLength
   # before_action :authenticate_user!
   before_action :ensure_user_is_admin!
   before_action :set_model, only: %i[show edit update destroy]
@@ -8,12 +8,10 @@ class AdminController < ApplicationController
   # GET /admin/#{model}.json
   def index
     @models = model
-      .page(params[:page] || 1)
-      .includes(includes)
-      .order(order)
-    if filter
-      @models = @models.where(filter)
-    end
+              .page(params[:page] || 1)
+              .includes(includes)
+              .order(order)
+    @models = @models.where(filter) if filter
   end
 
   # GET /admin/#{model}/1
@@ -30,7 +28,6 @@ class AdminController < ApplicationController
 
   # POST /admin/#{model}
   # POST /admin/#{model}.json
-  # rubocop:disable Metrics/AbcSize
   def create
     @model = model.new(model_params)
     respond_to do |format|
@@ -43,7 +40,6 @@ class AdminController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   # PATCH/PUT /admin/#{model}/1
   # PATCH/PUT /admin/#{model}/1.json
@@ -94,19 +90,19 @@ class AdminController < ApplicationController
 
   def filter
     if filter_whitelist.include? params[:filter_by]
-      {params[:filter_by] => params[:filter]}
+      { params[:filter_by] => params[:filter] }
     else
       {}
     end
   end
 
-  def order
+  def order # rubocop:disable Metrics/AbcSize
     sort = {
       sort_by: :created_at,
-      sort_dir: :asc,
+      sort_dir: :asc
     }
     sort[:sort_by] = params[:sort_by] if params[:sort_by] && sort_whitelist.include?(params[:sort_by])
-    sort[:sort_dir] = params[:sort_dir] if params[:sort_dir] && ['asc', 'desc'].include?(params[:sort_dir])
+    sort[:sort_dir] = params[:sort_dir] if params[:sort_dir] && %w[asc desc].include?(params[:sort_dir])
     { sort[:sort_by] => sort[:sort_dir] }
   end
 
@@ -141,7 +137,7 @@ class AdminController < ApplicationController
   end
 
   def ensure_user_is_admin!
-    raise ActionController::RoutingError.new('Not Found') and return \
-      unless current_user && current_user.admin?
+    raise(ActionController::RoutingError, 'Not Found') and return \
+      unless current_user&.admin?
   end
 end

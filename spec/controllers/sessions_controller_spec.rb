@@ -10,14 +10,13 @@ RSpec.describe SessionsController do
   end
 
   describe '#create' do
-
     context 'when using standard authentications' do
       context 'invalid password' do
         it 'does not authenticate user' do
           post(:create, params: { user: { login: 'invalid', password: 'invalid' } })
 
           expect(controller)
-            .to set_flash.now[:alert].to /Invalid Login or password/
+            .to set_flash.now[:alert].to(/Invalid Login or password/)
         end
       end
 
@@ -53,7 +52,7 @@ RSpec.describe SessionsController do
           expect(controller)
             .to receive(:remember_me).with(user).and_call_original
 
-          authenticate_2fa(remember_me: '1', otp_attempt: user.current_otp)
+          authenticate_2fa({ remember_me: '1', otp_attempt: user.current_otp })
 
           expect(response.cookies['remember_user_token']).to be_present
         end
@@ -62,7 +61,7 @@ RSpec.describe SessionsController do
           allow(controller).to receive(:find_user).and_return(user)
           expect(controller).not_to receive(:remember_me)
 
-          authenticate_2fa(remember_me: '0', otp_attempt: user.current_otp)
+          authenticate_2fa({ remember_me: '0', otp_attempt: user.current_otp })
 
           expect(response.cookies['remember_user_token']).to be_nil
         end
@@ -77,7 +76,7 @@ RSpec.describe SessionsController do
             otp_user_id: user.id
           )
 
-          expect(controller).to set_flash.now[:alert].to /Invalid Login or password/
+          expect(controller).to set_flash.now[:alert].to(/Invalid Login or password/)
         end
       end
 
@@ -94,8 +93,8 @@ RSpec.describe SessionsController do
 
           context 'when OTP is valid for another user' do
             it 'does not authenticate' do
-              authenticate_2fa(login: another_user.username,
-                               otp_attempt: another_user.current_otp)
+              authenticate_2fa({ login: another_user.username,
+                                 otp_attempt: another_user.current_otp })
 
               expect(subject.current_user).not_to eq another_user
             end
@@ -103,8 +102,8 @@ RSpec.describe SessionsController do
 
           context 'when OTP is invalid for another user' do
             it 'does not authenticate' do
-              authenticate_2fa(login: another_user.username,
-                               otp_attempt: 'invalid')
+              authenticate_2fa({ login: another_user.username,
+                                 otp_attempt: 'invalid' })
 
               expect(subject.current_user).not_to eq another_user
             end
@@ -113,7 +112,7 @@ RSpec.describe SessionsController do
           context 'when authenticating with OTP' do
             context 'when OTP is valid' do
               it 'authenticates correctly' do
-                authenticate_2fa(otp_attempt: user.current_otp)
+                authenticate_2fa({ otp_attempt: user.current_otp })
 
                 expect(subject.current_user).to eq user
               end
@@ -121,7 +120,7 @@ RSpec.describe SessionsController do
 
             context 'when OTP is invalid' do
               before do
-                authenticate_2fa(otp_attempt: 'invalid')
+                authenticate_2fa({ otp_attempt: 'invalid' })
               end
 
               it 'does not authenticate' do
@@ -130,7 +129,7 @@ RSpec.describe SessionsController do
 
               it 'warns about invalid OTP code' do
                 expect(controller).to set_flash.now[:alert]
-                  .to /Invalid two-factor code/
+                                               .to(/Invalid two-factor code/)
               end
             end
           end
@@ -159,7 +158,7 @@ RSpec.describe SessionsController do
           expect(controller)
             .to receive(:remember_me).with(user).and_call_original
 
-          authenticate_2fa_u2f(remember_me: '1', login: user.username, device_response: "{}")
+          authenticate_2fa_u2f(remember_me: '1', login: user.username, device_response: '{}')
 
           expect(response.cookies['remember_user_token']).to be_present
         end
@@ -169,7 +168,7 @@ RSpec.describe SessionsController do
           allow(controller).to receive(:find_user).and_return(user)
           expect(controller).not_to receive(:remember_me)
 
-          authenticate_2fa_u2f(remember_me: '0', login: user.username, device_response: "{}")
+          authenticate_2fa_u2f(remember_me: '0', login: user.username, device_response: '{}')
 
           expect(response.cookies['remember_user_token']).to be_nil
         end
