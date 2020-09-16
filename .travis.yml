@@ -28,3 +28,4 @@ script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rspec
   - bundle exec rubocop
+  - bundle exec brakeman
