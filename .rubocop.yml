@@ -11,6 +11,7 @@ AllCops:
     - config/initializers/devise.rb
     - app/models/setting.rb
     - config/deploy.rb
+    - vendor/**/*
 
 Style/StructInheritance:
   Exclude:
