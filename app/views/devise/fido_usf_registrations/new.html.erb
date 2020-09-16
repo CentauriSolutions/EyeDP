@@ -77,7 +77,7 @@
   };
 
   u2f.register(appId, registerRequests, signRequests, function(registerResponse) {
-    var form, reg;
+    var form;
 
     if (registerResponse.errorCode) {
       return setErrorCode(registerResponse.errorCode);

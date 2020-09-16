@@ -1,0 +1,56 @@
+<% if @user.two_factor_otp_enabled? %>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post, html: { class: "edit_user gl-show-field-errors js-2fa-form" }) do |f| %>
+    <% resource_params = params[resource_name].presence || params %>
+    <%= f.hidden_field :remember_me, value: resource_params.fetch(:remember_me, 0) %>
+    <div>
+      <%= f.label 'Two-Factor Authentication code', name: :otp_attempt %>
+      <%= f.text_field :otp_attempt, class: 'form-control', required: true, autofocus: true, autocomplete: 'off', title: 'This field is required.', data: { qa_selector: 'two_fa_code_field' } %>
+      <p class="form-text text-muted hint">Enter the code from the two-factor app on your mobile device. If you've lost your device, you may enter one of your recovery codes.</p>
+      <div class="prepend-top-20">
+        <%= f.submit "Verify code", class: "btn btn-success", data: { qa_selector: 'verify_code_button' } %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<h2>Authenticate key</h2>
+<p>Please insert one of your registered keys and press the button within 15 seconds</p>
+<p id="waiting">Waiting...</p>
+<p id="error" class="d-none"></p>
+<%= form_tag send("new_user_session_path"), method: 'post' do %>
+  <%= hidden_field_tag 'user[device_response]' %>
+<% end %>
+<%= javascript_tag nonce: true do -%>
+  var appId = <%= @app_id.to_json.html_safe %>;
+  var signRequests = <%= @sign_requests.to_json.html_safe %>;
+  var challenge = <%= @challenge.to_json.html_safe %>;
+  var $waiting = document.getElementById('waiting');
+  var $error = document.getElementById('error');
+  var errorMap = {
+    1: 'Unknown error, try again',
+    2: "Bad request error, try again" ,
+    3: "This key isn't supported, please try another one",
+    4: 'The device is is not registered, please register first.',
+    5: 'Authentication timed out. Please reload to try again.'
+  };
+  var setError = function(code) {
+    $waiting.className += ' d-none';
+    $error.className = $error.className.replace(/\bd-none\b/g, '');
+    $error.innerHTML = errorMap[code];
+  };
+
+  u2f.sign(appId, challenge, signRequests, function(signResponse) {
+    var form, reg;
+
+    if (signResponse.errorCode) {
+      return setError(signResponse.errorCode);
+    }
+
+    form = document.forms[<%= @user.two_factor_otp_enabled? ? 1 : 0 %>];
+    response = document.querySelector('[name="user[device_response]"]');
+
+    response.value = JSON.stringify(signResponse);
+
+    form.submit();
+  }, 15);
+<% end -%>

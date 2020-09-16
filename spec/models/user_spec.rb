@@ -25,6 +25,7 @@
 #
 
 require 'rails_helper'
+require 'devise_two_factor/spec_helpers'
 
 RSpec.describe User, type: :model do
   let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
@@ -61,4 +62,7 @@ RSpec.describe User, type: :model do
     user.login = 'example2'
     expect(user.login).to eq 'example2'
   end
+
+  it_behaves_like "two_factor_authenticatable"
+  it_behaves_like "two_factor_backupable"
 end

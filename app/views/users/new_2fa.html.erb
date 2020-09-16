@@ -1,0 +1,67 @@
+<div class="row gl-mt-3">
+  <div class="col-lg-4">
+    <h4 class="gl-mt-0">
+      <%= _('Register Two-Factor Authenticator') %>
+    </h4>
+    <p>
+      <%= _('Use an one time password authenticator on your mobile device or computer to enable two-factor authentication (2FA).') %>
+    </p>
+  </div>
+  <div class="col-lg-8">
+    <% if current_user.two_factor_otp_enabled? %>
+      <p>
+        <%= _("You've already enabled two-factor authentication using one time password authenticators. In order to register a different device, you must first disable two-factor authentication.") %>
+      </p>
+      <p>
+        <%= _('If you lose your recovery codes you can generate new ones, invalidating all previous codes.') %>
+      </p>
+      <div>
+        <%= link_to _('Disable two-factor authentication'), user_two_factor_auth_path,
+          method: :delete,
+          data: { confirm: ('Are you sure? This will invalidate your registered applications and U2F devices.') },
+          class: 'btn btn-danger gl-mr-3'
+         %>
+        <%= form_tag user_2fa_codes_path, {style: 'display: inline-block', method: :post} do |f| %>
+          <%= submit_tag _('Regenerate recovery codes'), class: 'btn' %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="row gl-mb-3">
+        <div class="col-md-4">
+          <%= raw @qr_code %>
+        </div>
+        <div class="col-md-8">
+          <div class="account-well">
+            <p class="gl-mt-0 gl-mb-0">
+              <%= _("Can't scan the code?") %>
+            </p>
+            <p class="gl-mt-0 gl-mb-0">
+              <%= _('To add the entry manually, provide the following details to the application on your phone.') %>
+            </p>
+            <p class="gl-mt-0 gl-mb-0">
+              <%= _('Account: %{account}') % { account: @account_string } %>
+              <%= _('Key: %{key}') %{ key: current_user.otp_secret.scan(/.{4}/).join(' ') } %>
+            </p>
+            <p class="two-factor-new-manual-content">
+              <%= _('Time based: Yes') %>
+            </p>
+          </div>
+        </div>
+      </div>
+      <%= form_tag user_two_factor_auth_path, method: :post do |f| %>
+        <% if @error %>
+          <div class="gl-alert gl-alert-danger gl-mb-5">
+            <%= @error %>
+          </div>
+        <% end %>
+        <div class="form-group">
+          <%= label_tag :pin_code, _('Pin code'), class: "label-bold" %>
+          <%= text_field_tag :pin_code, nil, class: "form-control", required: true, data: { qa_selector: 'pin_code_field' } %>
+        </div>
+        <div class="gl-mt-3">
+          <%= submit_tag _('Register with two-factor app'), class: 'btn btn-success', data: { qa_selector: 'register_2fa_app_button' } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

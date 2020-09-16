@@ -16,6 +16,14 @@
     <% end %>
   <% end %>
   <hr>
+  <%= settings_row("Device based two factor", "Use your phone or other device for token based two factor authentication", id: "two-factor") do %>
+    <%- if current_user.two_factor_otp_enabled? %>
+      <%= link_to _('Manage 2FA'), new_user_2fa_registration_path, class: 'btn btn-success' %>
+    <%- else %>
+      <%= link_to _('Enable 2FA'), new_user_2fa_registration_path, class: 'btn btn-success' %>
+    <%- end %>
+  <% end %>
+  <hr>
   <%= settings_row("FIDO U2F Devices", "Your registered FIDO U2F devices for a more secure authentication with a second factor", id: "fido-usf-devices") do %>
     <%= render partial: 'devise/registrations/fido_usf_devices' %>
   <% end %>

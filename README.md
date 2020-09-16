@@ -4,6 +4,7 @@ EyeDP is a federating identity provider. It is designed to be very self-containe
 
 EyeDP is dual licensed under the Apache2 and MIT licenses.
 
+EyeDP is proud to use [Translation.io](https://translation.io) for our localisation.
 ## Contents
 
 - [Overview](#overview)
@@ -113,6 +114,7 @@ services:
     - DISABLE_SSL=true
     - RAILS_SERVE_STATIC_FILES=true
     - SSO_DOMAIN=.example.com
+    - TOTP_ENCRYPTION_KEY=something-really-awesome-that's-at-least-32-bytes
 volumes:
   postgres:
 ```

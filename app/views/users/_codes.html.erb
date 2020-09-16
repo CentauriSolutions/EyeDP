@@ -1,0 +1,18 @@
+<p class="slead">
+  <%= _('Should you ever lose your phone or access to your one time password secret, each of these recovery codes can be used one time each to regain access to your account. Please save them in a safe place, or you will lose access to your account.') %>
+</p>
+<div class="codes card">
+  <ul>
+    <% @codes.each do |code| %>
+      <li>
+        <span class="monospace">
+          <%= code %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+</div>
+<div class="d-flex">
+  <%= link_to _('Proceed'), edit_user_registration_path, class: 'btn btn-success gl-mr-3', data: { qa_selector: 'proceed_button' } %>
+  <%= link_to _('Download codes'), "data:text/plain;charset=utf-8,#{CGI.escape(@codes.join("\n"))}", download: "recovery-codes.txt", class: 'btn btn-default' %>
+</div>

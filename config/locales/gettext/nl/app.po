@@ -1,0 +1,132 @@
+# Dutch translations for eyedp package.
+# Copyright (C) 2020 eyedp
+# This file is distributed under the same license as the eyedp package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: eyedp 1.0\n"
+"Report-Msgid-Bugs-To: contact@translation.io\n"
+"POT-Creation-Date: 2020-09-15 19:55+0200\n"
+"PO-Revision-Date: 2020-09-15 19:55+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Dutch\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"\n"
+
+#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:55
+msgid "Invalid two-factor code."
+msgstr ""
+
+#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:88
+msgid "Authentication via %{method} device failed."
+msgstr ""
+
+#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:109
+msgid "An error occurred. Please sign in again."
+msgstr ""
+
+#: ../../../app/controllers/users_controller.rb:21
+msgid "Invalid pin code"
+msgstr ""
+
+#: ../../../app/controllers/users_controller.rb:37
+msgid "Two-factor authentication has been disabled successfully!"
+msgstr ""
+
+#: ../../../app/views/devise/registrations/edit.html.erb:21
+msgid "Manage 2FA"
+msgstr ""
+
+#: ../../../app/views/devise/registrations/edit.html.erb:23
+msgid "Enable 2FA"
+msgstr ""
+
+#: ../../../app/views/users/_codes.html.erb:2
+msgid ""
+"Should you ever lose your phone or access to your one time password secret, ea"
+"ch of these recovery codes can be used one time each to regain access to your "
+"account. Please save them in a safe place, or you will lose access to your acc"
+"ount."
+msgstr ""
+
+#: ../../../app/views/users/_codes.html.erb:16
+msgid "Proceed"
+msgstr ""
+
+#: ../../../app/views/users/_codes.html.erb:17
+msgid "Download codes"
+msgstr ""
+
+#: ../../../app/views/users/codes.html.erb:3
+msgid "Two-factor Authentication Recovery codes"
+msgstr ""
+
+#: ../../../app/views/users/create_2fa.html.erb:2
+msgid "Congratulations! You have enabled Two-factor Authentication!"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:4
+msgid "Register Two-Factor Authenticator"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:7
+msgid ""
+"Use an one time password authenticator on your mobile device or computer to en"
+"able two-factor authentication (2FA)."
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:13
+msgid ""
+"You've already enabled two-factor authentication using one time password authe"
+"nticators. In order to register a different device, you must first disable two"
+"-factor authentication."
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:16
+msgid ""
+"If you lose your recovery codes you can generate new ones, invalidating all pr"
+"evious codes."
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:19
+msgid "Disable two-factor authentication"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:25
+msgid "Regenerate recovery codes"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:36
+msgid "Can't scan the code?"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:39
+msgid ""
+"To add the entry manually, provide the following details to the application on"
+" your phone."
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:42
+msgid "Account: %{account}"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:43
+msgid "Key: %{key}"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:46
+msgid "Time based: Yes"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:58
+msgid "Pin code"
+msgstr ""
+
+#: ../../../app/views/users/new_2fa.html.erb:62
+msgid "Register with two-factor app"
+msgstr ""

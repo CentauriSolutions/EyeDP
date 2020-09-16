@@ -5,7 +5,7 @@ en:
 
     flashs:
       device:
-        removed:  "Device removed."
+        removed:  ""
         registered:  "New 2FA device successfully registered."
 
   common:

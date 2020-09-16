@@ -32,6 +32,12 @@ gem 'devise'
 gem 'devise-i18n'
 gem 'devise_fido_usf'
 gem 'friendly_id'
+# Do TOTP 2FA
+gem 'devise-two-factor'
+gem 'rqrcode'
+
+# Translations
+gem 'translation'
 
 gem 'bootstrap', '~> 4.4.1'
 gem 'bootstrap_form', '>= 4.2.0'
@@ -99,4 +105,10 @@ group :development do
   gem 'capistrano-rvm',     require: false
   gem 'capistrano3-puma',   require: false
   gem 'ed25519',            require: false
+end
+
+group :test do
+  gem 'faker'
+  gem 'timecop'
+  gem 'shoulda'
 end

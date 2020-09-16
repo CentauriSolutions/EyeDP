@@ -19,7 +19,10 @@ Rails.application.routes.draw do
     post :settings, to: 'settings#update'
   end
 
-  devise_for :users, :controllers => { :registrations => "registrations" }
+  devise_for :users, :controllers => {
+    registrations: :registrations,
+    sessions: :sessions,
+  }
 
   authenticated do
     root to: 'pages#user_dashboard', as: :authenticated_root
@@ -29,6 +32,10 @@ Rails.application.routes.draw do
     root to: 'pages#home'
   end
 
+  get 'users/2fa', to: 'users#new_2fa', as: 'new_user_2fa_registration'
+  post 'users/2fa', to: 'users#create_2fa', as: 'user_two_factor_auth'
+  post 'users/2fa/codes', to: 'users#codes', as: 'user_2fa_codes'
+  delete '/users/2fa', to: 'users#disable_2fa'
   # SAMLv2 IdP
   get '/saml/auth' => 'saml_idp#create'
   post '/saml/auth' => 'saml_idp#create'

@@ -29,10 +29,18 @@ class ApplicationController < ActionController::Base
     super || ( current_user && current_user.admin? )
   end
 
+  # U2F (universal 2nd factor) devices need a unique identifier for the application
+  # to perform authentication.
+  # https://developers.yubico.com/U2F/App_ID.html
+  def u2f_app_id
+    request.base_url
+  end
+
+
    protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:login])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:login, :otp_attempt])
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :email])
     devise_parameter_sanitizer.permit(:account_update, keys: [:username, :email, :name])
   end

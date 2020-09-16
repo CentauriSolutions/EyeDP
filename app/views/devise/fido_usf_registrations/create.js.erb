@@ -1,0 +1,6 @@
+<%- if @error_message %>
+  <% flash.clear %>
+  setError("<%= escape_javascript @error_message %>");
+<% else %>
+  setSuccess("<%= escape_javascript render partial: 'devise/fido_usf_registrations/success' %>");
+<% end -%>

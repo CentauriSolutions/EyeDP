@@ -20,5 +20,6 @@ services:
     - db
   environment:
     DATABASE_URL: postgres://postgres:super-secure-password@db:5432/myapp_development
+    TOTP_ENCRYPTION_KEY: something-really-awesome-that's-at-least-32-bytes
 volumes:
   postgres:
