@@ -13,6 +13,7 @@
   <% end %>
 <% end %>
 
+<% if @user.two_factor_u2f_enabled? %>
 <h2>Authenticate key</h2>
 <p>Please insert one of your registered keys and press the button within 15 seconds</p>
 <p id="waiting">Waiting...</p>
@@ -53,4 +54,5 @@
 
     form.submit();
   }, 15);
+<% end -%>
 <% end -%>
