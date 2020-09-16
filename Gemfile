@@ -110,4 +110,5 @@ end
 group :test do
   gem 'faker'
   gem 'timecop'
+  gem 'shoulda'
 end
