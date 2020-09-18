@@ -34,35 +34,35 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
-      "fingerprint": "b9de5fbe03a42325b50925f441acf6f0cd1cb5dca29d358ca5be7fa35c911197",
+      "fingerprint": "b0e78553e12950f66f3164d2313a7e57647e1cccc0da7326640f55325384b3b9",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
-      "file": "app/views/pages/user_dashboard.html.erb",
-      "line": 3,
+      "file": "app/views/profile/show.html.erb",
+      "line": 9,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Liquid::Template.parse(Setting.registered_home_template).render(template_variables)",
       "render_path": [
         {
           "type": "controller",
-          "class": "PagesController",
-          "method": "user_dashboard",
-          "line": 14,
-          "file": "app/controllers/pages_controller.rb",
+          "class": "ProfileController",
+          "method": "show",
+          "line": 7,
+          "file": "app/controllers/profile_controller.rb",
           "rendered": {
-            "name": "pages/user_dashboard",
-            "file": "app/views/pages/user_dashboard.html.erb"
+            "name": "profile/show",
+            "file": "app/views/profile/show.html.erb"
           }
         }
       ],
       "location": {
         "type": "template",
-        "template": "pages/user_dashboard"
+        "template": "profile/show"
       },
       "user_input": "Setting.registered_home_template",
       "confidence": "Weak",
-      "note": "Setting.registered_home_template is only configurable by an admin"
+      "note": "Setting.registered_home_template is only configurable by an admin."
     }
   ],
-  "updated": "2020-09-16 10:08:29 +0200",
+  "updated": "2020-09-18 14:49:27 +0200",
   "brakeman_version": "4.9.1"
 }
