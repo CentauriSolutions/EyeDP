@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <%- if Setting.logo && asset_available?(Setting.logo) %>
-    <a class="navbar-brand" href="#"><%= image_tag Setting.logo, height: Setting.logo_height, width: Setting.logo_width %></a>
+    <a class="navbar-brand" href="<%= root_path %>"><%= image_tag Setting.logo, height: Setting.logo_height, width: Setting.logo_width %></a>
   <%- else %>
-    <a class="navbar-brand" href="#"><%= fa_icon("eye") %>dP</a>
+    <a class="navbar-brand" href="<%= root_path %>"><%= fa_icon("eye") %>dP</a>
   <%- end %>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>

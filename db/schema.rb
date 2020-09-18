@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_15_061345) do
+ActiveRecord::Schema.define(version: 2020_09_18_103309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2020_09_15_061345) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "internal", default: false
+    t.text "display_url"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -134,6 +135,8 @@ ActiveRecord::Schema.define(version: 2020_09_15_061345) do
     t.string "response_hosts", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "display_url"
+    t.text "name"
     t.index ["issuer_or_entity_id"], name: "index_saml_service_providers_on_issuer_or_entity_id", unique: true
   end
 

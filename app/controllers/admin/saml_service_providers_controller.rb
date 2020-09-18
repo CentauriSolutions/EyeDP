@@ -9,11 +9,11 @@ class Admin::SamlServiceProvidersController < AdminController
   private
 
   def model_attributes
-    %w[issuer_or_entity_id metadata_url fingerprint response_hosts]
+    %w[name display_url issuer_or_entity_id metadata_url fingerprint response_hosts]
   end
 
   def new_fields
-    %w[issuer_or_entity_id metadata_url fingerprint response_hosts]
+    %w[name display_url issuer_or_entity_id metadata_url fingerprint response_hosts]
   end
 
   def model
@@ -23,7 +23,10 @@ class Admin::SamlServiceProvidersController < AdminController
   def model_params
     p = params
         .require(:saml_service_provider)
-        .permit(:issuer_or_entity_id, :metadata_url, :fingerprint, :response_hosts)
+        .permit(
+          :name, :display_url,
+          :issuer_or_entity_id, :metadata_url,
+          :fingerprint, :response_hosts)
     p[:response_hosts] = p[:response_hosts].split(/ +/) if p[:response_hosts]
     p
   end
