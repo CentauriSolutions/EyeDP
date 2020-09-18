@@ -36,6 +36,9 @@
           <%- @logins.each do |login| %>
           <tr>
             <%- sp = login.service_provider %>
+            <% if sp.kind_of? Doorkeeper::Application %>
+              <%- sp = Application.find(sp.id) %>
+            <%- end %>
             <% name = sp.try(:name) || sp.to_s %>
             <% url = sp.display_url || sp.to_s %>
             <td><%= link_to name, url %></td>

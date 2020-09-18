@@ -5,6 +5,7 @@ class ProfileController < ApplicationController
     @template = Liquid::Template.parse(Setting.registered_home_template)
     @logins = current_user
               .logins
+              .includes([:service_provider])
               .select(
                 'DISTINCT ON(logins.service_provider_id) logins.*'
               )
