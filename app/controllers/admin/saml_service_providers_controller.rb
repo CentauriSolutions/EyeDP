@@ -26,7 +26,8 @@ class Admin::SamlServiceProvidersController < AdminController
         .permit(
           :name, :display_url,
           :issuer_or_entity_id, :metadata_url,
-          :fingerprint, :response_hosts)
+          :fingerprint, :response_hosts
+        )
     p[:response_hosts] = p[:response_hosts].split(/ +/) if p[:response_hosts]
     p
   end
