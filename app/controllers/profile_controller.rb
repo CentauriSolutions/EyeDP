@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
-class PagesController < ApplicationController
-  before_action :authenticate_user!
-  skip_before_action :authenticate_user!, only: :home
-
-  def home
-    @template = Liquid::Template.parse(Setting.home_template)
+class ProfileController < ApplicationController
+  def show
+    @template = Liquid::Template.parse(Setting.registered_home_template)
+    @logins = current_user
+              .logins
+              .select(
+                'DISTINCT ON(logins.service_provider_id) logins.*'
+              )
+              .order(service_provider_id: :desc, created_at: :desc)
+              .limit(10)
   end
 
   def template_variables # rubocop:disable Metrics/MethodLength

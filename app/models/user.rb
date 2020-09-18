@@ -88,7 +88,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
         encrypted_otp_secret_salt:   nil,
         otp_backup_codes:            nil
       )
-      fido_usf_devices.destroy_all
+      fido_usf_devices.destroy_all unlless params[:otp_only]
     end
   end
 

@@ -4,11 +4,11 @@ class Admin::ApplicationsController < AdminController
   private
 
   def model_attributes
-    %w[name uid internal secret redirect_uri scopes confidential]
+    %w[name display_url uid internal secret redirect_uri scopes confidential]
   end
 
   def new_fields
-    %w[name uid internal secret redirect_uri scopes confidential]
+    %w[name display_url uid internal secret redirect_uri scopes confidential]
   end
 
   def model

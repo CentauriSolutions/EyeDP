@@ -1,0 +1,49 @@
+<h1 class="flex justify-center">Welcome, <%= current_user.username || current_user.email %></h1>
+<hr />
+<div class="row">
+  <%= render partial: 'profile/profile_nav' %>
+  <div class="col-md-9">
+
+    <hr class="d-none d-sm-block d-md-none" />
+    <%- if @template %>
+      <%= @template.render(template_variables).html_safe %>
+      <hr />
+      <%- end %>
+    <h2>Personal Details</h2>
+    <%- resource = @resource || current_user %>
+    <%- resource_name = 'user' %>
+
+        <%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+          <%= f.text_field :username %>
+          <%= f.email_field :email, autofocus: true %>
+          <%= f.text_field :name %>
+
+          <hr />
+
+          <p><%= _("To edit any details on this page, you must confirm your current password.") %></p>
+          <%= f.password_field :password, autocomplete: "off", help: _("Leave blank if you don't want to change your password") %>
+          <%= f.password_field :password_confirmation, autocomplete: "off" %>
+          <%= f.password_field :current_password, autocomplete: "off", help: _("We need your current password to confirm your changes to update your account details") %>
+          <%= f.submit _('Save Changes'), class: 'btn btn-success', style: "float: left" %>
+        <% end %>
+        <%= button_to _('Permanently delete account'), registration_path(resource_name), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete %></p>
+        <hr>
+    <%- if @logins %>
+      <h2><%= _("Sites to which you've recently authenticated") %></h2>
+
+      <table class="table table-striped">
+        <tbody>
+          <%- @logins.each do |login| %>
+          <tr>
+            <%- sp = login.service_provider %>
+            <% name = sp.try(:name) || sp.to_s %>
+            <% url = sp.display_url || sp.to_s %>
+            <td><%= link_to name, url %></td>
+            <td><%= login.created_at.to_formatted_s(:long) %></td>
+          </tr>
+          <%- end %>
+        </tbody>
+      </table>
+    <%- end %>
+  </div>
+</div>

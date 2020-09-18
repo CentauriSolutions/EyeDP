@@ -1,0 +1,44 @@
+<h1 class="flex justify-center">Welcome, <%= current_user.username || current_user.email %></h1>
+<hr />
+<div class="row">
+  <%= render partial: 'profile/profile_nav' %>
+  <div class="col-md-9">
+    <h2>Authentication Devices you've added</h2>
+    <div class="new-device"></div>
+
+    <table id class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th class="col-md-4"><%= FidoUsf::FidoUsfDevice.human_attribute_name('name') %></th>
+        <th class="col-md-3"><%= FidoUsf::FidoUsfDevice.human_attribute_name('last_authenticated_at') %></th>
+        <th class="col-md-2"><%= t('common.actions') %></th>
+      </tr>
+      </thead>
+      <tbody id="devices">
+        <%- if current_user.two_factor_otp_enabled? %>
+          <tr id="totp_device">
+            <td>TOTP</td>
+            <td><%= l(Time::at(current_user.consumed_timestep * current_user.otp.interval), format: :long) %></td>
+            <td><%= link_to _('Delete'), user_two_factor_auth_path(otp_only: true),
+              method: :delete,
+              data: { confirm: ('Are you sure? This will invalidate your registered applications and U2F devices.') } %></td>
+          </tr>
+        <%- end %>
+        <% current_user.fido_usf_devices.each do |device| %>
+          <tr id="device_<%= device.id %>">
+            <td><%= device.name %></td>
+            <td><%= l(device.last_authenticated_at, format: :long) %></td>
+            <td><%= link_to _('Delete'), user_fido_usf_registration_path, id: device.id, remote: true, method: :delete, data: { confirm: "Should device #{device.name} be deleted?" } %></td>
+          </tr>
+        <%- end %>
+      </tbody>
+    </table>
+
+    <%- if current_user.two_factor_otp_enabled? %>
+      <%= link_to _('Manage TOTP 2FA'), new_user_2fa_registration_path, class: 'btn btn-primary' %>
+    <%- else %>
+      <%= link_to _('Enable TOTP 2FA'), new_user_2fa_registration_path, class: 'btn btn-primary' %>
+    <%- end %>
+    <%= link_to t('devise.registrations.register_u2f'), new_user_fido_usf_registration_path, class: "btn btn-primary" %>
+  </div>
+</div>

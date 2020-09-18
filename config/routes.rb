@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   }
 
   authenticated do
-    root to: 'pages#user_dashboard', as: :authenticated_root
+    root to: 'profile#show', as: :authenticated_root
   end
 
   scope '(:locale)', locale: /en/ do
@@ -43,4 +43,9 @@ Rails.application.routes.draw do
   match '/saml/logout' => 'saml_idp#logout', via: %i[get post delete]
 
   get 'auth/basic/:permission_name', to: 'basic_auth#create'
+
+  namespace :profile do
+    get 'authentication_devices', to: 'authentication_devices#index', as: 'authentication_devices'
+    get 'account_activity', to: 'account_activity#index', as: 'account_activity'
+  end
 end

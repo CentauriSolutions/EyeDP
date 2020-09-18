@@ -1,0 +1,25 @@
+<h1 class="flex justify-center">Welcome, <%= current_user.username || current_user.email %></h1>
+<hr />
+<div class="row">
+  <%= render partial: 'profile/profile_nav' %>
+  <div class="col-md-9">
+    <h2>Account Activity</h2>
+
+     <p>The 50 most recent accesses made with your account are shown here.</p>
+
+    <p>This includes authentication requests made by other sites and devices. </p>
+
+    <table class="table table-striped">
+      <tbody>
+        <%- @logins.each do |login| %>
+        <tr>
+          <% name = login.service_provider.try(:name) || login.service_provider.to_s %>
+          <td><%= link_to name, name %></td>
+          <td><%= login.auth_type %></td>
+          <td><%= login.created_at.to_formatted_s(:long) %></td>
+        </tr>
+        <%- end %>
+      </tbody>
+    </table>
+  </div>
+</div>
