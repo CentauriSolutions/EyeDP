@@ -79,7 +79,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def disable_two_factor! otp_only=false
+  def disable_two_factor!(otp_only = false) # rubocop:disable Style/OptionalBooleanParameter
     transaction do
       update(
         otp_required_for_login:      false,
