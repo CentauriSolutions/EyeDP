@@ -50,7 +50,7 @@ module AuthenticatesWithTwoFactor
       sign_in(user, message: :two_factor_authenticated, event: :authentication)
     else
       # user.increment_failed_attempts!
-      Rails.logger.info("Failed Login: user=#{user.username} ip=#{request.remote_ip} method=OTP")
+      Rails.logger.warn("Failed Login: user=#{user.username} ip=#{request.remote_ip} method=OTP")
       flash.now[:alert] = _('Invalid two-factor code.')
       prompt_for_two_factor(user)
     end
@@ -81,7 +81,7 @@ module AuthenticatesWithTwoFactor
 
   def handle_two_factor_failure(user, method)
     # user.increment_failed_attempts!
-    Rails.logger.info("Failed Login: user=#{user.username} ip=#{request.remote_ip} method=#{method}")
+    Rails.logger.warn("Failed Login: user=#{user.username} ip=#{request.remote_ip} method=#{method}")
     flash.now[:alert] = format(_('Authentication via %{method} device failed.'), method: method) # rubocop:disable Style/FormatStringToken
     prompt_for_two_factor(user)
   end
