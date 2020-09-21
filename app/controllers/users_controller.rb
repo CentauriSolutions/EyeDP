@@ -32,7 +32,7 @@ class UsersController < ApplicationController
   end
 
   def disable_2fa
-    current_user.disable_two_factor!
+    current_user.disable_two_factor! params[:otp_only]
 
     redirect_to edit_user_registration_path,
                 status: :found,

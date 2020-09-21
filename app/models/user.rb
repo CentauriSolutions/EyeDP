@@ -79,7 +79,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def disable_two_factor!
+  def disable_two_factor!(otp_only = false) # rubocop:disable Style/OptionalBooleanParameter
     transaction do
       update(
         otp_required_for_login:      false,
@@ -88,7 +88,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
         encrypted_otp_secret_salt:   nil,
         otp_backup_codes:            nil
       )
-      fido_usf_devices.destroy_all unlless params[:otp_only]
+      fido_usf_devices.destroy_all unless otp_only
     end
   end
 
