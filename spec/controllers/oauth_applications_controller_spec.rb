@@ -20,7 +20,14 @@ RSpec.describe OauthApplicationsController, type: :controller do
     end
 
     describe 'Existing Login' do
-      it 'records the login'  do
+      it 'updates user activity' do
+        start = user.last_activity_at
+        get :create, params: params
+        user.reload
+        expect(user.last_activity_at).not_to eq(start)
+      end
+
+      it 'records the login' do
         # @request.env['devise.mapping'] = Devise.mappings[:user]
         get :create, params: params
         expect(response.status).to eq(302)
@@ -29,6 +36,13 @@ RSpec.describe OauthApplicationsController, type: :controller do
     end
 
     describe 'New login' do
+      it 'updates user activity' do
+        start = user.last_activity_at
+        get :create, params: params
+        user.reload
+        expect(user.last_activity_at).not_to eq(start)
+      end
+
       it 'records the login' do
         # @request.env['devise.mapping'] = Devise.mappings[:user]
         get :create, params: params

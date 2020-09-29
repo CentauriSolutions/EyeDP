@@ -102,6 +102,12 @@ class Setting < ApplicationRecord
         return value
       when :integer
         return value.to_i
+      when :time
+        if value.is_a?(String)
+          return ActiveSupport::Duration::parse(value)
+        else
+          return value.iso8601
+        end
       else
         value
       end
@@ -141,4 +147,6 @@ class Setting < ApplicationRecord
 
   field :home_template, default: '', type: :string
   field :registered_home_template, default: '', type: :string
+
+  field :expire_after, type: :time
 end

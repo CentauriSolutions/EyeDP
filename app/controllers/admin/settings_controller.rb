@@ -8,13 +8,14 @@ class Admin::SettingsController < AdminController
 
   # PATCH/PUT /admin/settings/1
   # PATCH/PUT /admin/settings/1.json
-  def update
+  def update # rubocop:disable Metrics/MethodLength
     opts = setting_params
     opts[:registration_enabled] = if opts[:registration_enabled].nil?
                                     false
                                   else
                                     true
                                   end
+    opts[:expire_after] = opts[:expire_after].to_i.days if opts[:expire_after]
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
@@ -36,7 +37,8 @@ class Admin::SettingsController < AdminController
       :oidc_signing_key,
       :registration_enabled,
       :logo, :logo_height, :logo_width,
-      :home_template, :registered_home_template
+      :home_template, :registered_home_template,
+      :expire_after
     )
   end
 end

@@ -68,6 +68,39 @@ RSpec.describe User, type: :model do
     expect(user.expired?).to be true
   end
 
+  context 'Expirable' do
+    context 'expire_after 30 days' do
+      before do
+        Setting.expire_after = 30.days
+      end
+      after do
+        Setting.expire_after = nil
+      end
+      it 'expires a user' do
+        expect(user.expired?).to be false
+        user.last_activity_at = 31.days.ago
+        expect(user.expired?).to be true
+      end
+
+      it 'allows unexpired users' do
+        expect(user.expired?).to be false
+        user.last_activity_at = 10.days.ago
+        expect(user.expired?).to be false
+      end
+    end
+
+    context 'expire_after nil' do
+      before do
+        Setting.expire_after = nil
+      end
+      it 'expires a user' do
+        expect(user.expired?).to be false
+        user.last_activity_at = 2.years.ago
+        expect(user.expired?).to be false
+      end
+    end
+  end
+
   it_behaves_like 'two_factor_authenticatable'
   it_behaves_like 'two_factor_backupable'
 end

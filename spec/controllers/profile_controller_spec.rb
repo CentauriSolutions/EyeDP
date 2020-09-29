@@ -37,5 +37,12 @@ RSpec.describe ProfileController, type: :controller do
         .to match(/account is expired/)
       expect(response.body).to include('redirected')
     end
+
+    it 'updates user activity' do
+      start = user.last_activity_at
+      get :show
+      user.reload
+      expect(user.last_activity_at).not_to eq(start)
+    end
   end
 end

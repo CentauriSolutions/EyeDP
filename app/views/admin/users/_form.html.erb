@@ -58,6 +58,18 @@
   <div class="form-group">
     <div class="row">
       <div class="col-sm-2">
+        <%= form.label :last_activity_at %>
+      </div>
+      <div class="col-sm-10">
+          <%= form.text_field :last_activity_at, class: 'form-control' %>
+          <a href='#' onclick="clear_activity()">Reset</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-2">
         <%= form.label :password %>
       </div>
       <div class="col-sm-10">
@@ -93,5 +105,9 @@ function generate() {
 
 function expire_now() {
   $('#user_expires_at').val("<%= Time.now.utc %>");
+}
+
+function clear_activity() {
+  $('#user_last_activity_at').val("");
 }
 </script>
