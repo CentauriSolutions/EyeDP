@@ -113,6 +113,18 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     }
   end
 
+  def active_for_authentication?
+    super && !expired?
+  end
+
+  def expired?
+    expires_at.present? && expires_at < Time.current
+  end
+
+  def inactive_message
+    expired? ? :user_expired : super
+  end
+
   def admin?
     @admin ||= groups.include?(Group.find_by(name: 'administrators'))
   end

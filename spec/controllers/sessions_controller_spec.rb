@@ -29,6 +29,14 @@ RSpec.describe SessionsController do
 
           expect(subject.current_user).to eq user
         end
+
+        it 'does not authenticate an expired user' do
+          user.update!(expires_at: 10.minutes.ago)
+
+          post(:create, params: { user: user_params })
+          expect(flash[:alert])
+            .to match(/account is expired/)
+        end
       end
     end
 
