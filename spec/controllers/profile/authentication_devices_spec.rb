@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Profile::AuthenticationDevicesController, type: :controller do
+RSpec.describe Profile::AuthenticationDevicesController, type: :controller do # rubocop:disable Metrics/BlockLength
   let(:user) do
     User.create!(
       username: 'example',
@@ -23,6 +23,13 @@ RSpec.describe Profile::AuthenticationDevicesController, type: :controller do
       user.save
       get :index
       expect(response.body).to include('TOTP')
+    end
+
+    it 'updates user activity' do
+      start = user.last_activity_at
+      get :index
+      user.reload
+      expect(user.last_activity_at).not_to eq(start)
     end
   end
 end

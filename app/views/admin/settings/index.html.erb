@@ -10,6 +10,11 @@
       <td>Enable User Registration</td>
       <td><input type="checkbox" name="setting[registration_enabled]" class="form-control" <% if Setting.registration_enabled %>checked <% end %> value="" /></td>
     </tr>
+    <tr>
+      <td>Expire User after inactivity</td>
+      <td><input type="text" name="setting[expire_after]" class="form-control" value="<%= Setting.expire_after.parts[:days] %>" />
+        <p class="small">Number of days after which a user should be deactivated. Empty disables this feature.</p></td>
+    </tr>
     <!-- Logo settings -->
   </table>
   <h3>Branding</h3>

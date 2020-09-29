@@ -2,8 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::UsersController, type: :controller do
-  let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
+RSpec.describe Admin::SettingsController, type: :controller do
+  let(:user) do
+    User.create!(
+      username: 'user', email: 'user@localhost',
+      password: 'test1234', last_activity_at: 1.year.ago
+    )
+  end
   let(:group) { Group.create!(name: 'administrators') }
   let(:admin) do
     user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
@@ -23,21 +28,15 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
 
       context 'Edit' do
-        it 'can expire a user' do
-          expect(user.expired?).to be false
-          post(:update, params: { id: user.id, user: { expires_at: 10.minutes.ago } })
-          expect(response.status).to eq(302)
-          user.reload
-          expect(user.expired?).to be true
+        after do
+          Setting.expire_after = nil
         end
-
-        it 'can re-enable a timed-out User' do
-          user.update!({ last_activity_at: 30.days.ago })
-          Setting.expire_after = 15.days
-          expect(user.expired?).to eq true
-          post(:update, params: { id: user.id, user: { last_activity_at: nil } })
-          user.reload
-          expect(user.expired?).to eq false
+        it 'can update expire time' do
+          expect(user.expired?).to be false
+          post(:update, params: { setting: { expire_after: 30 } })
+          expect(response.status).to eq(302)
+          expect(user.expired?).to be true
+          expect(Setting.expire_after).to eq 30.days
         end
       end
     end

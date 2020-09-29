@@ -25,7 +25,7 @@ class Admin::UsersController < AdminController
   end
 
   def whitelist_attributes
-    %w[email name username groups expires_at]
+    %w[email name username groups expires_at last_activity_at]
   end
 
   def model
@@ -36,7 +36,7 @@ class Admin::UsersController < AdminController
   def model_params
     p = params.require(:user).permit(
       :email, :username, :password, :email, :name, :expires_at,
-      groups: []
+      :last_activity_at, groups: []
     )
     # binding.pry
     p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]

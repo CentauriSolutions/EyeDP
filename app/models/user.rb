@@ -35,6 +35,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   devise :registerable, :recoverable, :rememberable, :validatable,
          :fido_usf_registerable
 
+  devise :expirable
+
   has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups
   has_many :group_permissions, through: :groups
@@ -111,14 +113,6 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
         # name_id_format: Saml::XML::Namespaces::Formats::NameId::NAME
       }
     }
-  end
-
-  def active_for_authentication?
-    super && !expired?
-  end
-
-  def expired?
-    expires_at.present? && expires_at < Time.current
   end
 
   def inactive_message
