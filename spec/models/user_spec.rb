@@ -63,6 +63,11 @@ RSpec.describe User, type: :model do
     expect(user.login).to eq 'example2'
   end
 
+  it 'can be expired' do
+    user.update!(expires_at: 10.minutes.ago)
+    expect(user.expired?).to be true
+  end
+
   it_behaves_like 'two_factor_authenticatable'
   it_behaves_like 'two_factor_backupable'
 end

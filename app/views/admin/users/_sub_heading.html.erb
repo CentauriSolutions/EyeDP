@@ -1,0 +1,5 @@
+<%- if @model.expired? %>
+  <div class="alert alert-warning" role="alert">
+      <%= content_tag :div, "This user is expired" %>
+    </div>
+<%- end %>

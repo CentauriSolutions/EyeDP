@@ -28,5 +28,14 @@ RSpec.describe ProfileController, type: :controller do
       get :show
       expect(response.body).to include('this is a fairly high entropy test string')
     end
+
+    it 'blocks expired users' do
+      user.update!(expires_at: 10.minutes.ago)
+
+      get :show
+      expect(flash[:alert])
+        .to match(/account is expired/)
+      expect(response.body).to include('redirected')
+    end
   end
 end

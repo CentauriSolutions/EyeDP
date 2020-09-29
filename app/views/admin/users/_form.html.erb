@@ -46,6 +46,18 @@
   <div class="form-group">
     <div class="row">
       <div class="col-sm-2">
+        <%= form.label :expires_at %>
+      </div>
+      <div class="col-sm-10">
+          <%= form.text_field :expires_at, class: 'form-control', placeholder: 'YYYY-MM-DD HH:MM:SS TZ' %>
+          <a href='#' onclick="expire_now()">Now</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-2">
         <%= form.label :password %>
       </div>
       <div class="col-sm-10">
@@ -77,5 +89,9 @@
 function generate() {
   password=Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
   $('#user_password').val(password);
+}
+
+function expire_now() {
+  $('#user_expires_at').val("<%= Time.now.utc %>");
 }
 </script>
