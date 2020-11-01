@@ -44,7 +44,6 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   # PATCH/PUT /admin/#{model}/1
   # PATCH/PUT /admin/#{model}/1.json
   def update
-    # binding.pry
     respond_to do |format|
       if @model.update(model_params)
         format.html { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully updated." }

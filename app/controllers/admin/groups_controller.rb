@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class Admin::GroupsController < AdminController
+  def email
+    @group = Group.find(params[:group_id])
+    render :email, layout: nil
+  end
+
   private
 
   def model_attributes
@@ -42,7 +47,7 @@ class Admin::GroupsController < AdminController
   end
 
   def model_params
-    p = params.require(:group).permit(:name, :parent, permissions: [])
+    p = params.require(:group).permit(:name, :parent, :welcome_email, permissions: [])
     # binding.pry
     p[:parent_id] = p.delete(:parent) if p[:parent]
     p[:permissions] = [] if p[:permissions].nil?

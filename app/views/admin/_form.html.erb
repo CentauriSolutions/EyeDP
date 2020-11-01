@@ -43,8 +43,10 @@
           <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
         </div>
       </div>
-
+    </div>
   <%- end %>
+
+  <%= render partial: 'sub_form', locals: { model: model, form: form } %>
 
   <div class="actions">
     <%= form.submit %>

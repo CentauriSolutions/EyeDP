@@ -283,3 +283,11 @@ environment variables in .env correctly) and run
 `bundle exec rails db:create db:migrate db:seed`. After the database has been
 initialized, you can run the development server with
 `bundle exec rails server`.
+
+### Email
+
+If you're going to be testing with email, you need to `gem install mailcatcher`
+and then execute `mailcatcher`. This will start an SMTP server and HTTP server
+on 1025 and 1080, respectively, that can be used to confirm email is what you
+expect. If you'd like to run the `mailcatcher` application in the foreground,
+you can use `mailcatcher -f`.

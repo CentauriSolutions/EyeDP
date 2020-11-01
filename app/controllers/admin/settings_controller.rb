@@ -38,7 +38,7 @@ class Admin::SettingsController < AdminController
       :registration_enabled,
       :logo, :logo_height, :logo_width,
       :home_template, :registered_home_template,
-      :expire_after
+      :expire_after, :welcome_from_email
     )
   end
 end

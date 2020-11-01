@@ -134,6 +134,13 @@ class Setting < ApplicationRecord
       end
       # end
     end
+
+    def idp_base_uri
+      begin
+        URI.parse(Setting.idp_base)
+      rescue URI::InvalidURIError
+      end
+    end
   end
 
   field :idp_base
@@ -148,5 +155,7 @@ class Setting < ApplicationRecord
   field :home_template, default: '', type: :string
   field :registered_home_template, default: '', type: :string
 
+  field :welcome_from_email, type: :string, default: "noreply@#{idp_base_uri ? idp_base_uri.hostname : "example.com"}"
   field :expire_after, type: :time
+
 end

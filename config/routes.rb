@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   get 'admin' => 'admin/dashboard#index', as: :admin_dashboard
   namespace :admin do
     # get 'dashboard/index'
-    resources :groups
+    resources :groups do
+      get :email, to: 'groups#email'
+    end
     resources :users
     resources :permissions
     resources :applications

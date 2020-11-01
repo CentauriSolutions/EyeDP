@@ -50,4 +50,27 @@ class Group < ApplicationRecord
   def effective_permissions
     Permission.joins(:group_permissions).where(group_permissions: { group_id: ancestors.pluck(:id) << id })
   end
+
+  def template
+    @template ||= Liquid::Template.parse(welcome_email)
+  end
+
+  def template_variables(user = nil) # rubocop:disable Metrics/MethodLength
+    h = {
+      'group' => {
+        'name' => name
+      }
+    }
+    if user
+      h['user'] = {
+        'username' => user.username,
+        'email' => user.email
+      }
+    end
+    h
+  end
+
+  def rendered_welcome_email(user = nil)
+    template.render(template_variables(user))
+  end
 end

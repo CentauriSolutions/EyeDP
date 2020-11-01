@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_29_072357) do
+ActiveRecord::Schema.define(version: 2020_11_01_095032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 2020_09_29_072357) do
     t.text "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "welcome_email"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
   end
 
