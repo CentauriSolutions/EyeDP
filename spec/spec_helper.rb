@@ -1,7 +1,31 @@
 # frozen_string_literal: true
 
-require 'coveralls'
-Coveralls.wear!
+require 'simplecov'
+require 'simplecov-lcov'
+
+# Fix incompatibility of simplecov-lcov with older versions of simplecov that are not expresses in its gemspec.
+# https://github.com/fortissimo1997/simplecov-lcov/pull/25
+unless SimpleCov.respond_to?(:branch_coverage)
+  module SimpleCov
+    def self.branch_coverage?
+      false
+    end
+  end
+end
+
+SimpleCov::Formatter::LcovFormatter.config do |c|
+  c.report_with_single_file = true
+  c.single_report_path = 'coverage/lcov.info'
+end
+SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
+  [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::LcovFormatter
+  ]
+)
+SimpleCov.start do
+  add_filter 'spec/'
+end
 
 ENV['RAILS_ENV'] = 'test'
 ENV['IN_MEMORY_APPLICATION_SETTINGS'] = 'true'
@@ -42,6 +66,17 @@ RSpec.configure do |config|
     # ...rather than:
     #     # => "be bigger than 2"
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
   end
 
   # rspec-mocks config goes here. You can use an alternate test double
