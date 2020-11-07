@@ -69,7 +69,6 @@ gem 'groupdate'
 gem 'liquid'
 
 group :development, :test do
-  gem 'coveralls', require: false
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 4'
@@ -109,7 +108,10 @@ group :development do
 end
 
 group :test do
+  gem 'database_cleaner-active_record'
   gem 'faker'
   gem 'shoulda'
+  gem 'simplecov',      require: false
+  gem 'simplecov-lcov', require: false
   gem 'timecop'
 end
