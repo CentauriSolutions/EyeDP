@@ -24,4 +24,10 @@
 class UserGroup < ApplicationRecord
   belongs_to :user
   belongs_to :group
+
+  after_create :send_welcome_email
+
+  def send_welcome_email
+    UserMailer.group_welcome_email(user, group).deliver_later if group.welcome_email
+  end
 end

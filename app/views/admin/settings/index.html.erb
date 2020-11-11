@@ -7,12 +7,16 @@
       <td><input type="text" name="setting[idp_base]" class="form-control" value="<%= Setting.idp_base %>" /></td>
     </tr>
     <tr>
+      <td>Email to send welcome emails from</td>
+      <td><input type="email" name="setting[welcome_from_email]" class="form-control" value="<%= Setting.welcome_from_email %>" /></td>
+    </tr>
+    <tr>
       <td>Enable User Registration</td>
       <td><input type="checkbox" name="setting[registration_enabled]" class="form-control" <% if Setting.registration_enabled %>checked <% end %> value="" /></td>
     </tr>
     <tr>
       <td>Expire User after inactivity</td>
-      <td><input type="text" name="setting[expire_after]" class="form-control" value="<%= Setting.expire_after.parts[:days] %>" />
+      <td><input type="text" name="setting[expire_after]" class="form-control" value="<%= Setting.expire_after.parts[:days] if Setting.expire_after %>" placeholder="30" />
         <p class="small">Number of days after which a user should be deactivated. Empty disables this feature.</p></td>
     </tr>
     <!-- Logo settings -->

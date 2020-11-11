@@ -34,6 +34,37 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
+      "fingerprint": "a3a01e05b8cd146c65165655f46883113d7dbb4dca33096f53796438aa46d889",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/admin/groups/email.html.erb",
+      "line": 2,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Group.find(params[:group_id]).rendered_welcome_email(current_user)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::GroupsController",
+          "method": "email",
+          "line": 6,
+          "file": "app/controllers/admin/groups_controller.rb",
+          "rendered": {
+            "name": "admin/groups/email",
+            "file": "app/views/admin/groups/email.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/groups/email"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "note": "Rendering an admin-editable template into an admin-only page."
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
       "fingerprint": "b0e78553e12950f66f3164d2313a7e57647e1cccc0da7326640f55325384b3b9",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
@@ -63,6 +94,6 @@
       "note": "Setting.registered_home_template is only configurable by an admin."
     }
   ],
-  "updated": "2020-09-18 14:49:27 +0200",
+  "updated": "2020-11-01 12:22:05 +0100",
   "brakeman_version": "4.9.1"
 }

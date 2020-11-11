@@ -28,6 +28,8 @@ require 'rails_helper'
 require 'devise_two_factor/spec_helpers'
 
 RSpec.describe User, type: :model do
+  include ActiveJob::TestHelper
+
   let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
   let(:group) { Group.create!(name: 'administrators') }
 
@@ -97,6 +99,32 @@ RSpec.describe User, type: :model do
         expect(user.expired?).to be false
         user.last_activity_at = 2.years.ago
         expect(user.expired?).to be false
+      end
+    end
+  end
+
+  context 'Emails' do
+    context 'A group with a welcome email' do
+      let(:test_group) { Group.create!(name: 'test_group', welcome_email: 'Hey!') }
+
+      it 'Sends a welcome email when a user is added to the group' do
+        expect do
+          perform_enqueued_jobs do
+            user.groups << test_group
+          end
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+
+    context 'A group without a welcome email' do
+      let(:test_group) { Group.create!(name: 'test_group') }
+
+      it 'Does not send a welcome email when a user is added to the group' do
+        expect do
+          perform_enqueued_jobs do
+            user.groups << test_group
+          end
+        end.not_to(change { ActionMailer::Base.deliveries.count })
       end
     end
   end
