@@ -39,5 +39,7 @@ module EyedP
     config.generators do |g|
       g.scaffold_stylesheet false
     end
+
+    config.action_mailer.default_url_options = { host: ENV['EMAIL_DOMAIN'] }
   end
 end
