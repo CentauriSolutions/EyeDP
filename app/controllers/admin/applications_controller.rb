@@ -16,6 +16,9 @@ class Admin::ApplicationsController < AdminController
   end
 
   def model_params
-    params.require('application').permit(:name, :uid, :internal, :secret, :scopes, :redirect_uri, :confidential)
+    params.require('application').permit(
+      :name, :display_url, :uid, :internal, :secret, :scopes,
+      :redirect_uri, :confidential
+    )
   end
 end
