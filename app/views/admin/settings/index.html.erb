@@ -64,6 +64,8 @@
         <td>Certificate</td>
         <td>
           <textarea name="setting[saml_certificate]" class="form-control"><%= Setting.saml_certificate %></textarea>
+          <%- cert = OpenSSL::X509::Certificate.new(Setting.saml_certificate) %>
+          <p class="small">Certificate Fingerprint: <%= OpenSSL::Digest::SHA1.hexdigest(cert.to_der).scan(/../).join(':').upcase %></p>
         </td>
       </tr>
 

@@ -27,6 +27,15 @@ RSpec.describe Admin::SettingsController, type: :controller do
         expect(response.status).to eq(200)
       end
 
+      context 'with rendered views' do
+        render_views
+        it 'Shows the SAML certificate fingerprint' do
+          Setting.saml_certificate = File.read('myCert.crt')
+          get :index
+          expect(response.body).to include('4C:51:74:2D:C7:00:32:1A:87:79:AD:B8:1D:D8:8A:66:0C:FB:73:F3')
+        end
+      end
+
       context 'Edit' do
         after do
           Setting.expire_after = nil
