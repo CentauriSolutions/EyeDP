@@ -60,7 +60,10 @@ Doorkeeper::OpenidConnect.configure do
     end
 
     claim :name do |resource_owner|
-      resource_owner.name or resource_owner.username
+      # read_name is aliased to name in the User model, and is called real_name
+      # here because of a doorkeeper issue where calling `.name` ends up
+      # raising an exception.
+      resource_owner.try(:real_name) or resource_owner.username
     end
 
     claim :nickname, &:username
