@@ -60,7 +60,7 @@ Doorkeeper::OpenidConnect.configure do
     end
 
     claim :name do |resource_owner|
-      resource_owner.real_name or resource_owner.username
+      resource_owner.name or resource_owner.username
     end
 
     claim :nickname, &:username
