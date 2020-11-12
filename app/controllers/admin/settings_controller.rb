@@ -15,7 +15,15 @@ class Admin::SettingsController < AdminController
                                   else
                                     true
                                   end
-    opts[:expire_after] = opts[:expire_after].to_i.days if opts[:expire_after]
+    opts[:expire_after] = if opts[:expire_after].present?
+                            opts[:expire_after].to_i.days
+                          # The below else is ignored because we need to
+                          # ensure that opts[:expire_after] is nil rather
+                          # than an empty string so that the expiration is
+                          # disabled!
+                          else # rubocop:disable Style/EmptyElse
+                            nil
+                          end
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
