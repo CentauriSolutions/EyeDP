@@ -31,12 +31,22 @@ RSpec.describe Admin::SettingsController, type: :controller do
         after do
           Setting.expire_after = nil
         end
+
         it 'can update expire time' do
           expect(user.expired?).to be false
           post(:update, params: { setting: { expire_after: 30 } })
           expect(response.status).to eq(302)
           expect(user.expired?).to be true
           expect(Setting.expire_after).to eq 30.days
+        end
+
+        it 'can unset expire time' do
+          Setting.expire_after = 30.days
+          expect(user.expired?).to be true
+          post(:update, params: { setting: { expire_after: '' } })
+          expect(response.status).to eq(302)
+          expect(user.expired?).to be false
+          expect(Setting.expire_after).to eq nil
         end
       end
     end
