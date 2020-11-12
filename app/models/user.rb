@@ -25,6 +25,8 @@
 #
 
 class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  alias_attribute :real_name, :name
+
   devise :two_factor_authenticatable,
          otp_secret_encryption_key: ENV['TOTP_ENCRYPTION_KEY']
 
