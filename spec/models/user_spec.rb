@@ -129,6 +129,13 @@ RSpec.describe User, type: :model do
     end
   end
 
+  it 'sends a password reset email with a forced reset' do
+    expect do
+      perform_enqueued_jobs do
+        user.force_password_reset!
+      end
+    end.to change { ActionMailer::Base.deliveries.count }.by(1)
+  end
   it_behaves_like 'two_factor_authenticatable'
   it_behaves_like 'two_factor_backupable'
 end

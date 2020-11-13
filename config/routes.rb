@@ -13,7 +13,9 @@ Rails.application.routes.draw do
     resources :groups do
       get :email, to: 'groups#email'
     end
-    resources :users
+    resources :users do
+      post :reset_password, to: 'users#reset_password'
+    end
     resources :permissions
     resources :applications
     resources :saml_service_providers
