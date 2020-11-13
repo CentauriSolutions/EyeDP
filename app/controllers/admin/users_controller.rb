@@ -1,6 +1,24 @@
 # frozen_string_literal: true
 
 class Admin::UsersController < AdminController
+  def create
+    super
+    @model.send_admin_welcome_email if @model.persisted?
+  end
+
+  def reset_password
+    @model = User.find(params[:user_id])
+    respond_to do |format|
+      if @model.force_password_reset!
+        format.html { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully updated." }
+        format.json { render :show, status: :ok, location: [:admin, @model] }
+      else
+        format.html { render :edit }
+        format.json { render json: @model.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   # def model_attributes
@@ -35,12 +53,11 @@ class Admin::UsersController < AdminController
   # Never trust parameters from the scary internet, only allow the white list through.
   def model_params
     p = params.require(:user).permit(
-      :email, :username, :password, :email, :name, :expires_at,
+      :email, :username, :email, :name, :expires_at,
       :last_activity_at, groups: []
     )
     # binding.pry
     p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]
-    p.delete(:password) if p[:password] && p[:password].empty?
     p
   end
 

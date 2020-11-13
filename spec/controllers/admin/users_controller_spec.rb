@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::UsersController, type: :controller do
+  include ActiveJob::TestHelper
   let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
   let(:group) { Group.create!(name: 'administrators') }
   let(:admin) do
@@ -22,6 +23,16 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(response.status).to eq(200)
       end
 
+      context 'New' do
+        it 'can create a user' do
+          expect do
+            perform_enqueued_jobs do
+              post(:create, params: { user: { email: 'test@example.com', username: 'test' } })
+            end
+          end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+      end
+
       context 'Edit' do
         it 'can expire a user' do
           expect(user.expired?).to be false
@@ -38,6 +49,14 @@ RSpec.describe Admin::UsersController, type: :controller do
           post(:update, params: { id: user.id, user: { last_activity_at: nil } })
           user.reload
           expect(user.expired?).to eq false
+        end
+
+        it 'can reset a user passowrd' do
+          expect(user.valid_password?('test1234')).to be true
+          post(:reset_password, params: { user_id: user.id })
+          expect(response.status).to eq(302)
+          user.reload
+          expect(user.valid_password?('test1234')).to be false
         end
       end
     end

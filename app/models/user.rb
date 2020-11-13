@@ -60,10 +60,25 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validate :validate_username
 
+  before_validation :ensure_password
+
   attr_writer :login
 
   def validate_username
     errors.add(:username, :invalid) if User.exists?(email: username)
+  end
+
+  def force_password_reset!
+    token = set_reset_password_token
+    return false unless UserMailer.force_reset_password_email(self, token).deliver_later
+
+    new_pass = SecureRandom.hex(32)
+    update({ password: new_pass, password_confirmation: new_pass })
+  end
+
+  def send_admin_welcome_email
+    token = set_reset_password_token
+    UserMailer.admin_welcome_email(self, token).deliver_later
   end
 
   def self.u2f_authenticate(user, app_id, json_response, challenges) # rubocop:disable Metrics/MethodLength
@@ -171,5 +186,11 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     else
       fido_usf_devices.exists?
     end
+  end
+
+  private
+
+  def ensure_password
+    self.password ||= SecureRandom.hex(32)
   end
 end
