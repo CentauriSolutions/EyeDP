@@ -70,6 +70,17 @@ RSpec.describe User, type: :model do
     expect(user.expired?).to be true
   end
 
+  it 'only changes password when encrypted_password is nil' do
+    user.password = nil
+    expect(user.valid_password?('test1234')).to be true
+    user.save
+    expect(user.valid_password?('test1234')).to be true
+    old_encrypted = user.encrypted_password
+    user.encrypted_password = nil
+    user.save
+    expect(user.encrypted_password).not_to eq(old_encrypted)
+  end
+
   context 'Expirable' do
     context 'expire_after 30 days' do
       before do

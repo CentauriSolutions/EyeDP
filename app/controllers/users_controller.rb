@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
+  before_action :authenticate_user!
   def new_2fa
     current_user.otp_secret = User.generate_otp_secret(32) unless current_user.two_factor_otp_enabled?
     current_user.save!
-
     @qr_code = build_qr_code
   end
 
