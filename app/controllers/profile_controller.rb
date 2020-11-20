@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ProfileController < ApplicationController
+  before_action :authenticate_user!
   def show
     @template = Liquid::Template.parse(Setting.registered_home_template)
     @logins = current_user

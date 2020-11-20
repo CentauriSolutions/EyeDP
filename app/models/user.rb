@@ -191,6 +191,6 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   private
 
   def ensure_password
-    self.password ||= SecureRandom.hex(32)
+    self.password = SecureRandom.hex(32) if encrypted_password.blank?
   end
 end

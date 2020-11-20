@@ -28,6 +28,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           expect do
             perform_enqueued_jobs do
               post(:create, params: { user: { email: 'test@example.com', username: 'test' } })
+              expect(response.status).to eq(302)
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
