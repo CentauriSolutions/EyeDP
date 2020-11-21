@@ -57,6 +57,30 @@ RSpec.describe Admin::SettingsController, type: :controller do
           expect(user.expired?).to be false
           expect(Setting.expire_after).to eq nil
         end
+
+        it 'can enable permenant usernames' do
+          Setting.permemant_username = false
+          post(:update, params: { setting: { permemant_username: '' } })
+          expect(Setting.permemant_username).to be true
+        end
+
+        it 'can disable permenant usernames' do
+          Setting.permemant_username = true
+          post(:update, params: { setting: {} })
+          expect(Setting.permemant_username).to be false
+        end
+
+        it 'can enable user registration' do
+          Setting.registration_enabled = false
+          post(:update, params: { setting: { registration_enabled: '' } })
+          expect(Setting.registration_enabled).to be true
+        end
+
+        it 'can disable user registration' do
+          Setting.registration_enabled = true
+          post(:update, params: { setting: {} })
+          expect(Setting.registration_enabled).to be false
+        end
       end
     end
 
