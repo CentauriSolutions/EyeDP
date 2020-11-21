@@ -54,7 +54,7 @@ class Admin::UsersController < AdminController
   def model_params
     p = params.require(:user).permit(
       :email, :username, :email, :name, :expires_at,
-      :last_activity_at, groups: []
+      :password, :last_activity_at, groups: []
     )
     # binding.pry
     p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]
