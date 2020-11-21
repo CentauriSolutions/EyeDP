@@ -19,6 +19,10 @@
       <td><input type="text" name="setting[expire_after]" class="form-control" value="<%= Setting.expire_after.parts[:days] if Setting.expire_after %>" placeholder="30" />
         <p class="small">Number of days after which a user should be deactivated. Empty disables this feature.</p></td>
     </tr>
+    <tr>
+      <td>User Cannot Edit username or email</td>
+      <td><input type="checkbox" name="setting[permemant_username]" class="form-control" <% if Setting.permemant_username %>checked <% end %> value="" /></td>
+    </tr>
     <!-- Logo settings -->
   </table>
   <h3>Branding</h3>
