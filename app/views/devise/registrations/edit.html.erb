@@ -2,9 +2,15 @@
 
 <%= settings_row("Account", "Your registered account details") do %>
     <%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-      <%= f.text_field :username %>
-      <%= f.email_field :email, autofocus: true %>
-      <%= f.text_field :name %>
+        <%- if Setting.permemant_username %>
+          <%= f.text_field :username, disabled: true %>
+          <%= f.email_field :email, autofocus: true, disabled: true %>
+          <%= f.text_field :name, disabled: true %>
+        <%- else %>
+          <%= f.text_field :username %>
+          <%= f.email_field :email, autofocus: true %>
+          <%= f.text_field :name %>
+        <%- end %>
 
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
         <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>

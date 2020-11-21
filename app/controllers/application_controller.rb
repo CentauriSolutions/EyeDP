@@ -41,7 +41,11 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_in, keys: %i[login otp_attempt])
     devise_parameter_sanitizer.permit(:sign_up, keys: %i[username email])
-    devise_parameter_sanitizer.permit(:account_update, keys: %i[username email name])
+    if Setting.permemant_username
+      devise_parameter_sanitizer.permit(:account_update, keys: %i[name])
+    else
+      devise_parameter_sanitizer.permit(:account_update, keys: %i[username email name])
+    end
   end
 
   private
