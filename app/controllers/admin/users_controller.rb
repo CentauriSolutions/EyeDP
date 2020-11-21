@@ -58,6 +58,7 @@ class Admin::UsersController < AdminController
     )
     # binding.pry
     p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]
+    p.delete(:password) if p[:password] && p[:password].empty?
     p
   end
 

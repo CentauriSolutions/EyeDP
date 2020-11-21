@@ -59,6 +59,22 @@ RSpec.describe Admin::UsersController, type: :controller do
           user.reload
           expect(user.valid_password?('test1234')).to be false
         end
+
+        it 'can set a user password' do
+          expect(user.valid_password?('test1234')).to be true
+          post(:update, params: { id: user.id, user: { password: 'testing-it' } })
+          expect(response.status).to eq(302)
+          user.reload
+          expect(user.valid_password?('test1234')).to be false
+          expect(user.valid_password?('testing-it')).to be true
+        end
+
+        it 'can update a user without setting password' do
+          post(:update, params: { id: user.id, user: { username: 'testing-name' } })
+          expect(response.status).to eq(302)
+          user.reload
+          expect(user.username).to eq('testing-name')
+        end
       end
     end
 
