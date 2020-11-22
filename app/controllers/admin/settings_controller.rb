@@ -51,7 +51,8 @@ class Admin::SettingsController < AdminController
       :registration_enabled, :permemant_username,
       :logo, :logo_height, :logo_width,
       :home_template, :registered_home_template,
-      :expire_after, :welcome_from_email
+      :expire_after, :welcome_from_email,
+      :admin_reset_email_template
     )
   end
 end

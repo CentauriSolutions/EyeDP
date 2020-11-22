@@ -40,6 +40,12 @@
       </td>
     </tr>
     <tr>
+      <td>Password reset email template</td>
+      <td>
+        <textarea name="setting[admin_reset_email_template]" class="form-control" ><%= Setting.admin_reset_email_template %></textarea>
+      </td>
+    </tr>
+    <tr>
       <td>Logo</td>
       <td>
         <input type="text" name="setting[logo]" class="form-control" value="<%= Setting.logo %>" />

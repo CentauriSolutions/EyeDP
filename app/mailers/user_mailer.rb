@@ -13,6 +13,9 @@ class UserMailer < ApplicationMailer
   def force_reset_password_email(user, token)
     @user = user
     @token = token
+    if Setting.admin_reset_email_template.present?
+      @template = Liquid::Template.parse(Setting.admin_reset_email_template)
+    end
     mail(to: @user.email,
          subject: 'Password Changed')
   end
@@ -23,4 +26,12 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email,
          subject: 'Your account has been created')
   end
+
+  def template_variables(user)
+    {
+      'username' => user.username,
+      'email' => user.email
+    }
+  end
+  helper_method :template_variables
 end
