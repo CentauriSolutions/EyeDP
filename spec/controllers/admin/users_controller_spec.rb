@@ -78,14 +78,14 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         it 'can add a user to a group' do
-          post(:update, params: {id: user.id, user: { group_ids: [group.id, user_group.id]} })
+          post(:update, params: { id: user.id, user: { group_ids: [group.id, user_group.id] } })
           user.reload
-          expect(user.groups.pluck(:name)).to eq ['administrators', 'users']
+          expect(user.groups.pluck(:name)).to eq %w[administrators users]
         end
 
         it 'can remove a user from a group' do
           user.groups << user_group
-          post(:update, params: {id: user.id, user: { group_ids: [group.id]} })
+          post(:update, params: { id: user.id, user: { group_ids: [group.id] } })
           user.reload
           expect(user.groups.last.name).to eq 'administrators'
         end

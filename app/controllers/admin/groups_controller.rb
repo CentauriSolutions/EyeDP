@@ -16,7 +16,6 @@ class Admin::GroupsController < AdminController
     ['name']
   end
 
-  # rubocop:disable Metrics/MethodLength
   def form_relations
     {
       parent: {
@@ -25,10 +24,9 @@ class Admin::GroupsController < AdminController
         finder: lambda {
                   helpers.options_from_collection_for_select(Group.all, :id, :name, @model.parent.try(:id))
                 }
-      },
+      }
     }
   end
-  # rubocop:enable Metrics/MethodLength
 
   def includes
     %i[parent permissions]
@@ -40,7 +38,8 @@ class Admin::GroupsController < AdminController
 
   def model_params
     p = params.require(:group).permit(
-      :name, :parent, :welcome_email, permission_ids: [])
+      :name, :parent, :welcome_email, permission_ids: []
+    )
     p[:permission_ids] ||= []
     p[:parent_id] = p.delete(:parent) if p[:parent]
     p

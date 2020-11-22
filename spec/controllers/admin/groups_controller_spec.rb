@@ -42,7 +42,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
           group.permissions << permission
           group.save
           expect(group.permissions.first).to eq(permission)
-          post(:update, params: { id: group.id, group: {name: 'administrators', permission_ids: [] } })
+          post(:update, params: { id: group.id, group: { name: 'administrators', permission_ids: [] } })
           group.reload
           expect(group.permissions.first).to be_nil
         end
