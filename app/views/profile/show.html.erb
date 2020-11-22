@@ -17,14 +17,12 @@
           <%- if Setting.permemant_username %>
             <%= f.text_field :username, disabled: true %>
             <%= f.email_field :email, autofocus: true, disabled: true %>
-            <%= f.text_field :name, disabled: true %>
           <%- else %>
             <%= f.text_field :username %>
             <%= f.email_field :email, autofocus: true %>
-            <%= f.text_field :name %>
           <%- end %>
+          <%= f.text_field :name %>
           <hr />
-
           <p><%= _("To edit any details on this page, you must confirm your current password.") %></p>
           <%= f.password_field :password, autocomplete: "off", help: _("Leave blank if you don't want to change your password") %>
           <%= f.password_field :password_confirmation, autocomplete: "off" %>
