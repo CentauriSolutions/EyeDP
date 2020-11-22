@@ -6,6 +6,7 @@ RSpec.describe Admin::UsersController, type: :controller do
   include ActiveJob::TestHelper
   let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
   let(:group) { Group.create!(name: 'administrators') }
+  let(:user_group) { Group.create!(name: 'users') }
   let(:admin) do
     user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
     user.groups << group
@@ -74,6 +75,19 @@ RSpec.describe Admin::UsersController, type: :controller do
           expect(response.status).to eq(302)
           user.reload
           expect(user.username).to eq('testing-name')
+        end
+
+        it 'can add a user to a group' do
+          post(:update, params: {id: user.id, user: { group_ids: [group.id, user_group.id]} })
+          user.reload
+          expect(user.groups.pluck(:name)).to eq ['administrators', 'users']
+        end
+
+        it 'can remove a user from a group' do
+          user.groups << user_group
+          post(:update, params: {id: user.id, user: { group_ids: [group.id]} })
+          user.reload
+          expect(user.groups.last.name).to eq 'administrators'
         end
       end
     end

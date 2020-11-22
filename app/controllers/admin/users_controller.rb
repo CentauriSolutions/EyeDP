@@ -25,19 +25,6 @@ class Admin::UsersController < AdminController
   #   model.attribute_names - ['id', 'created_at', 'updated_at', 'encrypted_password']
   # end
 
-  def form_relations
-    {
-      groups: {
-        type: :select,
-        html_options: { multiple: true },
-        # options: {selected: @model.groups},
-        finder: lambda {
-                  helpers.options_from_collection_for_select(Group.all, :id, :name, @model.groups.pluck(:id))
-                }
-      }
-    }
-  end
-
   def includes
     [:groups]
   end
@@ -54,10 +41,10 @@ class Admin::UsersController < AdminController
   def model_params
     p = params.require(:user).permit(
       :email, :username, :email, :name, :expires_at,
-      :password, :last_activity_at, groups: []
+      :password, :last_activity_at, group_ids: []
     )
-    # binding.pry
-    p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]
+    p[:group_ids] ||= []
+    # p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]
     p.delete(:password) if p[:password] && p[:password].empty?
     p
   end
