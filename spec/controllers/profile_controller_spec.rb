@@ -29,6 +29,43 @@ RSpec.describe ProfileController, type: :controller do
       expect(response.body).to include('this is a fairly high entropy test string')
     end
 
+    context 'with permenant usernames' do
+      before do
+        Setting.permemant_username = true
+      end
+
+      it 'can edit name' do
+        get :show
+        expect(response.body).to include('<input class="form-control" type="text" name="user[name]" id="user_name" />')
+      end
+
+      it 'cannot edit username' do
+        get :show
+        expect(response.body).to include(
+          '<input disabled="disabled" class="form-control" type="text"' \
+          ' value="example" name="user[username]" id="user_username" />'
+        )
+      end
+    end
+
+    context 'without permenant usernames' do
+      before do
+        Setting.permemant_username = false
+      end
+
+      it 'can edit name' do
+        get :show
+        expect(response.body).to include('<input class="form-control" type="text" name="user[name]" id="user_name" />')
+      end
+
+      it 'can edit username' do
+        get :show
+        expect(response.body).to include(
+          '<input class="form-control" type="text" value="example" name="user[username]" id="user_username" />'
+        )
+      end
+    end
+
     it 'blocks expired users' do
       user.update!(expires_at: 10.minutes.ago)
 
