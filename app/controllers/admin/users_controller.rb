@@ -44,7 +44,6 @@ class Admin::UsersController < AdminController
       :password, :last_activity_at, group_ids: []
     )
     p[:group_ids] ||= []
-    # p[:groups] = Group.where(id: p[:groups].reject(&:empty?)) if p[:groups]
     p.delete(:password) if p[:password] && p[:password].empty?
     p
   end
