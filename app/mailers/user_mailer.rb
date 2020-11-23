@@ -23,6 +23,9 @@ class UserMailer < ApplicationMailer
   def admin_welcome_email(user, token)
     @user = user
     @token = token
+    if Setting.admin_welcome_email_template.present?
+      @template = Liquid::Template.parse(Setting.admin_welcome_email_template)
+    end
     mail(to: @user.email,
          subject: 'Your account has been created')
   end

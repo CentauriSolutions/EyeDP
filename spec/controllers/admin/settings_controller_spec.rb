@@ -86,6 +86,11 @@ RSpec.describe Admin::SettingsController, type: :controller do
           post(:update, params: { setting: { admin_reset_email_template: 'Password was reset!' } })
           expect(Setting.admin_reset_email_template).to eq 'Password was reset!'
         end
+
+        it 'can set user creation template' do
+          post(:update, params: { setting: { admin_welcome_email_template: 'welcome to eyedp!' } })
+          expect(Setting.admin_welcome_email_template).to eq 'welcome to eyedp!'
+        end
       end
     end
 
