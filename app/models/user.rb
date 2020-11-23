@@ -69,11 +69,11 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def force_password_reset!
-    token = set_reset_password_token
-    return false unless UserMailer.force_reset_password_email(self, token).deliver_later
-
     new_pass = SecureRandom.hex(32)
     update({ password: new_pass, password_confirmation: new_pass })
+
+    token = set_reset_password_token
+    return false unless UserMailer.force_reset_password_email(self, token).deliver_later
   end
 
   def send_admin_welcome_email
