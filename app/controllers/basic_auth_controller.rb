@@ -6,7 +6,7 @@ class BasicAuthController < ApplicationController
   def create
     if user_signed_in?
       permission_checks = [params[:permission_name], "#{params[:permission_name]}.#{params[:format]}"]
-      groups = current_user.groups
+      groups = current_user.asserted_groups
       effective_permissions = groups
                               .map(&:effective_permissions)
                               .flatten
