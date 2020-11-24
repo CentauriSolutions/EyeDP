@@ -5,9 +5,7 @@
         <Label>Password</Label>
       </div>
       <div class="col-sm-10">
-        <%= form_with(url: 'reset_password', local: true, class: 'form') do |_form| %>
-          <button class="btn btn-warning">Reset</a>
-        <%- end %>
+        <%= link_to 'Reset Password', [:admin, model, :reset_password], method: :post, data: { confirm: 'Are you sure? Clicking reset multiple times will send multiple reset emails to the user.'}, class: "btn btn-warning"  %>
       </div>
     </div>
   </div>

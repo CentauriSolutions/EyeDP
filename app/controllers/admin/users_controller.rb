@@ -10,10 +10,11 @@ class Admin::UsersController < AdminController
     @model = User.find(params[:user_id])
     respond_to do |format|
       if @model.force_password_reset!
-        format.html { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully updated." }
+        format.html { redirect_to [:edit, :admin, @model], notice: 'Password reset was processed successfully' }
         format.json { render :show, status: :ok, location: [:admin, @model] }
       else
-        format.html { render :edit }
+        format.html { redirect_to [:admin, @model, :edit], notice: 'There was a problem processing the password reset' }
+
         format.json { render json: @model.errors, status: :unprocessable_entity }
       end
     end

@@ -3,3 +3,4 @@
       <%= content_tag :div, "This user is expired" %>
     </div>
 <%- end %>
+<%= link_to 'Reset Password', [:admin, @model, :reset_password], method: :post, data: { confirm: 'Are you sure? Clicking reset multiple times will send multiple reset emails to the user.'}, class: "btn btn-warning"  %>
