@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Admin::GroupsController, type: :controller do
   let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
   let(:group) { Group.create!(name: 'administrators') }
+  let(:users_group) { Group.create!(name: 'usesr') }
   let(:permission) { Permission.create!(name: 'test permission') }
   let(:admin) do
     user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
@@ -45,6 +46,21 @@ RSpec.describe Admin::GroupsController, type: :controller do
           post(:update, params: { id: group.id, group: { name: 'administrators', permission_ids: [] } })
           group.reload
           expect(group.permissions.first).to be_nil
+        end
+
+        it 'can require two factor' do
+          expect(users_group.requires_2fa).to be false
+          post(:update, params: { id: users_group.id, group: { requires_2fa: '1' } })
+          users_group.reload
+          expect(users_group.requires_2fa).to be true
+        end
+
+        it 'can not require two factor' do
+          users_group.update(requires_2fa: true)
+          expect(users_group.requires_2fa).to be true
+          post(:update, params: { id: users_group.id, group: { requires_2fa: '0' } })
+          users_group.reload
+          expect(users_group.requires_2fa).to be false
         end
       end
     end

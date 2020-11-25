@@ -29,6 +29,13 @@ RSpec.describe ProfileController, type: :controller do
       expect(response.body).to include('this is a fairly high entropy test string')
     end
 
+    it 'notifies about group 2fa restriction' do
+      user.groups << Group.create!(name: 'complex high entropoy test name', requires_2fa: true)
+      get :show
+      expect(response.body).to include('complex high entropoy test name')
+      expect(response.body).to include('it requires two factor')
+    end
+
     context 'with permenant usernames' do
       before do
         Setting.permemant_username = true

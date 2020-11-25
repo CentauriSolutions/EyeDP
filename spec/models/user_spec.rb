@@ -38,6 +38,14 @@ RSpec.describe User, type: :model do
     expect(user.admin?).to be true
   end
 
+  it 'can require an admin to have 2fa before adding' do
+    group.update({ requires_2fa: true })
+    user.groups << group
+    expect(user.admin?).to be false
+    user.update({ otp_required_for_login: true })
+    expect(user.admin?).to be true
+  end
+
   it 'does not make a non-admin an admin' do
     expect(user.admin?).to be false
   end
