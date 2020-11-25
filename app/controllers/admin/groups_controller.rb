@@ -9,11 +9,11 @@ class Admin::GroupsController < AdminController
   private
 
   def model_attributes
-    %w[name parent permissions]
+    %w[name parent requires_2fa permissions]
   end
 
   def new_fields
-    ['name']
+    %w[name requires_2fa]
   end
 
   def form_relations
@@ -38,7 +38,7 @@ class Admin::GroupsController < AdminController
 
   def model_params
     p = params.require(:group).permit(
-      :name, :parent, :welcome_email, permission_ids: []
+      :name, :parent, :welcome_email, :requires_2fa, permission_ids: []
     )
     p[:permission_ids] ||= []
     p[:parent_id] = p.delete(:parent) if p[:parent]
