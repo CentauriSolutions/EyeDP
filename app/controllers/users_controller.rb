@@ -39,12 +39,8 @@ class UsersController < ApplicationController
                 notice: s_('Two-factor authentication has been disabled successfully!')
   end
 
-  def account_string
-    "#{issuer_host}:#{current_user.email}"
-  end
-
   def build_qr_code
-    uri = current_user.otp_provisioning_uri(account_string, issuer: issuer_host)
+    uri = current_user.otp_provisioning_uri(current_user.username, issuer: issuer_host)
     qrcode = RQRCode::QRCode.new(uri)
 
     qrcode.as_svg(
