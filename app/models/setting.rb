@@ -160,4 +160,5 @@ class Setting < ApplicationRecord
   field :permemant_username, type: :boolean, default: true
 
   field :admin_reset_email_template, default: '', type: :string
+  field :admin_welcome_email_template, default: '', type: :string
 end

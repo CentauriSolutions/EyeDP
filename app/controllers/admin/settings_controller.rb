@@ -52,7 +52,7 @@ class Admin::SettingsController < AdminController
       :logo, :logo_height, :logo_width,
       :home_template, :registered_home_template,
       :expire_after, :welcome_from_email,
-      :admin_reset_email_template
+      :admin_reset_email_template, :admin_welcome_email_template
     )
   end
 end

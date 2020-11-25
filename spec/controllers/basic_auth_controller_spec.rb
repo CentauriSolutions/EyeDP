@@ -27,6 +27,15 @@ RSpec.describe BasicAuthController, type: :controller do
       expect(user.last_activity_at).not_to eq(start)
     end
 
+    it 'forbids authenticated role without required two factor' do
+      group.update({ requires_2fa: true })
+      @request.env['devise.mapping'] = Devise.mappings[:user]
+      user.groups << group
+      sign_in user
+      get :create, params: { permission_name: 'use.test_app' }
+      expect(response.status).to eq(403)
+    end
+
     it 'forbids authenticated role without group' do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in user

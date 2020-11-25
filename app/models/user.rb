@@ -115,7 +115,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def asserted_attributes # rubocop:disable Metrics/MethodLength
     {
-      groups: { getter: :groups },
+      groups: { getter: :asserted_groups },
       email: {
         getter: :email,
           name_format: Saml::XML::Namespaces::Formats::NameId::EMAIL_ADDRESS,
@@ -134,12 +134,20 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     }
   end
 
+  def asserted_groups
+    if two_factor_enabled?
+      groups
+    else
+      groups.where(requires_2fa: false)
+    end
+  end
+
   def inactive_message
     expired? ? :user_expired : super
   end
 
   def admin?
-    @admin ||= groups.include?(Group.find_by(name: 'administrators'))
+    @admin ||= asserted_groups.where(name: 'administrators').present?
   end
 
   def to_s
