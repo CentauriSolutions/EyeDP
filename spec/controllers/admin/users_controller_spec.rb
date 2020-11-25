@@ -56,7 +56,7 @@ RSpec.describe Admin::UsersController, type: :controller do
         it 'can reset a user passowrd' do
           expect(user.valid_password?('test1234')).to be true
           post(:reset_password, params: { user_id: user.id })
-          expect(response.status).to eq(200)
+          expect(response.status).to eq(302)
           user.reload
           expect(user.valid_password?('test1234')).to be false
         end

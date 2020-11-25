@@ -74,6 +74,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     token = set_reset_password_token
     return false unless UserMailer.force_reset_password_email(self, token).deliver_later
+
+    true
   end
 
   def send_admin_welcome_email
