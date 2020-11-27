@@ -34,7 +34,7 @@ class UsersController < ApplicationController
   def disable_2fa
     current_user.disable_two_factor! params[:otp_only]
 
-    redirect_to edit_user_registration_path,
+    redirect_to authenticated_root_path,
                 status: :found,
                 notice: s_('Two-factor authentication has been disabled successfully!')
   end

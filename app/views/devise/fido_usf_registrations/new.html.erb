@@ -19,7 +19,7 @@
           <%= form_with id: "form-register", url: user_fido_usf_registration_path() do |f| %>
             <%= f.hidden_field :response %>
           <% end %>
-          <%= link_to 'Cancel', edit_user_registration_path(), class: "btn btn-secondary" %>
+          <%= link_to 'Cancel', profile_authentication_devices_path(), class: "btn btn-secondary" %>
         </div>
       </div>
       <div id="error" class="d-none card border-danger">
@@ -28,7 +28,7 @@
         </div>
         <div class="card-body">
           <p id="error-text" class="card-text text-danger">None</p>
-          <%= link_to 'Cancel', edit_user_registration_path(), class: "btn btn-secondary" %>
+          <%= link_to 'Cancel', profile_authentication_devices_path(), class: "btn btn-secondary" %>
           <%= link_to 'Try again', new_user_fido_usf_registration_path(), class: "btn btn-primary" %>
         </div>
       </div>
