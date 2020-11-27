@@ -58,6 +58,10 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   # DELETE /admin/#{model}/1
   # DELETE /admin/#{model}/1.json
   def destroy
+    unless can_destroy?
+      redirect_to [:admin, @model.class], notice: "#{@model.class.name.pluralize} cannot be destroyed." and return
+    end
+
     @model.destroy
     respond_to do |format|
       format.html { redirect_to [:admin, @model.class], notice: "#{@model.class.name} was successfully destroyed." }
@@ -69,7 +73,12 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def model_attributes
     attrs = model.attribute_names
-    attrs = whitelist_attributes if whitelist_attributes.any?
+    if params[:action] == 'show' && respond_to?('show_whitelist_attributes', true)
+      res = show_whitelist_attributes
+      attrs = res if res.any?
+    elsif whitelist_attributes.any?
+      attrs = whitelist_attributes
+    end
     attrs -= blacklist_attributes if blacklist_attributes.any?
     attrs
   end
@@ -94,6 +103,11 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
       {}
     end
   end
+
+  def can_destroy?
+    true
+  end
+  helper_method :can_destroy?
 
   def order # rubocop:disable Metrics/AbcSize
     sort = {

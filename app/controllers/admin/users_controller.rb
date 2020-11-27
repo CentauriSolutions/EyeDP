@@ -22,16 +22,20 @@ class Admin::UsersController < AdminController
 
   private
 
-  # def model_attributes
-  #   model.attribute_names - ['id', 'created_at', 'updated_at', 'encrypted_password']
-  # end
+  def can_destroy?
+    false
+  end
 
   def includes
     [:groups]
   end
 
-  def whitelist_attributes
+  def show_whitelist_attributes
     %w[email name username groups expires_at last_activity_at]
+  end
+
+  def whitelist_attributes
+    %w[email username name groups expired?]
   end
 
   def model

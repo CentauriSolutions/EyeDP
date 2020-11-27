@@ -4,6 +4,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th></th>
       <%- model_attributes.each do |attr_name| %>
         <th>
           <%= attr_name %>
@@ -27,26 +28,27 @@
           <%- end %>
         </th>
       <%- end %>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @models.each do |model| %>
       <tr>
+        <td><nobr><%= link_to fa_icon('eye'), [:admin, model] %>
+        <%= link_to fa_icon('pencil'), ['edit', :admin, model] %>
+        <%- if can_destroy? %>
+          <%= link_to fa_icon('trash-o'), [:admin, model], method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%- end %>
+          </nobr></td>
         <%- model_attributes.each do |attr_name| %>
           <td>
             <%- data = model.send(attr_name) %>
             <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
-              <%= data.join ", " %>
-            <%- else %>
-              <%= data %>
+              <%- data =  data.join ", " %>
             <%- end %>
+            <%= data %>
           </td>
         <%- end %>
-        <td><%= link_to 'Show', [:admin, model] %></td>
-        <td><%= link_to 'Edit', ['edit', :admin, model] %></td>
-        <td><%= link_to 'Destroy', [:admin, model], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
