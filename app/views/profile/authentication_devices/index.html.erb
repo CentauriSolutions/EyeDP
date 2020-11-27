@@ -19,9 +19,12 @@
           <tr id="totp_device">
             <td>TOTP</td>
             <td><%= l(Time::at(current_user.consumed_timestep * current_user.otp.interval), format: :long) %></td>
-            <td><%= link_to _('Delete'), user_two_factor_auth_path(otp_only: true),
+            <td>
+              <%= link_to _('Delete'), user_two_factor_auth_path(otp_only: true),
               method: :delete,
-              data: { confirm: ('Are you sure? This will invalidate your registered applications and U2F devices.') } %></td>
+              data: { confirm: ('Are you sure? This will invalidate your registered applications and U2F devices.') } %> |
+              <%= link_to _('Regenerate recovery codes'), user_2fa_codes_path %>
+            </td>
           </tr>
         <%- end %>
         <% current_user.fido_usf_devices.each do |device| %>

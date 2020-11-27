@@ -13,6 +13,6 @@
   </ul>
 </div>
 <div class="d-flex">
-  <%= link_to _('Proceed'), edit_user_registration_path, class: 'btn btn-success gl-mr-3', data: { qa_selector: 'proceed_button' } %>
+  <%= link_to _('Proceed'), profile_authentication_devices_path, class: 'btn btn-success gl-mr-3', data: { qa_selector: 'proceed_button' } %>
   <%= link_to _('Download codes'), "data:text/plain;charset=utf-8,#{CGI.escape(@codes.join("\n"))}", download: "recovery-codes.txt", class: 'btn btn-default' %>
 </div>
