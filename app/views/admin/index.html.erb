@@ -34,10 +34,10 @@
   <tbody>
     <% @models.each do |model| %>
       <tr>
-        <td><nobr><%= link_to fa_icon('eye'), [:admin, model] %>
-        <%= link_to fa_icon('pencil'), ['edit', :admin, model] %>
+        <td><nobr><%= link_to fa_icon('eye', title: 'Show'), [:admin, model] %>
+        <%= link_to fa_icon('pencil', title: 'Edit'), ['edit', :admin, model] %>
         <%- if can_destroy? %>
-          <%= link_to fa_icon('trash-o'), [:admin, model], method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to fa_icon('trash-o', title: "Delete"), [:admin, model], method: :delete, data: { confirm: 'Are you sure?' } %>
         <%- end %>
           </nobr></td>
         <%- model_attributes.each do |attr_name| %>
