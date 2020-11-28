@@ -62,7 +62,7 @@ module Devise
       # The message sym, if {#active_for_authentication?} returns +false+. E.g. needed
       # for i18n.
       def inactive_message
-        !expired? ? super : :expired
+        expired? ? :expired : super
       end
 
       module ClassMethods
