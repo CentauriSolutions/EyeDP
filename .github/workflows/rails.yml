@@ -1,7 +1,7 @@
 # Put this in the file: .github/workflows/verify.yml
 
 name: Verify
-on: [push]
+on: [push, pull_request]
 
 jobs:
   linters:
@@ -54,6 +54,9 @@ jobs:
       - name: Run security checks
         run: |
           bin/brakeman -q -w2
+          gem install bundle-audit
+          bundle-audit update
+          bundle-audit
 
   tests:
     name: Tests
