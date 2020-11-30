@@ -20,7 +20,7 @@ RSpec.describe SessionsController do
         end
       end
 
-      context 'when using valid password', :clean_gitlab_redis_shared_state do
+      context 'when using valid password' do
         let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
         let(:user_params) { { login: user.username, password: user.password } }
 
@@ -36,6 +36,32 @@ RSpec.describe SessionsController do
           post(:create, params: { user: user_params })
           expect(flash[:alert])
             .to match(/account is expired/)
+        end
+
+        it 'redirects to a known application' do
+          Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
+          post(:create, params: { user: user_params, redirect_to: 'https://example.com' })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('https://example.com')
+        end
+
+        it 'redirects to a known SAML provider' do
+          SamlServiceProvider.create!(
+            issuer_or_entity_id: 'https://example.com',
+            metadata_url: 'https://example.com/metadata', response_hosts: ['example.com']
+          )
+          post(:create, params: { user: user_params, redirect_to: 'https://example.com' })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('https://example.com')
+        end
+
+        it 'does not redirect to a random URL' do
+          post(:create, params: { user: user_params, redirect_to: 'https://wrong.com' })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('http://test.host/')
         end
       end
     end

@@ -22,7 +22,8 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    request.env['omniauth.origin'] || params[:redirect_to] || stored_location_for(resource) || root_url
+    redirect = can_redirect_to(params[:redirect_to])
+    request.env['omniauth.origin'] || redirect || stored_location_for(resource) || root_url
   end
 
   def peek_enabled?
@@ -62,5 +63,22 @@ class ApplicationController < ActionController::Base
   def store_user_location!
     # :user is the scope we are authenticating
     store_location_for(:user, request.fullpath)
+  end
+
+  def can_redirect_to(redirect_to) # rubocop:disable Metrics/MethodLength
+    return unless redirect_to
+
+    hostname = begin
+      URI.parse(redirect_to).hostname
+    rescue URI::InvalidURIError
+      nil
+    end
+    return unless hostname
+
+    apps = Application.arel_table
+    return redirect_to if Application.where(apps[:redirect_uri].matches("https://#{hostname}%")).any? ||
+                          SamlServiceProvider.where(
+                            '? = ANY ("saml_service_providers"."response_hosts")', hostname
+                          ).any?
   end
 end
