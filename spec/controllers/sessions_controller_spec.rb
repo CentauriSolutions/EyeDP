@@ -101,6 +101,17 @@ RSpec.describe SessionsController do
         end
       end
 
+      it 'redirects to a known application' do
+        allow(controller).to receive(:find_user).and_return(user)
+        Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
+        post(:create,
+             params: { user: { otp_attempt: user.current_otp }, redirect_to: 'https://example.com' },
+             session: { otp_user_id: user.id })
+        expect(subject.current_user).to eq user
+        expect(response.status).to eq(302)
+        expect(response.headers['Location']).to eq('https://example.com')
+      end
+
       context 'when otp_user_id is stale' do
         render_views
 
@@ -206,6 +217,18 @@ RSpec.describe SessionsController do
 
           expect(response.cookies['remember_user_token']).to be_nil
         end
+      end
+
+      it 'redirects to a known application' do
+        allow(User).to receive(:u2f_authenticate).and_return(true)
+        allow(controller).to receive(:find_user).and_return(user)
+        Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
+        post(:create,
+             params: { user: { login: user.username, device_response: '{}' }, redirect_to: 'https://example.com' },
+             session: { otp_user_id: user.id })
+        expect(subject.current_user).to eq user
+        expect(response.status).to eq(302)
+        expect(response.headers['Location']).to eq('https://example.com')
       end
     end
   end
