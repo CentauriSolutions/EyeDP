@@ -49,32 +49,34 @@ Doorkeeper::OpenidConnect.configure do
   # expiration 600
 
   claims do
-    claim :email, &:email
+    claim :email, scope: :openid do |resource_owner, scopes, access_token|
+      # Pass the resource_owner's preferred_username if the application has
+      # `profile` scope access. Otherwise, provide a more generic alternative.
+      # scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
+      resource_owner.email
+    end
 
     claim :email_verified do |_resource_owner|
       true
     end
 
-    claim :groups do |resource_owner|
-      resource_owner.asserted_groups || []
+    claim :groups, scope: :openid do |resource_owner|
+      (resource_owner.asserted_groups || []).map(&:name)
     end
 
-    claim :name do |resource_owner|
+    claim :name, scope: :openid do |resource_owner|
       # read_name is aliased to name in the User model, and is called real_name
       # here because of a doorkeeper issue where calling `.name` ends up
       # raising an exception.
       resource_owner.try(:real_name) or resource_owner.username
     end
 
-    claim :nickname, &:username
-
-    claim :preferred_username, &:username
-
-    # claim :preferred_username, scope: :openid do |resource_owner, scopes, access_token|
-    #   # Pass the resource_owner's preferred_username if the application has
-    #   # `profile` scope access. Otherwise, provide a more generic alternative.
-    #   scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
-    # end
+    claim :username, scope: :openid do |resource_owner, scopes, access_token|
+      # Pass the resource_owner's preferred_username if the application has
+      # `profile` scope access. Otherwise, provide a more generic alternative.
+      # scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
+      resource_owner.username
+    end
 
     claim :profile do |_resource_owner|
       nil
