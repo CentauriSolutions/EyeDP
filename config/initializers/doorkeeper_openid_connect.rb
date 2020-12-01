@@ -49,7 +49,7 @@ Doorkeeper::OpenidConnect.configure do
   # expiration 600
 
   claims do
-    claim :email, scope: :openid do |resource_owner, scopes, access_token|
+    claim :email, scope: :openid do |resource_owner, _scopes, _access_token|
       # Pass the resource_owner's preferred_username if the application has
       # `profile` scope access. Otherwise, provide a more generic alternative.
       # scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
@@ -71,7 +71,7 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.try(:real_name) or resource_owner.username
     end
 
-    claim :username, scope: :openid do |resource_owner, scopes, access_token|
+    claim :username, scope: :openid do |resource_owner, _scopes, _access_token|
       # Pass the resource_owner's preferred_username if the application has
       # `profile` scope access. Otherwise, provide a more generic alternative.
       # scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
