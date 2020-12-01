@@ -214,6 +214,8 @@ In the admin interface, you should scroll down to Oauth and open that. At the to
 - Name field: `name`
 - Roles/Groups field name: `groups`
 
+![OpenID Connect in Rocket.Chat](docs/images/rocketchat/new-openid-connect.png)
+
 It is also possible to enable Merging Roles from SSO, Merging users, and Showing Button on Login Page.
 
 At this point, a user should be able to login to Rocket.Chat via OpenID Connect with EyeDP!
@@ -303,6 +305,9 @@ To configure Rocket.Chat to use EyeDP via SAML, you should configure:
 - Custom Issuer: https://your.rocket.chat/_saml/metadata/eyedp
 
 Additionally, it is strongly recommended to insert EyeDP's SAML certificate into the Custom Certificate field, and ensure that "Validate All Signatures" is selected in the "Signature Validation Type" box.
+
+
+![SAML in Rocket.Chat](docs/images/rocketchat/new-saml.png)
 
 ### Nginx Auth Request
 

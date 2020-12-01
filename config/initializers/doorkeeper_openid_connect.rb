@@ -49,10 +49,10 @@ Doorkeeper::OpenidConnect.configure do
   # expiration 600
 
   claims do
-    claim :email, scope: :openid do |resource_owner, _scopes, _access_token|
-      # Pass the resource_owner's preferred_username if the application has
-      # `profile` scope access. Otherwise, provide a more generic alternative.
-      # scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
+    # This is kept as a block instead of a callable proc in case it is desired, later, to
+    # increase privacy via the confidential parameter
+    claim :email, scope: :openid do |resource_owner| # rubocop:disable Style/SymbolProc
+      # Pass the resource_owner's email
       resource_owner.email
     end
 
@@ -65,16 +65,16 @@ Doorkeeper::OpenidConnect.configure do
     end
 
     claim :name, scope: :openid do |resource_owner|
-      # read_name is aliased to name in the User model, and is called real_name
+      # real_name is aliased to name in the User model, and is called real_name
       # here because of a doorkeeper issue where calling `.name` ends up
       # raising an exception.
       resource_owner.try(:real_name) or resource_owner.username
     end
 
-    claim :username, scope: :openid do |resource_owner, _scopes, _access_token|
-      # Pass the resource_owner's preferred_username if the application has
-      # `profile` scope access. Otherwise, provide a more generic alternative.
-      # scopes.exists?(:profile) ? resource_owner.username : "summer-sun-9449"
+    # This is kept as a block instead of a callable proc in case it is desired, later, to
+    # increase privacy via the confidential parameter
+    claim :username, scope: :openid do |resource_owner| # rubocop:disable Style/SymbolProc
+      # Pass the resource_owner's username
       resource_owner.username
     end
 
