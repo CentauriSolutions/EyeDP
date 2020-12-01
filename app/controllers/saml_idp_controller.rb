@@ -29,7 +29,7 @@ class SamlIdpController < SamlIdp::IdpController
 
   # not using params intentionally
   def idp_make_saml_response(found_user)
-    encode_response found_user, {}
+    encode_response found_user, {signed_message: true}
   end
 
   def saml_acs_url
