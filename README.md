@@ -14,8 +14,10 @@ EyeDP is proud to use [Translation.io](https://translation.io) for our localisat
   + [docker](#docker)
 - [Identity Provider](#identity-provider)
   + [OpenID Connect](#openid-connect)
+    - [OIDC with Rocket.Chat](#openid-connect-with-rocketchat)
   + [SAML](#saml)
     - [SAML with Gitlab](#saml-with-gitlab)
+    - [SAML with Rocket.Chat](#saml-with-rocketchat)
   + [Nginx Auth Request](#nginx-auth-request)
 - [Development](#development)
 
@@ -190,6 +192,34 @@ OpenID Connect requires setting up the  `signing_key`. The signing key can be
 generated via a command like
 `openssl genpkey -algorithm RSA -out key.pem -pkeyopt rsa_keygen_bits:2048`. 
 
+#### OpenID Connect with Rocket.Chat
+
+To configure Rocket.Chat to use OpenID Connect, you must setup a custom Oauth provider.
+
+In the admin interface, you should scroll down to Oauth and open that. At the top, you should click "Add custom oauth". At this page, you will need to configure a few things:
+
+- URL: The URL to your EyeDP installation
+- Token Path: `/oauth/token`
+- Token Sent Via: `Payload`
+- Identity Token Sent Via: `Header`
+- Identity Path: `/oauth/userinfo`
+- Authorize Path: `/oauth/authorize`
+- Scope: `openid`
+- Param Name for access token: `code`
+- Id: The UID configured in EyeDP
+- Secret: Secret configured in EyeDP
+- Login Style: Redirect
+- Username field: `username`
+- Email field: `email`
+- Name field: `name`
+- Roles/Groups field name: `groups`
+
+![OpenID Connect in Rocket.Chat](docs/images/rocketchat/new-openid-connect.png)
+
+It is also possible to enable Merging Roles from SSO, Merging users, and Showing Button on Login Page.
+
+At this point, a user should be able to login to Rocket.Chat via OpenID Connect with EyeDP!
+
 ### SAML
 
 Saml requires a few pieces of configuration, `certificate` and `key`. Generating
@@ -201,7 +231,7 @@ It is entirely possible to change this expiration time as well.
 When configuring EyeDP as an Identity Provider, you will likely be required to
 supply the SHA1 fingerprint of your certificate. To generate this, you can run
 `openssl x509 -noout -fingerprint -sha1 -inform pem -in myCert.crt` given the
-`myCert.crt` file generated before.
+`myCert.crt` file generated before; alternately, you can view the SHA1 in the settings page after configuring your certificate.
 
 #### SAML with Gitlab
 
@@ -265,6 +295,19 @@ Gitlab can also automatically redirect to the sign-in provider with:
 ```ruby
   gitlab_rails['omniauth_auto_sign_in_with_provider'] = 'saml'
 ```
+
+#### SAML with Rocket.Chat
+
+To configure Rocket.Chat to use EyeDP via SAML, you should configure:
+
+- Custom Entry Point: https://your.eyedp/saml/auth
+- IDP SLO Redirect URL: https://your.eyedp/saml/logout
+- Custom Issuer: https://your.rocket.chat/_saml/metadata/eyedp
+
+Additionally, it is strongly recommended to insert EyeDP's SAML certificate into the Custom Certificate field, and ensure that "Validate All Signatures" is selected in the "Signature Validation Type" box.
+
+
+![SAML in Rocket.Chat](docs/images/rocketchat/new-saml.png)
 
 ### Nginx Auth Request
 
