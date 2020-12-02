@@ -2,6 +2,7 @@
   <%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post, html: { class: "edit_user gl-show-field-errors js-2fa-form" }) do |f| %>
     <% resource_params = params[resource_name].presence || params %>
     <%= f.hidden_field :remember_me, value: resource_params.fetch(:remember_me, 0) %>
+    <%= f.hidden_field :redirect_to, value: resource_params.fetch(:redirect_to, 0) %>
     <div>
       <%= f.label 'Two-Factor Authentication code', name: :otp_attempt %>
       <%= f.text_field :otp_attempt, class: 'form-control', required: true, autofocus: true, autocomplete: 'off', title: 'This field is required.', data: { qa_selector: 'two_fa_code_field' } %>
@@ -20,6 +21,8 @@
 <p id="error" class="d-none"></p>
 <%= form_tag send("new_user_session_path"), method: 'post' do %>
   <%= hidden_field_tag 'user[device_response]' %>
+  <%= f.hidden_field :remember_me, value: resource_params.fetch(:remember_me, 0) %>
+  <%= f.hidden_field :redirect_to, value: resource_params.fetch(:redirect_to, 0) %>
 <% end %>
 <%= javascript_tag nonce: true do -%>
   var appId = <%= @app_id.to_json.html_safe %>;
