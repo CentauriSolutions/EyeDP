@@ -31,11 +31,11 @@ class Admin::UsersController < AdminController
   end
 
   def show_whitelist_attributes
-    %w[email name username groups expires_at last_activity_at]
+    %w[email name username two_factor_enabled? groups expires_at last_activity_at]
   end
 
   def whitelist_attributes
-    %w[email username name groups expired?]
+    %w[email username name two_factor_enabled? groups expired?]
   end
 
   def model
