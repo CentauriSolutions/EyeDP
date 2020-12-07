@@ -3,7 +3,14 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for(:title) ? content_for(:title) : 'Admin' %> | <%= Setting.html_title_base %></title>
+    <title>
+      <%- if content_for(:title) %>
+        <%= content_for(:title) %>
+      <%- else %>
+        Admin
+      <%- end %> |
+      <%= Setting.html_title_base %>
+    </title>
     <%= csrf_meta_tags %>
     <%= action_cable_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
