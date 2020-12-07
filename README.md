@@ -56,10 +56,22 @@ to `admin/settings` and update the values there:
 <dl>
   <dt><strong>Base</strong></dt>
   <dd>This should be updated to the root url of your installation</dd>
+</dl>
+
+Next, depending on your needs, you will need to configure SAML and OpenID Connect:
+
+To configure SAML, you should navigate to `admin/settings/saml` and update:
+
+<dl>
   <dt><strong>Certificate</strong></dt>
   <dd>This is the certificate generated in <a href='#saml'>SAML</a></dd>
   <dt><strong>Key</strong></dt>
   <dd>This is the key generated in <a href='#saml'>SAML</a></dd>
+</dl>
+
+To configure OIDC, you should navigate to `admin/settings/openid_connect` and update:
+
+<dl>
   <dt>Signing Key</dt>
   <dd>This is the key generated in <a href='#openid-connect'>OpenID Connect</a></dd>
 </dl>
