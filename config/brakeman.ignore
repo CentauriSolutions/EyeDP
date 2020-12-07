@@ -77,7 +77,7 @@
           "type": "controller",
           "class": "ProfileController",
           "method": "show",
-          "line": 7,
+          "line": 11,
           "file": "app/controllers/profile_controller.rb",
           "rendered": {
             "name": "profile/show",
@@ -92,8 +92,28 @@
       "user_input": "Setting.registered_home_template",
       "confidence": "Weak",
       "note": "Setting.registered_home_template is only configurable by an admin."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "ded083a60327240307d2f69b0215746d34ab49f4580f611080a7f584647c1b6a",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/admin_controller.rb",
+      "line": 101,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "rel.where(params[:filter_by] => params[:filter])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AdminController",
+        "method": "filter"
+      },
+      "user_input": "params[:filter_by]",
+      "confidence": "Medium",
+      "note": "This is an admin only controller, and is restricted by a whitelist of acceptable options'"
     }
   ],
-  "updated": "2020-11-01 12:22:05 +0100",
-  "brakeman_version": "4.9.1"
+  "updated": "2020-12-07 10:28:05 +0100",
+  "brakeman_version": "4.10.0"
 }
