@@ -21,6 +21,12 @@ Rails.application.routes.draw do
     resources :saml_service_providers
     get :settings, to: 'settings#index'
     post :settings, to: 'settings#update'
+    # namespace :settings do
+    get 'settings/openid_connect', to: 'settings#openid_connect'
+    get 'settings/saml', to: 'settings#saml'
+    get 'settings/branding', to: 'settings#branding'
+    get 'settings/templates', to: 'settings#templates'
+    # end
   end
 
   devise_for :users, controllers: {

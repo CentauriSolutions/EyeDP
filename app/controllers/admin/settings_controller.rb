@@ -6,6 +6,14 @@ class Admin::SettingsController < AdminController
   # GET /admin/settings.json
   def index; end
 
+  def openid_connect; end
+
+  def saml; end
+
+  def branding; end
+
+  def templates; end
+
   # PATCH/PUT /admin/settings/1
   # PATCH/PUT /admin/settings/1.json
   def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/PerceivedComplexity
@@ -41,7 +49,7 @@ class Admin::SettingsController < AdminController
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
-    redirect_to admin_settings_url, notice: 'Settings were successfully updated.'
+    redirect_back fallback_location: admin_settings_url, notice: 'Settings were successfully updated.'
   end
 
   private

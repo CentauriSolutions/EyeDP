@@ -1,0 +1,14 @@
+<%= form_tag({controller: "settings", action: "update"}, method: :post, class: "form") do |form| %>
+  <h1>OpenID Connect</h1>
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>Signing Key</td>
+        <td>
+          <textarea name="setting[oidc_signing_key]" class="form-control"><%= Setting.oidc_signing_key %></textarea>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-primary">Save</button>
+<%- end %>

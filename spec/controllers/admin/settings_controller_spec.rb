@@ -31,7 +31,7 @@ RSpec.describe Admin::SettingsController, type: :controller do
         render_views
         it 'Shows the SAML certificate fingerprint' do
           Setting.saml_certificate = File.read('myCert.crt')
-          get :index
+          get :saml
           expect(response.body).to include('4C:51:74:2D:C7:00:32:1A:87:79:AD:B8:1D:D8:8A:66:0C:FB:73:F3')
         end
       end

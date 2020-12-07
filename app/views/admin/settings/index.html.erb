@@ -1,18 +1,9 @@
 <h1> Settings</h1>
 <%= form_tag({controller: "settings", action: "update"}, method: :post, class: "form") do |form| %>
-  <h3>General</h3>
   <table class="table table-striped">
     <tr>
       <td>Base</td>
       <td><input type="text" name="setting[idp_base]" class="form-control" value="<%= Setting.idp_base %>" /></td>
-    </tr>
-    <tr>
-      <td>HTML Title</td>
-      <td><input type="text" name="setting[html_title_base]" class="form-control" value="<%= Setting.html_title_base %>" /></td>
-    </tr>
-    <tr>
-      <td>Email to send welcome emails from</td>
-      <td><input type="email" name="setting[welcome_from_email]" class="form-control" value="<%= Setting.welcome_from_email %>" /></td>
     </tr>
     <tr>
       <td>Enable User Registration</td>
@@ -33,90 +24,6 @@
         <p class="small">How many days to allow a password reset token to be valid.</p></td>
     </tr>
     <!-- Logo settings -->
-  </table>
-  <h3>Branding</h3>
-  <table class="table table-striped">
-    <tr>
-      <td>Home page template</td>
-      <td>
-        <textarea name="setting[home_template]" class="form-control" ><%= Setting.home_template %></textarea>
-      </td>
-    </tr>
-    <tr>
-      <td>Registered home page template</td>
-      <td>
-        <textarea name="setting[registered_home_template]" class="form-control" ><%= Setting.registered_home_template %></textarea>
-      </td>
-    </tr>
-    <tr>
-      <td>Password reset email template</td>
-      <td>
-        <textarea name="setting[admin_reset_email_template]" class="form-control" ><%= Setting.admin_reset_email_template %></textarea>
-      </td>
-    </tr>
-    <tr>
-      <td>Admin created user welcome template</td>
-      <td>
-        <textarea name="setting[admin_welcome_email_template]" class="form-control" ><%= Setting.admin_welcome_email_template %></textarea>
-      </td>
-    </tr>
-    <tr>
-      <td>Logo</td>
-      <td>
-        <input type="text" name="setting[logo]" class="form-control" value="<%= Setting.logo %>" />
-        <p class="small">Path to a logo file, either as a fully qualified URL or a path inside the local installation's <code>public/images</code> directory. If the path is inside the public directory, it should be just the filename inside of that directory (logo.gif, rather than public/images/logo.gif)</p>
-      </td>
-    </tr>
-    <tr>
-      <td>Logo Height</td>
-      <td>
-        <input type="text" name="setting[logo_height]" class="form-control" value="<%= Setting.logo_height %>" />
-      </td>
-    </tr>
-    <tr>
-      <td>Logo Width</td>
-      <td>
-        <input type="text" name="setting[logo_width]" class="form-control" value="<%= Setting.logo_width %>" />
-      </td>
-    </tr>
-    <!-- End logo settings -->
-  </table>
-
-  <h3>SAML</h3>
-  <table class="table table-striped">
-    <tbody>
-      <tr>
-        <td>Certificate</td>
-        <td>
-          <textarea name="setting[saml_certificate]" class="form-control"><%= Setting.saml_certificate %></textarea>
-          <%- if Setting.saml_certificate.present? %>
-            <%- cert = OpenSSL::X509::Certificate.new(Setting.saml_certificate) %>
-            <p class="small">Certificate Fingerprint: <%= OpenSSL::Digest::SHA1.hexdigest(cert.to_der).scan(/../).join(':').upcase %></p>
-          <%- end %>
-        </td>
-      </tr>
-
-      <tr>
-        <td>Key</td>
-        <td>
-          <textarea name="setting[saml_key]" class="form-control"><%= Setting.saml_key %></textarea>
-        </td>
-      </tr>
-
-    </tbody>
-  </table>
-
-  <h3>OpenID Connect</h3>
-  <table class="table table-striped">
-
-    <tbody>
-      <tr>
-        <td>Signing Key</td>
-        <td>
-          <textarea name="setting[oidc_signing_key]" class="form-control"><%= Setting.oidc_signing_key %></textarea>
-        </td>
-      </tr>
-    </tbody>
   </table>
   <button class="btn btn-primary">Save</button>
 <%- end %>

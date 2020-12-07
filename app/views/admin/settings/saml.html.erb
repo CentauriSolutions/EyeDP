@@ -1,0 +1,25 @@
+<%= form_tag({controller: "settings", action: "update"}, method: :post, class: "form") do |form| %>
+  <h3>SAML</h3>
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>Certificate</td>
+        <td>
+          <textarea name="setting[saml_certificate]" class="form-control"><%= Setting.saml_certificate %></textarea>
+          <%- if Setting.saml_certificate.present? %>
+            <%- cert = OpenSSL::X509::Certificate.new(Setting.saml_certificate) %>
+            <p class="small">Certificate Fingerprint: <%= OpenSSL::Digest::SHA1.hexdigest(cert.to_der).scan(/../).join(':').upcase %></p>
+          <%- end %>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Key</td>
+        <td>
+          <textarea name="setting[saml_key]" class="form-control"><%= Setting.saml_key %></textarea>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-primary">Save</button>
+<%- end %>
