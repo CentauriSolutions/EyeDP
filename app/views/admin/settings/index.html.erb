@@ -27,6 +27,11 @@
       <td>User Cannot Edit username or email</td>
       <td><input type="checkbox" name="setting[permemant_username]" class="form-control" <% if Setting.permemant_username %>checked <% end %> value="" /></td>
     </tr>
+    <tr>
+      <td>Reset Password Within</td>
+      <td><input type="text" name="setting[reset_password_within]" class="form-control" value="<%= Setting.reset_password_within.parts[:days] if Setting.reset_password_within %>"/>
+        <p class="small">How many days to allow a password reset token to be valid.</p></td>
+    </tr>
     <!-- Logo settings -->
   </table>
   <h3>Branding</h3>
