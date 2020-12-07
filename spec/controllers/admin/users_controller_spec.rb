@@ -28,13 +28,13 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         it 'shows if a user has two factor enabled' do
-          user.update( { otp_required_for_login: true } )
+          user.update({ otp_required_for_login: true })
           get :index
           expect(response.body).to match(/<td class="two_factor_enabled">\s+true/)
         end
 
         it 'shows if a user does not have two factor enabled' do
-          user.update( { otp_required_for_login: false } )
+          user.update({ otp_required_for_login: false })
           get :index
           expect(response.body).to match(/<td class="two_factor_enabled">\s+false/)
         end
@@ -55,15 +55,15 @@ RSpec.describe Admin::UsersController, type: :controller do
         render_views
 
         it 'Can see if a user has two factor enabled' do
-          user.update( { otp_required_for_login: true } )
+          user.update({ otp_required_for_login: true })
           get(:show, params: { id: user.id })
-          expect(response.body).to match(/<dt>two_factor_enabled\?<\/dt>\s+<dd>\s+true/)
+          expect(response.body).to match(%r{<dt>two_factor_enabled\?</dt>\s+<dd>\s+true})
         end
 
         it 'Can see if a user does not have two factor enabled' do
-          user.update( { otp_required_for_login: false } )
+          user.update({ otp_required_for_login: false })
           get(:show, params: { id: user.id })
-          expect(response.body).to match(/<dt>two_factor_enabled\?<\/dt>\s+<dd>\s+false/)
+          expect(response.body).to match(%r{<dt>two_factor_enabled\?</dt>\s+<dd>\s+false})
         end
       end
 

@@ -59,6 +59,8 @@ Layout/LineLength:
   Max: 120
 Layout/SpaceAroundMethodCallOperator: # (new in 0.82)
   Enabled: true
+Lint/UnexpectedBlockArity: # (new in 1.5)
+  Enabled: true
 Lint/BinaryOperatorWithIdenticalOperands: # (new in 0.89)
   Enabled: true
 Lint/ConstantDefinitionInBlock: # (new in 0.91)
