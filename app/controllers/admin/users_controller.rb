@@ -58,15 +58,19 @@ class Admin::UsersController < AdminController
   end
 
   def filter_whitelist
-    %w[username email]
+    %w[username email group]
   end
 
-  def filter
+  def filter(rel)
     if filter_whitelist.include? params[:filter_by]
-      users = User.arel_table
-      users[params[:filter_by]].matches("%#{params[:filter]}%")
+      if params[:filter_by] == 'group'
+        rel.joins(:user_groups).where(user_groups: { group_id: params[:filter] })
+      else
+        users = User.arel_table
+        rel.where(users[params[:filter_by]].matches("%#{params[:filter]}%"))
+      end
     else
-      {}
+      rel
     end
   end
 end
