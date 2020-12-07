@@ -8,7 +8,7 @@ class Admin::SettingsController < AdminController
 
   # PATCH/PUT /admin/settings/1
   # PATCH/PUT /admin/settings/1.json
-  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/PerceivedComplexity
     opts = setting_params
     opts[:registration_enabled] = if opts[:registration_enabled].nil?
                                     false
@@ -29,6 +29,15 @@ class Admin::SettingsController < AdminController
                           else # rubocop:disable Style/EmptyElse
                             nil
                           end
+    opts[:reset_password_within] = if opts[:reset_password_within].present?
+                                     opts[:reset_password_within].to_i.days
+                                   # The below else is ignored because we need to
+                                   # ensure that opts[:expire_after] is nil rather
+                                   # than an empty string so that the expiration is
+                                   # disabled!
+                                   else
+                                     7.days
+                                   end
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
@@ -43,9 +52,10 @@ class Admin::SettingsController < AdminController
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def setting_params
+  def setting_params # rubocop:disable Metrics/MethodLength
     params.fetch(:setting, {}).permit(
-      :idp_base,
+      :idp_base, :html_title_base,
+      :reset_password_within,
       :saml_certificate, :saml_key,
       :oidc_signing_key,
       :registration_enabled, :permemant_username,

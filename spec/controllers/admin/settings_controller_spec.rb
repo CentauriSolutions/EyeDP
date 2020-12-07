@@ -91,6 +91,19 @@ RSpec.describe Admin::SettingsController, type: :controller do
           post(:update, params: { setting: { admin_welcome_email_template: 'welcome to eyedp!' } })
           expect(Setting.admin_welcome_email_template).to eq 'welcome to eyedp!'
         end
+
+        it 'can update HTML title' do
+          post(:update, params: { setting: { html_title_base: 'Custom EyeDP' } })
+          expect(Setting.html_title_base).to eq 'Custom EyeDP'
+        end
+
+        it 'can update the password reset token validity' do
+          expect(Setting.reset_password_within).to eq 7.days
+          expect(Devise.reset_password_within).to eq 7.days
+          post(:update, params: { setting: { reset_password_within: '30' } })
+          expect(Setting.reset_password_within).to eq 30.days
+          expect(Devise.reset_password_within).to eq 30.days
+        end
       end
     end
 

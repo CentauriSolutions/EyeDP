@@ -19,9 +19,25 @@ RSpec.describe Admin::UsersController, type: :controller do
         sign_in(admin)
       end
 
-      it 'Shows the index page' do
-        get :index
-        expect(response.status).to eq(200)
+      context 'index' do
+        render_views
+
+        it 'Shows the index page' do
+          get :index
+          expect(response.status).to eq(200)
+        end
+
+        it 'shows if a user has two factor enabled' do
+          user.update({ otp_required_for_login: true })
+          get :index
+          expect(response.body).to match(/<td class="two_factor_enabled">\s+true/)
+        end
+
+        it 'shows if a user does not have two factor enabled' do
+          user.update({ otp_required_for_login: false })
+          get :index
+          expect(response.body).to match(/<td class="two_factor_enabled">\s+false/)
+        end
       end
 
       context 'New' do
@@ -32,6 +48,22 @@ RSpec.describe Admin::UsersController, type: :controller do
               expect(response.status).to eq(302)
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+      end
+
+      context 'Show' do
+        render_views
+
+        it 'Can see if a user has two factor enabled' do
+          user.update({ otp_required_for_login: true })
+          get(:show, params: { id: user.id })
+          expect(response.body).to match(%r{<dt>two_factor_enabled\?</dt>\s+<dd>\s+true})
+        end
+
+        it 'Can see if a user does not have two factor enabled' do
+          user.update({ otp_required_for_login: false })
+          get(:show, params: { id: user.id })
+          expect(response.body).to match(%r{<dt>two_factor_enabled\?</dt>\s+<dd>\s+false})
         end
       end
 

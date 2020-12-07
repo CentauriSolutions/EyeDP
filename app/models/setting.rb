@@ -151,6 +151,7 @@ class Setting < ApplicationRecord
   field :logo
   field :logo_height, default: 50, type: :integer
   field :logo_width, default: 100, type: :integer
+  field :reset_password_within, type: :time, default: 7.days.iso8601
 
   field :home_template, default: '', type: :string
   field :registered_home_template, default: '', type: :string
@@ -161,4 +162,6 @@ class Setting < ApplicationRecord
 
   field :admin_reset_email_template, default: '', type: :string
   field :admin_welcome_email_template, default: '', type: :string
+
+  field :html_title_base, default: 'EyeDP', type: :string
 end

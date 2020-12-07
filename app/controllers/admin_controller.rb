@@ -11,7 +11,7 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
               .page(params[:page] || 1)
               .includes(includes)
               .order(order)
-    @models = @models.where(filter) if filter
+    @models = filter(@models)
   end
 
   # GET /admin/#{model}/1
@@ -96,11 +96,11 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
     []
   end
 
-  def filter
+  def filter(rel)
     if filter_whitelist.include? params[:filter_by]
-      { params[:filter_by] => params[:filter] }
+      rel.where(params[:filter_by] => params[:filter])
     else
-      {}
+      rel
     end
   end
 
