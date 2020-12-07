@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class Admin::UsersController < AdminController
+  def show
+    super
+    @logins = @model.logins.includes(:service_provider).order(created_at: :desc).limit(50)
+  end
+
   def create
     super
     @model.send_admin_welcome_email if @model.persisted?
