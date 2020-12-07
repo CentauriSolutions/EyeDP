@@ -161,4 +161,6 @@ class Setting < ApplicationRecord
 
   field :admin_reset_email_template, default: '', type: :string
   field :admin_welcome_email_template, default: '', type: :string
+
+  field :html_title_base, default: 'EyeDP', type: :string
 end
