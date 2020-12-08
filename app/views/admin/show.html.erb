@@ -1,6 +1,11 @@
 <h2><%= @model.class.name %> <%= @model %></h2>
 <%= render partial: 'sub_heading' %>
 <div class="row">
+  <%= link_to 'Edit', ['edit', :admin, @model] %> |
+  <%= link_to 'Back', [:admin, @model.class] %>
+</div>
+
+<div class="row">
   <dl>
     <%- model_attributes.each do |attribute| %>
       <dt><%= attribute %></dt>
@@ -28,7 +33,3 @@
 <% rescue ActionView::MissingTemplate %>
 <% end %>
 
-<div class="row">
-  <%= link_to 'Edit', ['edit', :admin, @model] %> |
-  <%= link_to 'Back', [:admin, @model.class] %>
-</div>

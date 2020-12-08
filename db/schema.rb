@@ -10,11 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_07_072630) do
+ActiveRecord::Schema.define(version: 2020_12_08_075557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "custom_userdata", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "custom_userdata_type_id", null: false
+    t.text "value_raw"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["custom_userdata_type_id"], name: "index_custom_userdata_on_custom_userdata_type_id"
+    t.index ["user_id"], name: "index_custom_userdata_on_user_id"
+  end
+
+  create_table "custom_userdata_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "name"
+    t.text "custom_type"
+    t.boolean "visible", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "fido_usf_devices", force: :cascade do |t|
     t.string "user_type", null: false
@@ -187,6 +205,8 @@ ActiveRecord::Schema.define(version: 2020_12_07_072630) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "custom_userdata", "custom_userdata_types"
+  add_foreign_key "custom_userdata", "users"
   add_foreign_key "group_permissions", "groups"
   add_foreign_key "group_permissions", "permissions"
   add_foreign_key "logins", "users"
