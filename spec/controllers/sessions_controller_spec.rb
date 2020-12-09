@@ -30,6 +30,20 @@ RSpec.describe SessionsController do
           expect(subject.current_user).to eq user
         end
 
+        context 'with rendered wiews' do
+          render_views
+
+          it 'renders two factor screen' do
+            user.update({ otp_required_for_login: true })
+            user.fido_usf_devices.create!(
+              name: 'test', key_handle: 'test', public_key: 'test', certificate: 'test',
+              last_authenticated_at: Time.zone.now
+            )
+            expect { post(:create, params: { user: user_params }) }.not_to raise_error(ActionView::Template::Error)
+            expect(response.status).to eq(200)
+          end
+        end
+
         it 'does not authenticate an expired user' do
           user.update!(expires_at: 10.minutes.ago)
 
