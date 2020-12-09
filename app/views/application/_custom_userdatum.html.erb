@@ -5,12 +5,12 @@
     <%= hidden_field_tag "custom_userdata[#{custom_userdatum.name}]", custom_userdatum.value || false %>
     <%= check_box_tag "custom_userdata[#{custom_userdatum.name}]", true, custom_userdatum.value, disabled: disabled %>
   <%- when 'array' %>
-    <%= text_field_tag "custom_userdata[#{custom_userdatum.name}]", custom_userdatum.value.try(:join, '; '), class: 'form-control' %>
+    <%= text_field_tag "custom_userdata[#{custom_userdatum.name}]", custom_userdatum.value.try(:join, '; '), disabled: disabled, class: 'form-control' %>
     <p class="small">Please separate multiple values with a semicolon (";")</p>
   <%- when 'integer' %>
-    <%= number_field_tag "custom_userdata[#{custom_userdatum.name}]", custom_userdatum.value, class: 'form-control' %>
+    <%= number_field_tag "custom_userdata[#{custom_userdatum.name}]", custom_userdatum.value, disabled: disabled, class: 'form-control' %>
   <%- else %>
-    <%= text_field_tag "custom_userdata[#{custom_userdatum.name}]", custom_userdatum.value, class: 'form-control' %>
+    <%= text_field_tag "custom_userdata[#{custom_userdatum.name}]", custom_userdatum.value, disabled: disabled, class: 'form-control' %>
   <%- end %>
 </div>
 
