@@ -13,7 +13,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
   context 'with permenant usernames' do
     before do
-      Setting.permemant_username = true
+      Setting.permanent_email = true
     end
 
     it 'can edit name' do
@@ -23,17 +23,17 @@ RSpec.describe RegistrationsController, type: :controller do
       expect(user.name).to eq('test')
     end
 
-    it 'cannot edit username' do
-      patch(:update, params: { id: user.id, user: { username: 'test', current_password: 'test1234' } })
+    it 'cannot edit email' do
+      patch(:update, params: { id: user.id, user: { email: 'test2@localhost', current_password: 'test1234' } })
       expect(response.status).to eq(302)
       user.reload
-      expect(user.username).to eq('example')
+      expect(user.email).to eq('test@localhost')
     end
   end
 
   context 'without permenant usernames' do
     before do
-      Setting.permemant_username = false
+      Setting.permanent_email = false
     end
 
     it 'can edit name' do
@@ -43,11 +43,11 @@ RSpec.describe RegistrationsController, type: :controller do
       expect(user.name).to eq('test')
     end
 
-    it 'can edit username' do
-      patch(:update, params: { id: user.id, user: { username: 'test', current_password: 'test1234' } })
+    it 'can edit email' do
+      patch(:update, params: { id: user.id, user: { email: 'test2@localhost', current_password: 'test1234' } })
       expect(response.status).to eq(302)
       user.reload
-      expect(user.username).to eq('test')
+      expect(user.email).to eq('test2@localhost')
     end
   end
 end

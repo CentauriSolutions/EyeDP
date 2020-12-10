@@ -23,11 +23,11 @@ class Admin::SettingsController < AdminController
                                   else
                                     true
                                   end
-    opts[:permemant_username] = if opts[:permemant_username].nil?
-                                  false
-                                else
-                                  true
-                                end
+    opts[:permanent_email] = if opts[:permanent_email].nil?
+                               false
+                             else
+                               true
+                             end
     opts[:expire_after] = if opts[:expire_after].present?
                             opts[:expire_after].to_i.days
                           # The below else is ignored because we need to
@@ -66,7 +66,7 @@ class Admin::SettingsController < AdminController
       :devise_reset_password_within,
       :saml_certificate, :saml_key,
       :oidc_signing_key,
-      :registration_enabled, :permemant_username,
+      :registration_enabled, :permanent_email,
       :logo, :logo_height, :logo_width,
       :home_template, :registered_home_template,
       :expire_after, :welcome_from_email,

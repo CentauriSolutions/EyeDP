@@ -38,7 +38,7 @@ RSpec.describe ProfileController, type: :controller do
 
     context 'with permenant usernames' do
       before do
-        Setting.permemant_username = true
+        Setting.permanent_email = true
       end
 
       it 'can edit name' do
@@ -46,18 +46,18 @@ RSpec.describe ProfileController, type: :controller do
         expect(response.body).to include('<input class="form-control" type="text" name="user[name]" id="user_name" />')
       end
 
-      it 'cannot edit username' do
+      it 'cannot edit email' do
         get :show
         expect(response.body).to include(
-          '<input disabled="disabled" class="form-control" type="text"' \
-          ' value="example" name="user[username]" id="user_username" />'
+          'disabled="disabled" class="form-control" type="email" value="test@localhost" ' \
+          'name="user[email]" id="user_email" />'
         )
       end
     end
 
     context 'without permenant usernames' do
       before do
-        Setting.permemant_username = false
+        Setting.permanent_email = false
       end
 
       it 'can edit name' do
@@ -65,10 +65,11 @@ RSpec.describe ProfileController, type: :controller do
         expect(response.body).to include('<input class="form-control" type="text" name="user[name]" id="user_name" />')
       end
 
-      it 'can edit username' do
+      it 'can edit email' do
         get :show
         expect(response.body).to include(
-          '<input class="form-control" type="text" value="example" name="user[username]" id="user_username" />'
+          '<input autofocus="autofocus" class="form-control" type="email" value="test@localhost" ' \
+          'name="user[email]" id="user_email" />'
         )
       end
     end
