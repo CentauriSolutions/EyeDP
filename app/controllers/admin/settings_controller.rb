@@ -6,9 +6,17 @@ class Admin::SettingsController < AdminController
   # GET /admin/settings.json
   def index; end
 
+  def openid_connect; end
+
+  def saml; end
+
+  def branding; end
+
+  def templates; end
+
   # PATCH/PUT /admin/settings/1
   # PATCH/PUT /admin/settings/1.json
-  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/PerceivedComplexity
     opts = setting_params
     opts[:registration_enabled] = if opts[:registration_enabled].nil?
                                     false
@@ -29,10 +37,19 @@ class Admin::SettingsController < AdminController
                           else # rubocop:disable Style/EmptyElse
                             nil
                           end
+    opts[:devise_reset_password_within] = if opts[:devise_reset_password_within].present?
+                                            opts[:devise_reset_password_within].to_i.days
+                                          # The below else is ignored because we need to
+                                          # ensure that opts[:expire_after] is nil rather
+                                          # than an empty string so that the expiration is
+                                          # disabled!
+                                          else
+                                            7.days
+                                          end
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
-    redirect_to admin_settings_url, notice: 'Settings were successfully updated.'
+    redirect_back fallback_location: admin_settings_url, notice: 'Settings were successfully updated.'
   end
 
   private
@@ -43,9 +60,10 @@ class Admin::SettingsController < AdminController
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def setting_params
+  def setting_params # rubocop:disable Metrics/MethodLength
     params.fetch(:setting, {}).permit(
-      :idp_base,
+      :idp_base, :html_title_base,
+      :devise_reset_password_within,
       :saml_certificate, :saml_key,
       :oidc_signing_key,
       :registration_enabled, :permemant_username,

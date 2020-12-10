@@ -1,0 +1,34 @@
+<%= form_tag({controller: "settings", action: "update"}, method: :post, class: "form") do |form| %>
+  <h1>Branding</h1>
+    <tr>
+      <td>HTML Title</td>
+      <td><input type="text" name="setting[html_title_base]" class="form-control" value="<%= Setting.html_title_base %>" /></td>
+    </tr>
+    <tr>
+      <td>Email to send welcome emails from</td>
+      <td><input type="email" name="setting[welcome_from_email]" class="form-control" value="<%= Setting.welcome_from_email %>" /></td>
+    </tr>
+    <h2>Logo</h2>
+    <!-- begin logo -->
+    <tr>
+      <td>Logo</td>
+      <td>
+        <input type="text" name="setting[logo]" class="form-control" value="<%= Setting.logo %>" />
+        <p class="small">Path to a logo file, either as a fully qualified URL or a path inside the local installation's <code>public/images</code> directory. If the path is inside the public directory, it should be just the filename inside of that directory (logo.gif, rather than public/images/logo.gif)</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Logo Height</td>
+      <td>
+        <input type="text" name="setting[logo_height]" class="form-control" value="<%= Setting.logo_height %>" />
+      </td>
+    </tr>
+    <tr>
+      <td>Logo Width</td>
+      <td>
+        <input type="text" name="setting[logo_width]" class="form-control" value="<%= Setting.logo_width %>" />
+      </td>
+    </tr>
+    <!-- End logo settings -->
+  <button class="btn btn-primary">Save</button>
+<%- end %>

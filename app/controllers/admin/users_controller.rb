@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class Admin::UsersController < AdminController
+  def show
+    super
+    @logins = @model.logins.includes(:service_provider).order(created_at: :desc).limit(50)
+  end
+
   def create
     super
     @model.send_admin_welcome_email if @model.persisted?
@@ -31,11 +36,11 @@ class Admin::UsersController < AdminController
   end
 
   def show_whitelist_attributes
-    %w[email name username groups expires_at last_activity_at]
+    %w[email name username two_factor_enabled? groups expires_at last_activity_at]
   end
 
   def whitelist_attributes
-    %w[email username name groups expired?]
+    %w[email username name two_factor_enabled? groups expired?]
   end
 
   def model
@@ -58,15 +63,19 @@ class Admin::UsersController < AdminController
   end
 
   def filter_whitelist
-    %w[username email]
+    %w[username email group]
   end
 
-  def filter
+  def filter(rel) # rubocop:disable Metrics/AbcSize
     if filter_whitelist.include? params[:filter_by]
-      users = User.arel_table
-      users[params[:filter_by]].matches("%#{params[:filter]}%")
+      if params[:filter_by] == 'group'
+        rel.joins(:user_groups).where(user_groups: { group_id: params[:filter] })
+      else
+        users = User.arel_table
+        rel.where(users[params[:filter_by]].matches("%#{params[:filter]}%"))
+      end
     else
-      {}
+      rel
     end
   end
 end

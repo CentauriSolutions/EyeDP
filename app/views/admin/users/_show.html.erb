@@ -1,0 +1,25 @@
+<div class="col-md-9 col-lg-10">
+  <h2>Account Activity</h2>
+
+  <p>The 50 most recent accesses made with this account are shown here.</p>
+
+  <p>This includes authentication requests made by other sites and devices. </p>
+
+  <table class="table table-striped">
+    <tbody>
+      <%- @logins.each do |login| %>
+      <tr>
+        <%- sp = login.service_provider %>
+        <% if sp.kind_of? Doorkeeper::Application %>
+          <%- sp = Application.find(sp.id) %>
+        <%- end %>
+        <% name = sp.try(:name) || sp.to_s %>
+        <% url = sp.display_url || sp.to_s %>
+        <td><%= link_to name, url %></td>
+        <td><%= login.auth_type %></td>
+        <td><%= login.created_at.to_formatted_s(:long) %></td>
+      </tr>
+      <%- end %>
+    </tbody>
+  </table>
+</div>

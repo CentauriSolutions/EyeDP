@@ -31,7 +31,7 @@ RSpec.describe Admin::SettingsController, type: :controller do
         render_views
         it 'Shows the SAML certificate fingerprint' do
           Setting.saml_certificate = File.read('myCert.crt')
-          get :index
+          get :saml
           expect(response.body).to include('4C:51:74:2D:C7:00:32:1A:87:79:AD:B8:1D:D8:8A:66:0C:FB:73:F3')
         end
       end
@@ -90,6 +90,19 @@ RSpec.describe Admin::SettingsController, type: :controller do
         it 'can set user creation template' do
           post(:update, params: { setting: { admin_welcome_email_template: 'welcome to eyedp!' } })
           expect(Setting.admin_welcome_email_template).to eq 'welcome to eyedp!'
+        end
+
+        it 'can update HTML title' do
+          post(:update, params: { setting: { html_title_base: 'Custom EyeDP' } })
+          expect(Setting.html_title_base).to eq 'Custom EyeDP'
+        end
+
+        it 'can update the password reset token validity' do
+          expect(Setting.devise_reset_password_within).to eq 7.days
+          expect(Devise.reset_password_within).to eq 7.days
+          post(:update, params: { setting: { devise_reset_password_within: '30' } })
+          expect(Setting.devise_reset_password_within).to eq 30.days
+          expect(Devise.reset_password_within).to eq 30.days
         end
       end
     end

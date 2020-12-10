@@ -8,12 +8,16 @@ class Admin::GroupsController < AdminController
 
   private
 
-  def model_attributes
+  def whitelist_attributes
     %w[name parent requires_2fa permissions]
   end
 
   def new_fields
-    %w[name requires_2fa]
+    %w[name description requires_2fa]
+  end
+
+  def show_whitelist_attributes
+    %w[name description parent requires_2fa permissions]
   end
 
   def form_relations
@@ -38,7 +42,8 @@ class Admin::GroupsController < AdminController
 
   def model_params
     p = params.require(:group).permit(
-      :name, :parent, :welcome_email, :requires_2fa, permission_ids: []
+      :name, :description, :parent, :welcome_email, :requires_2fa,
+      permission_ids: []
     )
     p[:permission_ids] ||= []
     p[:parent_id] = p.delete(:parent) if p[:parent]

@@ -25,6 +25,13 @@ RSpec.describe Admin::GroupsController, type: :controller do
       end
 
       context 'Edit' do
+        it 'can edit the description' do
+          expect(group.description).to eq(nil)
+          post(:update, params: { id: group.id, group: { description: 'Test description' } })
+          group.reload
+          expect(group.description).to eq('Test description')
+        end
+
         it 'can update a welcome email' do
           expect(group.welcome_email).to eq(nil)
           post(:update, params: { id: group.id, group: { welcome_email: 'Test welcome email' } })
