@@ -98,10 +98,10 @@ RSpec.describe Admin::SettingsController, type: :controller do
         end
 
         it 'can update the password reset token validity' do
-          expect(Setting.reset_password_within).to eq 7.days
+          expect(Setting.devise_reset_password_within).to eq 7.days
           expect(Devise.reset_password_within).to eq 7.days
-          post(:update, params: { setting: { reset_password_within: '30' } })
-          expect(Setting.reset_password_within).to eq 30.days
+          post(:update, params: { setting: { devise_reset_password_within: '30' } })
+          expect(Setting.devise_reset_password_within).to eq 30.days
           expect(Devise.reset_password_within).to eq 30.days
         end
       end

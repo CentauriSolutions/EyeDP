@@ -37,15 +37,15 @@ class Admin::SettingsController < AdminController
                           else # rubocop:disable Style/EmptyElse
                             nil
                           end
-    opts[:reset_password_within] = if opts[:reset_password_within].present?
-                                     opts[:reset_password_within].to_i.days
-                                   # The below else is ignored because we need to
-                                   # ensure that opts[:expire_after] is nil rather
-                                   # than an empty string so that the expiration is
-                                   # disabled!
-                                   else
-                                     7.days
-                                   end
+    opts[:devise_reset_password_within] = if opts[:devise_reset_password_within].present?
+                                            opts[:devise_reset_password_within].to_i.days
+                                          # The below else is ignored because we need to
+                                          # ensure that opts[:expire_after] is nil rather
+                                          # than an empty string so that the expiration is
+                                          # disabled!
+                                          else
+                                            7.days
+                                          end
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
@@ -63,7 +63,7 @@ class Admin::SettingsController < AdminController
   def setting_params # rubocop:disable Metrics/MethodLength
     params.fetch(:setting, {}).permit(
       :idp_base, :html_title_base,
-      :reset_password_within,
+      :devise_reset_password_within,
       :saml_certificate, :saml_key,
       :oidc_signing_key,
       :registration_enabled, :permemant_username,
