@@ -5,6 +5,11 @@ EyeDP is a federating identity provider. It is designed to be very self-containe
 EyeDP is dual licensed under the Apache2 and MIT licenses.
 
 EyeDP is proud to use [Translation.io](https://translation.io) for our localisation.
+
+## Reporting Issues
+
+To report sensitive or security issues, we prefer that confidential issues be created on [our Gitlab.com issue tracker](https://gitlab.com/CentauriSolutions/eyedp-issues/-/issues/new?issue[confidential]=true). For non-sensitive bugs or feature requests, please create a [new issue on Github.com](https://github.com/CentauriSolutions/EyeDP/issues/new).
+
 ## Contents
 
 - [Overview](#overview)
