@@ -146,6 +146,18 @@ RSpec.describe User, type: :model do
         end.not_to(change { ActionMailer::Base.deliveries.count })
       end
     end
+
+    context 'A group with an empty welcome email' do
+      let(:test_group) { Group.create!(name: 'test_group', welcome_email: '') }
+
+      it 'Does not send a welcome email when a user is added to the group' do
+        expect do
+          perform_enqueued_jobs do
+            user.groups << test_group
+          end
+        end.not_to(change { ActionMailer::Base.deliveries.count })
+      end
+    end
   end
 
   it 'sends a password reset email with a forced reset' do

@@ -28,6 +28,6 @@ class UserGroup < ApplicationRecord
   after_create :send_welcome_email
 
   def send_welcome_email
-    UserMailer.group_welcome_email(user, group).deliver_later if group.welcome_email
+    UserMailer.group_welcome_email(user, group).deliver_later if group.welcome_email.present?
   end
 end
