@@ -42,10 +42,10 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_in, keys: %i[login otp_attempt])
     devise_parameter_sanitizer.permit(:sign_up, keys: %i[username email])
-    if Setting.permemant_username
+    if Setting.permanent_email
       devise_parameter_sanitizer.permit(:account_update, keys: %i[name])
     else
-      devise_parameter_sanitizer.permit(:account_update, keys: %i[username email name])
+      devise_parameter_sanitizer.permit(:account_update, keys: %i[email name])
     end
   end
 

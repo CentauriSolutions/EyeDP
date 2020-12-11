@@ -14,11 +14,10 @@
     <%- resource_name = 'user' %>
 
         <%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-          <%- if Setting.permemant_username %>
-            <%= f.text_field :username, disabled: true %>
+          <%= f.text_field :username, disabled: true %>
+          <%- if Setting.permanent_email %>
             <%= f.email_field :email, autofocus: true, disabled: true %>
           <%- else %>
-            <%= f.text_field :username %>
             <%= f.email_field :email, autofocus: true %>
           <%- end %>
           <%= f.text_field :name %>

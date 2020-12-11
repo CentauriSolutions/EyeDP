@@ -59,15 +59,15 @@ RSpec.describe Admin::SettingsController, type: :controller do
         end
 
         it 'can enable permenant usernames' do
-          Setting.permemant_username = false
-          post(:update, params: { setting: { permemant_username: '' } })
-          expect(Setting.permemant_username).to be true
+          Setting.permanent_email = false
+          post(:update, params: { setting: { permanent_email: '' } })
+          expect(Setting.permanent_email).to be true
         end
 
         it 'can disable permenant usernames' do
-          Setting.permemant_username = true
+          Setting.permanent_email = true
           post(:update, params: { setting: {} })
-          expect(Setting.permemant_username).to be false
+          expect(Setting.permanent_email).to be false
         end
 
         it 'can enable user registration' do

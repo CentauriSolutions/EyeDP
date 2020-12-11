@@ -35,7 +35,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :registerable, :recoverable, :rememberable, :validatable,
-         :fido_usf_registerable
+         :fido_usf_registerable, :timeoutable
 
   devise :expirable
 

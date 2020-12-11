@@ -158,7 +158,7 @@ class Setting < ApplicationRecord
 
   field :welcome_from_email, type: :string, default: "noreply@#{idp_base_uri ? idp_base_uri.hostname : "example.com"}"
   field :expire_after, type: :time
-  field :permemant_username, type: :boolean, default: true
+  field :permanent_email, type: :boolean, default: true
 
   field :admin_reset_email_template, default: '', type: :string
   field :admin_welcome_email_template, default: '', type: :string
