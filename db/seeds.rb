@@ -13,6 +13,7 @@ groups = {}
 default_groups.each do |group_name|
   groups[group_name.to_sym] = Group.find_or_create_by!(name: group_name)
 end
+Group.where(name: 'administrators').update({ admin: true })
 
 user = User.find_or_initialize_by(email: ENV['SEED_EMAIL'].presence || 'admin@example.com')
 if user.persisted?

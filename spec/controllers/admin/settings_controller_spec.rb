@@ -9,7 +9,7 @@ RSpec.describe Admin::SettingsController, type: :controller do
       password: 'test1234', last_activity_at: 1.year.ago
     )
   end
-  let(:group) { Group.create!(name: 'administrators') }
+  let(:group) { Group.create!(name: 'administrators', admin: true) }
   let(:admin) do
     user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
     user.groups << group

@@ -147,7 +147,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def admin?
-    @admin ||= asserted_groups.where(name: 'administrators').present?
+    @admin ||= asserted_groups.where(admin: true).present?
   end
 
   def to_s
