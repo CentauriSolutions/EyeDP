@@ -31,11 +31,17 @@ RSpec.describe User, type: :model do
   include ActiveJob::TestHelper
 
   let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
-  let(:group) { Group.create!(name: 'administrators') }
+  let(:group) { Group.create!(name: 'administrators', admin: true) }
 
   it 'makes a user Admin is it has membership' do
     user.groups << group
     expect(user.admin?).to be true
+  end
+
+  it 'does not grant admin just because of a group name' do
+    group.admin = false
+    user.groups << group
+    expect(user.admin?).to be false
   end
 
   it 'can require an admin to have 2fa before adding' do

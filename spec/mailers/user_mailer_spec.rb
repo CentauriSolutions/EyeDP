@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe UserMailer, type: :mailer do # rubocop:disable Metrics/BlockLength
   context 'group_welcome_email' do
     let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
-    let(:group) { Group.create!(name: 'administrators') }
+    let(:group) { Group.create!(name: 'administrators', admin: true) }
 
     let(:mail) { UserMailer.group_welcome_email(user, group) }
     it 'renders the headers' do

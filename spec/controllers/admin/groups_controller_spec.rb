@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::GroupsController, type: :controller do
   let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
-  let(:group) { Group.create!(name: 'administrators') }
+  let(:group) { Group.create!(name: 'administrators', admin: true) }
   let(:users_group) { Group.create!(name: 'usesr') }
   let(:permission) { Permission.create!(name: 'test permission') }
   let(:admin) do

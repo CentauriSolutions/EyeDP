@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Admin::UsersController, type: :controller do
   include ActiveJob::TestHelper
   let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
-  let(:group) { Group.create!(name: 'administrators') }
+  let(:group) { Group.create!(name: 'administrators', admin: true) }
   let(:user_group) { Group.create!(name: 'users') }
   let(:admin) do
     user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
