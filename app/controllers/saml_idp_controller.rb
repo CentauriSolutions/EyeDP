@@ -25,6 +25,15 @@ class SamlIdpController < SamlIdp::IdpController
 
   # NOT USED -- def idp_authenticate(email, password) -- NOT USED
 
+  protected
+
+  def authn_context_classref
+    # Recommended via https://wiki.cac.washington.edu/display/infra/Configure+a+Service+Provider+for+Two-Factor+Authentication
+    return 'https://refeds.org/profile/mfa' if current_user.two_factor_enabled?
+
+    super
+  end
+
   private
 
   # not using params intentionally
