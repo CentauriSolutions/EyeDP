@@ -39,7 +39,7 @@ RSpec.describe SessionsController do
               name: 'test', key_handle: 'test', public_key: 'test', certificate: 'test',
               last_authenticated_at: Time.zone.now
             )
-            expect { post(:create, params: { user: user_params }) }.not_to raise_error(ActionView::Template::Error)
+            expect { post(:create, params: { user: user_params }) }.not_to raise_error
             expect(response.status).to eq(200)
           end
         end

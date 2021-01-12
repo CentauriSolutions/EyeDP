@@ -26,7 +26,11 @@ Bundler.require(*Rails.groups)
 module EyedP
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    config.load_defaults 6.0
+
+    # The new autoloader (Zeitwerk) in the 6.0 defaults breaks some of the Devise
+    # issues, so it's a TODO to resolve the below autoloading issues.
+    config.autoloader = :classic
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
