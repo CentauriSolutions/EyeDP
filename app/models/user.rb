@@ -56,6 +56,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_many :logins, dependent: :destroy
 
+  has_many :custom_userdata, dependent: :destroy
+
   validates :username, presence: true, uniqueness: { case_sensitive: false } # rubocop:disable Rails/UniqueValidationWithoutIndex
 
   validate :validate_username

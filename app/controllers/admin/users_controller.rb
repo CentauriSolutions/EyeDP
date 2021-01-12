@@ -25,6 +25,24 @@ class Admin::UsersController < AdminController
     end
   end
 
+  def update_custom_attributes # rubocop:disable Metrics/MethodLength
+    @model = User.find(params[:user_id])
+    custom_userdata_params.each do |name, value|
+      custom_type = CustomUserdataType.where(name: name).first
+      custom_datum = CustomUserdatum.where(
+        user_id: @model.id,
+        custom_userdata_type: custom_type
+      ).first_or_initialize
+      begin
+        custom_datum.value = value
+        custom_datum.save
+      rescue RuntimeError
+        flash[:error] = 'Failed to update userdata, invalid value'
+      end
+    end
+    redirect_to [:edit, :admin, @model]
+  end
+
   private
 
   def can_destroy?
@@ -77,5 +95,9 @@ class Admin::UsersController < AdminController
     else
       rel
     end
+  end
+
+  def custom_userdata_params
+    params.require(:custom_userdata).permit!
   end
 end
