@@ -19,8 +19,7 @@ class Group < ApplicationRecord
   acts_as_tree order: 'name'
   belongs_to :parent,
              class_name: 'Group',
-             optional: true,
-             foreign_type: :uuid
+             optional: true
 
   has_many :groups,
            foreign_key: 'parent_id',
