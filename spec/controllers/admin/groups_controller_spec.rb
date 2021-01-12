@@ -69,6 +69,26 @@ RSpec.describe Admin::GroupsController, type: :controller do
           users_group.reload
           expect(users_group.requires_2fa).to be false
         end
+
+        context 'Show' do
+          render_views
+          it "Can see a group's custom attributes" do
+            CustomGroupDataType.create(name: 'alias', custom_type: 'string')
+            get(:show, params: { id: group.id })
+            # The chewckbox below has a value of true, but is not checked, indicating that it is false
+            expect(response.body).to match(/id="custom_data_alias".+disabled="disabled"/)
+          end
+        end
+
+        context 'update' do
+          it "Can update a group's custom attributes" do
+            CustomGroupDataType.create(name: 'alias', custom_type: 'string')
+            post :update_custom_attributes, params: { group_id: group.id, custom_data: { 'alias': 'ahoy' } }
+            data = group.custom_groupdata.first
+            expect(data.name).to eq('alias')
+            expect(data.value).to eq('ahoy')
+          end
+        end
       end
     end
 

@@ -6,6 +6,24 @@ class Admin::GroupsController < AdminController
     render :email, layout: nil
   end
 
+  def update_custom_attributes # rubocop:disable Metrics/MethodLength
+    @model = Group.find(params[:group_id])
+    custom_groupdata_params.each do |name, value|
+      custom_type = CustomGroupDataType.where(name: name).first
+      custom_datum = CustomGroupdatum.where(
+        group_id: @model.id,
+        custom_group_data_type: custom_type
+      ).first_or_initialize
+      begin
+        custom_datum.value = value
+        custom_datum.save
+      rescue RuntimeError
+        flash[:error] = 'Failed to update group data, invalid value'
+      end
+    end
+    redirect_to [:edit, :admin, @model]
+  end
+
   private
 
   def whitelist_attributes
@@ -52,5 +70,9 @@ class Admin::GroupsController < AdminController
 
   def sort_whitelist
     %w[created_at name]
+  end
+
+  def custom_groupdata_params
+    params.require(:custom_data).permit!
   end
 end

@@ -22,14 +22,14 @@ RSpec.describe Profile::AdditionalPropertiesController, type: :controller do # r
     it 'shows custom attributes' do
       custom_bool
       get :index
-      expect(response.body).to include('id="custom_userdata_Has_pets" value="false" />')
+      expect(response.body).to include('id="custom_data_Has_pets" value="false" />')
     end
   end
 
   context 'update' do
     it 'updates custom attributes' do
       custom_bool
-      post :update, params: { custom_userdata: { 'Has pets': true } }
+      post :update, params: { custom_data: { 'Has pets': true } }
       data = user.custom_userdata.first
       expect(data.name).to eq('Has pets')
       expect(data.value).to be true

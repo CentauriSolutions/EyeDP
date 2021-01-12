@@ -129,7 +129,7 @@
       <%- custom_userdata = current_user.custom_userdata.includes([:custom_userdata_type]).group_by(&:custom_userdata_type_id) %>
       <%- CustomUserdataType.all.each do |data_type| %>
         <%- custom_userdatum = custom_userdata[data_type.id].try(:first) || CustomUserdatum.new(user: current_user, custom_userdata_type: data_type) %>
-        <%= render partial: 'custom_userdatum', locals: { data_type: data_type, custom_userdatum: custom_userdatum, disabled: false } %>
+        <%= render partial: 'custom_datum', locals: { data_type: data_type, custom_datum: custom_userdatum, disabled: false } %>
       <%- end %>
       <hr />
       <%= f.submit _('Save Changes'), class: 'btn btn-success' %>

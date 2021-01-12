@@ -70,7 +70,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean')
           get(:show, params: { id: user.id })
           # The chewckbox below has a value of true, but is not checked, indicating that it is false
-          expect(response.body).to include('id="custom_userdata_Has_pets" value="true" disabled="disabled"')
+          expect(response.body).to include('id="custom_data_Has_pets" value="true" disabled="disabled"')
         end
       end
 
@@ -131,7 +131,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
         it "Can update a user's custom attributes" do
           CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean')
-          post :update_custom_attributes, params: { user_id: user.id, custom_userdata: { 'Has pets': true } }
+          post :update_custom_attributes, params: { user_id: user.id, custom_data: { 'Has pets': true } }
           data = user.custom_userdata.first
           expect(data.name).to eq('Has pets')
           expect(data.value).to be true

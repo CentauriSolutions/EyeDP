@@ -98,6 +98,6 @@ class Admin::UsersController < AdminController
   end
 
   def custom_userdata_params
-    params.require(:custom_userdata).permit!
+    params.require(:custom_data).permit!
   end
 end
