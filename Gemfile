@@ -16,6 +16,11 @@ gem 'puma', '~> 4.3'
 gem 'rails', '~> 6.0'
 gem 'sass-rails', '~> 6.0'
 
+# There is no explicit dependency on Nokogiri in EyeDP but this is being
+# updated to protect against a low severity security issue:
+# https://github.com/advisories/GHSA-vr8q-g5c7-m54m
+gem 'nokogiri', '>= 1.11.0.rc4'
+
 gem 'bcrypt', '>= 3.1.13'
 gem 'uglifier', '>= 1.3.0'
 
