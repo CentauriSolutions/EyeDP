@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Profile::AuthenticationDevicesController, type: :controller do # rubocop:disable Metrics/BlockLength
+RSpec.describe Profile::AuthenticationDevicesController, type: :controller do
   let(:user) do
     User.create!(
       username: 'example',

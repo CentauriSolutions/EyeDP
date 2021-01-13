@@ -27,9 +27,9 @@ Metrics/BlockLength:
     - config/initializers/doorkeeper_openid_connect.rb
     - lib/tasks/*
     - app/admin/*
-    - spec/models/*.rb
-    - spec/controllers/*.rb
-    - spec/controllers/admin/*.rb
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'
 
 Style/GlobalVars:
   AllowedVariables:

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Profile::AccountActivityController, type: :controller do # rubocop:disable Metrics/BlockLength
+RSpec.describe Profile::AccountActivityController, type: :controller do
   let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
   let(:app) do
     Application.create!(
