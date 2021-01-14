@@ -42,6 +42,8 @@ class Group < ApplicationRecord
   has_many :user_groups, dependent: :destroy
   has_many :users, through: :user_groups
 
+  has_many :custom_groupdata, dependent: :destroy
+
   def to_s
     name
   end

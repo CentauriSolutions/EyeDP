@@ -1,0 +1,39 @@
+<%= form_with(model: [:admin, model], local: true, class: 'form') do |form| %>
+  <% if model.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
+
+      <ul>
+      <% model.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-2">
+          <%= form.label :name %>
+        </div>
+        <div class="col-sm-10">
+            <%= form.text_field :name, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-2">
+          <%= form.label :custom_type %>
+        </div>
+        <div class="col-sm-10">
+            <%= form.select :custom_type, [[:boolean, :boolean], [:string, :string], [:array, :array]], class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -12,10 +12,14 @@ Rails.application.routes.draw do
     # get 'dashboard/index'
     resources :groups do
       get :email, to: 'groups#email'
+      post :custom_attributes, to: 'groups#update_custom_attributes'
     end
     resources :users do
       post :reset_password, to: 'users#reset_password'
+      post :custom_attributes, to: 'users#update_custom_attributes'
     end
+    resources :custom_userdata_types
+    resources :custom_group_data_types
     resources :permissions
     resources :applications
     resources :saml_service_providers
@@ -55,7 +59,9 @@ Rails.application.routes.draw do
   get 'auth/basic/:permission_name', to: 'basic_auth#create'
 
   namespace :profile do
-    get 'authentication_devices', to: 'authentication_devices#index', as: 'authentication_devices'
-    get 'account_activity', to: 'account_activity#index', as: 'account_activity'
+    get 'authentication_devices', to: 'authentication_devices#index'
+    get 'account_activity', to: 'account_activity#index'
+    get 'additional_properties', to: 'additional_properties#index'
+    post 'additional_properties', to: 'additional_properties#update'
   end
 end

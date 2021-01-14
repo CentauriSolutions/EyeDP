@@ -2,8 +2,8 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_120328) do
     t.datetime "updated_at", null: false
     t.index ["key_handle"], name: "index_fido_usf_devices_on_key_handle"
     t.index ["last_authenticated_at"], name: "index_fido_usf_devices_on_last_authenticated_at"
-    t.index ["user_type", "user_id"], name: "index_fido_usf_devices_on_user_type_and_user_id"
+    t.index ["user_type", "user_id"], name: "index_fido_usf_devices_on_user"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_120328) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "auth_type", default: "New Login"
-    t.index ["service_provider_type", "service_provider_id"], name: "index_logins_on_service_provider_type_and_service_provider_id"
+    t.index ["service_provider_type", "service_provider_id"], name: "index_logins_on_service_provider"
     t.index ["user_id"], name: "index_logins_on_user_id"
   end
 

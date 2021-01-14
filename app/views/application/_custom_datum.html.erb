@@ -1,0 +1,18 @@
+<div class="form-group">
+  <%= label_tag(custom_datum.name, custom_datum.name) %>
+  <%- case custom_datum.type %>
+  <%- when 'boolean' %>
+    <%= hidden_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value || false %>
+    <%= check_box_tag "custom_data[#{custom_datum.name}]", true, custom_datum.value, disabled: disabled %>
+  <%- when 'array' %>
+    <%= text_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value.try(:join, '; '), class: 'form-control', disabled: disabled %>
+    <p class="small">Please separate multiple values with a semicolon (";")</p>
+  <%- when 'integer' %>
+    <%= number_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
+  <%- else %>
+    <%= text_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
+  <%- end %>
+</div>
+
+
+

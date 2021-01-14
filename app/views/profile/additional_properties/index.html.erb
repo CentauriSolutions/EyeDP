@@ -1,0 +1,17 @@
+<h1 class="flex justify-center">Welcome, <%= current_user.username || current_user.email %></h1>
+<hr />
+<div class="row">
+  <%= render partial: 'profile/profile_nav' %>
+  <div class="col-md-9 col-lg-10">
+    <h2>Additional Properties</h2>
+    <%= bootstrap_form_for(current_user, as: 'user', url: profile_additional_properties_path, html: { method: :post }) do |f| %>
+      <%- custom_userdata = current_user.custom_userdata.includes([:custom_userdata_type]).group_by(&:custom_userdata_type_id) %>
+      <%- CustomUserdataType.all.each do |data_type| %>
+        <%- custom_userdatum = custom_userdata[data_type.id].try(:first) || CustomUserdatum.new(user: current_user, custom_userdata_type: data_type) %>
+        <%= render partial: 'custom_datum', locals: { data_type: data_type, custom_datum: custom_userdatum, disabled: false } %>
+      <%- end %>
+      <hr />
+      <%= f.submit _('Save Changes'), class: 'btn btn-success', style: "float: left" %>
+    <%- end %>
+  </div>
+</div>

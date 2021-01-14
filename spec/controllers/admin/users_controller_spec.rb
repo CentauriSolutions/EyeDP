@@ -65,6 +65,13 @@ RSpec.describe Admin::UsersController, type: :controller do
           get(:show, params: { id: user.id })
           expect(response.body).to match(%r{<dt>two_factor_enabled\?</dt>\s+<dd>\s+false})
         end
+
+        it "Can see a user's custom attributes" do
+          CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean')
+          get(:show, params: { id: user.id })
+          # The chewckbox below has a value of true, but is not checked, indicating that it is false
+          expect(response.body).to include('id="custom_data_Has_pets" value="true" disabled="disabled"')
+        end
       end
 
       context 'Edit' do
@@ -120,6 +127,14 @@ RSpec.describe Admin::UsersController, type: :controller do
           post(:update, params: { id: user.id, user: { group_ids: [group.id] } })
           user.reload
           expect(user.groups.last.name).to eq 'administrators'
+        end
+
+        it "Can update a user's custom attributes" do
+          CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean')
+          post :update_custom_attributes, params: { user_id: user.id, custom_data: { 'Has pets': true } }
+          data = user.custom_userdata.first
+          expect(data.name).to eq('Has pets')
+          expect(data.value).to be true
         end
       end
     end

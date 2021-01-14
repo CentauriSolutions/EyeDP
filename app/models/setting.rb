@@ -17,6 +17,8 @@
 
 # RailsSettings Model
 class Setting < ApplicationRecord
+
+  SEPARATOR_REGEXP = /[\n,;]+/.freeze
   # cache_prefix { "v1" }
 
   # Define your fields
