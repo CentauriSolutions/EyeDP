@@ -38,7 +38,7 @@ gem 'devise_fido_usf'
 gem 'devise-i18n'
 gem 'friendly_id'
 # Do TOTP 2FA
-gem 'devise-two-factor'
+gem 'devise-two-factor', github: 'centaurisolutions/devise-two-factor'
 gem 'rqrcode'
 
 # Translations
