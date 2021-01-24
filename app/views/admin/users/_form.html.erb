@@ -122,7 +122,7 @@
     <%= form.submit _('Update User'), class: 'btn btn-success' %>
   </div>
 <% end %>
-
+  <%- unless new_model %>
   <div class="col-md-9 col-lg-10">
     <h2>Additional Properties</h2>
     <%= link_to "Manage User Data Types", admin_custom_userdata_types_path, class: 'btn btn-info' %>
@@ -136,6 +136,7 @@
       <%= f.submit _('Save Changes'), class: 'btn btn-success' %>
     <%- end %>
   </div>
+  <%- end %>
 
 <script>
 
