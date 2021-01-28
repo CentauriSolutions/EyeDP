@@ -46,6 +46,17 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api do
+    resources :groups do
+      get 'users', to: 'groups#list_users'
+      resources :users, only: [] do
+        post '/', to: 'groups#add_user'
+        delete '/', to: 'groups#remove_user'
+      end
+    end
+    resources :users
+  end
+
   devise_for :users, controllers: {
     registrations: :registrations,
     sessions: :sessions

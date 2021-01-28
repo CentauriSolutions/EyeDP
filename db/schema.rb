@@ -16,6 +16,15 @@ ActiveRecord::Schema.define(version: 2021_07_04_060019) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  create_table "api_keys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "key", null: false
+    t.text "name"
+    t.text "description"
+    t.integer "capabilities_mask", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "audits", force: :cascade do |t|
     t.uuid "auditable_id"
     t.string "auditable_type"
