@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     resources :permissions
     resources :applications
     resources :saml_service_providers
+    resources :audits, only: %i[index show]
     get :settings, to: 'settings#index'
     post :settings, to: 'settings#update'
     # namespace :settings do

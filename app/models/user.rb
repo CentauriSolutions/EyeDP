@@ -25,6 +25,8 @@
 #
 
 class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  audited
+
   alias_attribute :real_name, :name
 
   devise :two_factor_authenticatable,

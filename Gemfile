@@ -44,6 +44,9 @@ gem 'rqrcode'
 # Translations
 gem 'translation'
 
+# Audit Logs
+gem 'audited'
+
 gem 'bootstrap', '~> 4.4.1'
 gem 'bootstrap_form', '>= 4.2.0'
 gem 'font-awesome-rails'

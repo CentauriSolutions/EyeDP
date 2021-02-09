@@ -18,6 +18,8 @@
 # RailsSettings Model
 class Setting < ApplicationRecord
 
+  audited
+
   SEPARATOR_REGEXP = /[\n,;]+/.freeze
   # cache_prefix { "v1" }
 
