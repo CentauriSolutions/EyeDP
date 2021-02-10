@@ -1,0 +1,11 @@
+<h4>
+  <%= @model.action %> - <%= link_to "OpenID Connect Application '#{@model.auditable.display_url}'", admin_application_path(@model.auditable) %>
+</h4>
+<%=  @model.created_at.to_formatted_s(:rfc822) %>
+<hr />
+
+<dl>
+  <dt>Audited Changes</dt>
+  <dd><%= @model.audited_changes %> </dd>
+</dl>
+<%= render partial: 'source_user' %>

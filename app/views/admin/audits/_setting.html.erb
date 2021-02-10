@@ -1,0 +1,17 @@
+<h4>
+  <%= @model.action %> - <%= @model.auditable_type %> '<%= @model.auditable.var %>'
+</h4>
+<%=  @model.created_at.to_formatted_s(:rfc822) %>
+<hr />
+
+<dl>
+  <dt>Setting Name</dt>
+  <dd><%= @model.auditable.var %></dd>
+
+  <%- change_name =  @model.audited_changes.keys.first %>
+  <%- change = @model.audited_changes[change_name] %>
+  <dd><%= change_name %></dd>
+  <dt>Change</dt>
+  <dd><code><%= change[0] %></code> => <code><%= change[1] %></code></dd>
+</dl>
+<%= render partial: 'source_user' %>

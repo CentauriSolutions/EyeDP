@@ -6,32 +6,22 @@
 
 <div class="row">
   <div class="col-sm-12">
-    <h4><%= @model.action %> - <%= @model.auditable_type %></h4>
-    <%=  @model.created_at.to_formatted_s(:rfc822) %>
-    <hr />
+    <% begin %>
+        <%= render partial: @model.auditable_type.underscore.gsub('/', '_') %>
+    <% rescue ActionView::MissingTemplate %>
+      <h4>
+        <%= @model.action %> - <%= link_to "#{@model.auditable_type} '#{@model.auditable}'", [:admin, @model.auditable] %>
+      </h4>
+      <%=  @model.created_at.to_formatted_s(:rfc822) %>
+      <hr />
 
-    <dl>
-    <%- if @model.auditable_type == 'Setting' %>
-      <dt>Setting Name</dt>
-      <dd><%= @model.auditable.var %></dd>
+      <dl>
+        <dt>Audited Changes</dt>
+        <dd><%= @model.audited_changes %> </dd>
+      </dl>
+      <%= render partial: 'source_user' %>
+    <% end %>
 
-      <%- change_name =  @model.audited_changes.keys.first %>
-      <%- change = @model.audited_changes[change_name] %>
-      <dd><%= change_name %></dd>
-      <dt>Change</dt>
-      <dd><code><%= change[0] %></code> => <code><%= change[1] %></code></dd>
-    <%- else %>
-      <dt>Audited Changes</dt>
-      <dd><%= @model.audited_changes %> </dd>
-    <%- end %>
-    </dl>
-    <h5>User who performed change</h5>
-    <dl>
-      <dt>Username</dt>
-      <dd><%= @model.user.username %></dd>
-      <dt>Email</dt>
-      <dd><%= @model.user.email %></dd>
-    </dl>
   </div>
 </div>
 <hr />
@@ -58,12 +48,3 @@
     </dl>
   </div>
 </div>
-
-<% begin %>
-  <hr />
-  <div class="row">
-    <%= render partial: 'show' %>
-  </div>
-<% rescue ActionView::MissingTemplate %>
-<% end %>
-
