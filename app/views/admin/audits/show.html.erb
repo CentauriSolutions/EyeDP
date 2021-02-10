@@ -7,6 +7,7 @@
 <div class="row">
   <div class="col-sm-12">
     <h4><%= @model.action %> - <%= @model.auditable_type %></h4>
+    <%=  @model.created_at.to_formatted_s(:rfc822) %>
     <hr />
 
     <dl>
@@ -17,10 +18,8 @@
       <%- change_name =  @model.audited_changes.keys.first %>
       <%- change = @model.audited_changes[change_name] %>
       <dd><%= change_name %></dd>
-      <dt>Old Value</dt>
-      <dd><%= change[0] %></dd>
-      <dt>New Value</dt>
-      <dd><%= change[1] %></dd>
+      <dt>Change</dt>
+      <dd><code><%= change[0] %></code> => <code><%= change[1] %></code></dd>
     <%- else %>
       <dt>Audited Changes</dt>
       <dd><%= @model.audited_changes %> </dd>
