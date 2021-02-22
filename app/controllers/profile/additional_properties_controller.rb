@@ -23,6 +23,6 @@ class Profile::AdditionalPropertiesController < ApplicationController
   protected
 
   def custom_userdata_params
-    params.require(:custom_data).permit!
+    params.require(:custom_data).permit(CustomUserdataType.where.not(user_read_only: true).pluck(:name))
   end
 end

@@ -34,5 +34,24 @@ RSpec.describe Profile::AdditionalPropertiesController, type: :controller do
       expect(data.name).to eq('Has pets')
       expect(data.value).to be true
     end
+
+    it 'cannot update read-only attributes' do
+      custom_bool.update(user_read_only: true)
+      custom_datum = CustomUserdatum.where(
+        user_id: user.id,
+        custom_userdata_type: custom_bool
+      ).first_or_initialize
+      custom_datum.value = false
+      custom_datum.save
+      post :update, params: { custom_data: { 'Has pets': true } }
+      data = user.custom_userdata.first
+      expect(data.name).to eq('Has pets')
+      expect(data.value).to be false
+      custom_bool.update(user_read_only: false)
+      post :update, params: { custom_data: { 'Has pets': true } }
+      data = user.custom_userdata.first
+      expect(data.name).to eq('Has pets')
+      expect(data.value).to be true
+    end
   end
 end

@@ -9,11 +9,11 @@ class Admin::CustomUserdataTypesController < AdminController
 
   def model_params
     params.require(:custom_userdata_type).permit(
-      :name, :custom_type
+      :name, :custom_type, :user_read_only
     )
   end
 
   def whitelist_attributes
-    %w[name custom_type]
+    %w[name custom_type user_read_only]
   end
 end
