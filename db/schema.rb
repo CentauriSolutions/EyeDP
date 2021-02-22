@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_09_154430) do
+ActiveRecord::Schema.define(version: 2021_02_10_140728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 2021_02_09_154430) do
     t.boolean "visible", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "user_read_only", default: false
   end
 
   create_table "fido_usf_devices", force: :cascade do |t|
