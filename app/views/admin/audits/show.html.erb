@@ -1,0 +1,50 @@
+<h2>Audit</h2>
+<%= render partial: 'sub_heading' %>
+<div class="row">
+  <%= link_to 'Back', [:admin, 'audits'] %>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <% begin %>
+        <%= render partial: @model.auditable_type.underscore.gsub('/', '_') %>
+    <% rescue ActionView::MissingTemplate %>
+      <h4>
+        <%= @model.action %> - <%= link_to "#{@model.auditable_type} '#{@model.auditable}'", [:admin, @model.auditable] %>
+      </h4>
+      <%=  @model.created_at.to_formatted_s(:rfc822) %>
+      <hr />
+
+      <dl>
+        <dt>Audited Changes</dt>
+        <dd><%= @model.audited_changes %> </dd>
+      </dl>
+      <%= render partial: 'source_user' %>
+    <% end %>
+
+  </div>
+</div>
+<hr />
+<h4>Complete Record</h4>
+<div class="row">
+
+  <div class="col-sm-12">
+    <dl>
+      <%- model_attributes.each do |attribute| %>
+        <dt><%= attribute %></dt>
+        <dd>
+          <%- data = @model.send(attribute) %>
+          <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
+            <ul>
+              <%-data.each do |row| %>
+                <li><%= row %></li>
+              <%- end %>
+            </ul>
+          <%- else %>
+          <%= data %>
+          <%- end %>
+        </dd>
+      <%- end %>
+    </dl>
+  </div>
+</div>

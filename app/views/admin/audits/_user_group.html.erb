@@ -1,0 +1,12 @@
+<h4><%= @model.action %> - <%= @model.auditable_type %></h4>
+<%=  @model.created_at.to_formatted_s(:rfc822) %>
+<hr />
+
+<dl>
+  <dt>Target User</dt>
+  <dd><%= @model.auditable.user.username %></dd>
+  <dt>Target Group</dt>
+  <dd><%= @model.auditable.group.name %></dd>
+</dl>
+
+<%= render partial: 'source_user' %>

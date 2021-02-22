@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CustomGroupdatum < ApplicationRecord
+  audited
+
   belongs_to :group
   belongs_to :custom_group_data_type
 

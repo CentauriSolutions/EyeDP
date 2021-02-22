@@ -20,6 +20,8 @@
 #
 
 class Application < Doorkeeper::Application
+  audited
+
   has_many :logins, as: :service_provider, dependent: :destroy
 
   def to_s

@@ -16,6 +16,8 @@
 #
 
 class Group < ApplicationRecord
+  audited
+
   acts_as_tree order: 'name'
   belongs_to :parent,
              class_name: 'Group',

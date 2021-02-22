@@ -10,11 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_21_120328) do
+ActiveRecord::Schema.define(version: 2021_02_09_154430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "api_keys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "key", null: false
+    t.text "name"
+    t.text "description"
+    t.integer "capabilities_mask", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "audits", force: :cascade do |t|
+    t.uuid "auditable_id"
+    t.string "auditable_type"
+    t.integer "associated_id"
+    t.string "associated_type"
+    t.uuid "user_id"
+    t.string "user_type"
+    t.string "username"
+    t.string "action"
+    t.text "audited_changes"
+    t.integer "version", default: 0
+    t.string "comment"
+    t.string "remote_address"
+    t.string "request_uuid"
+    t.datetime "created_at"
+    t.index ["associated_type", "associated_id"], name: "associated_index"
+    t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index"
+    t.index ["created_at"], name: "index_audits_on_created_at"
+    t.index ["request_uuid"], name: "index_audits_on_request_uuid"
+    t.index ["user_id", "user_type"], name: "user_index"
+  end
 
   create_table "custom_group_data_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "name"
@@ -66,7 +97,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_120328) do
     t.datetime "updated_at", null: false
     t.index ["key_handle"], name: "index_fido_usf_devices_on_key_handle"
     t.index ["last_authenticated_at"], name: "index_fido_usf_devices_on_last_authenticated_at"
-    t.index ["user_type", "user_id"], name: "index_fido_usf_devices_on_user"
+    t.index ["user_type", "user_id"], name: "index_fido_usf_devices_on_user_type_and_user_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -109,7 +140,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_120328) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "auth_type", default: "New Login"
-    t.index ["service_provider_type", "service_provider_id"], name: "index_logins_on_service_provider"
+    t.index ["service_provider_type", "service_provider_id"], name: "index_logins_on_service_provider_type_and_service_provider_id"
     t.index ["user_id"], name: "index_logins_on_user_id"
   end
 
@@ -181,7 +212,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_120328) do
     t.index ["issuer_or_entity_id"], name: "index_saml_service_providers_on_issuer_or_entity_id", unique: true
   end
 
-  create_table "settings", force: :cascade do |t|
+  create_table "settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "var", null: false
     t.text "value"
     t.datetime "created_at", null: false

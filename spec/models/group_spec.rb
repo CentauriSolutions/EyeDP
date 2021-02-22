@@ -23,6 +23,8 @@ RSpec.describe Group, type: :model do
 
   let(:permission) { Permission.create!(name: 'test permission') }
 
+  it { should be_audited }
+
   it 'inherits permissions' do
     root_group.permissions << permission
     expect(child_group.effective_permissions).to include permission

@@ -33,6 +33,8 @@ RSpec.describe User, type: :model do
   let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
   let(:group) { Group.create!(name: 'administrators', admin: true) }
 
+  it { should be_audited }
+
   it 'makes a user Admin is it has membership' do
     user.groups << group
     expect(user.admin?).to be true
