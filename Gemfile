@@ -54,7 +54,7 @@ gem 'jquery-rails'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap4'
 
-gem 'doorkeeper'
+gem 'doorkeeper', '~> 5.4'
 gem 'doorkeeper-openid_connect'
 
 gem 'scout_apm'
