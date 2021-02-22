@@ -1,0 +1,2 @@
+[allowlist]
+paths = ['config/initializers/saml_idp.rb', 'myKey.key']
