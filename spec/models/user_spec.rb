@@ -32,12 +32,27 @@ RSpec.describe User, type: :model do
 
   let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
   let(:group) { Group.create!(name: 'administrators', admin: true) }
+  let(:operator_group) { Group.create!(name: 'operators', operator: true) }
+  let(:manager_group) { Group.create!(name: 'managers', manager: true) }
 
   it { should be_audited }
 
   it 'makes a user Admin is it has membership' do
+    expect(user.admin?).to be false
     user.groups << group
     expect(user.admin?).to be true
+  end
+
+  it 'makes a user Operator if it has membership' do
+    expect(user.operator?).to be false
+    user.groups << operator_group
+    expect(user.operator?).to be true
+  end
+
+  it 'makes the user Manager if it has membership' do
+    expect(user.manager?).to be false
+    user.groups << manager_group
+    expect(user.manager?).to be true
   end
 
   it 'does not grant admin just because of a group name' do

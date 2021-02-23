@@ -76,4 +76,12 @@ class Group < ApplicationRecord
   def rendered_welcome_email(user = nil)
     template.render(template_variables(user))
   end
+
+  def roles
+    @roles ||= begin
+      %i{admin manager operator}.filter do |name|
+        self.send(name)
+      end
+    end
+  end
 end
