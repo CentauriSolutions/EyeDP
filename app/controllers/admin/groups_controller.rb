@@ -27,7 +27,7 @@ class Admin::GroupsController < AdminController
   private
 
   def whitelist_attributes
-    %w[name parent requires_2fa permissions]
+    %w[name parent requires_2fa roles permissions]
   end
 
   def new_fields
@@ -35,7 +35,7 @@ class Admin::GroupsController < AdminController
   end
 
   def show_whitelist_attributes
-    %w[name description parent requires_2fa permissions]
+    %w[name description parent requires_2fa roles permissions]
   end
 
   def form_relations
@@ -58,11 +58,19 @@ class Admin::GroupsController < AdminController
     Group
   end
 
-  def model_params
-    p = params.require(:group).permit(
+  def model_params # rubocop:disable Metrics/MethodLength
+    permitted_params = [
       :name, :description, :parent, :welcome_email, :requires_2fa,
-      permission_ids: []
-    )
+      { permission_ids: [] }
+    ]
+    if current_user.admin?
+      permitted_params << :admin
+      permitted_params << :operator
+      permitted_params << :manager
+    end
+    permitted_params << :manager if current_user.manager?
+    p = params.require(:group).permit(permitted_params)
+
     p[:permission_ids] ||= []
     p[:parent_id] = p.delete(:parent) if p[:parent]
     p
@@ -74,5 +82,10 @@ class Admin::GroupsController < AdminController
 
   def custom_groupdata_params
     params.require(:custom_data).permit!
+  end
+
+  def ensure_user_is_authorized!
+    raise(ActionController::RoutingError, 'Not Found') and return \
+      unless current_user&.admin? || current_user&.manager?
   end
 end

@@ -2,7 +2,7 @@
 
 class AdminController < ApplicationController # rubocop:disable Metrics/ClassLength
   # before_action :authenticate_user!
-  before_action :ensure_user_is_admin!
+  before_action :ensure_user_is_authorized!
   before_action :set_model, only: %i[show edit update destroy]
   # GET /admin/#{model}
   # GET /admin/#{model}.json
@@ -149,8 +149,8 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
     @model = model.find(params[:id])
   end
 
-  def ensure_user_is_admin!
+  def ensure_user_is_authorized! # rubocop:disable Metrics/CyclomaticComplexity
     raise(ActionController::RoutingError, 'Not Found') and return \
-      unless current_user&.admin?
+      unless current_user&.admin? || current_user&.operator? || current_user&.manager?
   end
 end

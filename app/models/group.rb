@@ -79,8 +79,8 @@ class Group < ApplicationRecord
 
   def roles
     @roles ||= begin
-      %i{admin manager operator}.filter do |name|
-        self.send(name)
+      %i[admin manager operator].filter do |name|
+        send(name)
       end
     end
   end

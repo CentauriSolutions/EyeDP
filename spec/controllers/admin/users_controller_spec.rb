@@ -5,15 +5,92 @@ require 'rails_helper'
 RSpec.describe Admin::UsersController, type: :controller do
   include ActiveJob::TestHelper
   let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
-  let(:group) { Group.create!(name: 'administrators', admin: true) }
+  let(:admin_group) { Group.create!(name: 'administrators', admin: true) }
   let(:user_group) { Group.create!(name: 'users') }
   let(:admin) do
     user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
-    user.groups << group
+    user.groups << admin_group
+    user
+  end
+
+  let(:operator_group) { Group.create!(name: 'operators', operator: true) }
+  let(:operator) do
+    user = User.create!(username: 'operator', email: 'operator@localhost', password: 'test1234')
+    user.groups << operator_group
+    user
+  end
+
+  let(:manager_group) { Group.create!(name: 'managers', manager: true) }
+  let(:manager) do
+    user = User.create!(username: 'manager', email: 'manager@localhost', password: 'test1234')
+    user.groups << manager_group
     user
   end
 
   describe 'User' do
+    context 'signed in manager' do
+      before do
+        sign_in(manager)
+      end
+
+      it 'Shows the index page' do
+        get :index
+        expect(response.status).to eq(200)
+      end
+
+      it 'can add a user to a group' do
+        expect(user.groups.pluck(:name)).to eq []
+        post(:update, params: { id: user.id, user: { group_ids: [user_group.id] } })
+        user.reload
+        expect(user.groups.pluck(:name)).to eq %w[users]
+      end
+
+      it 'can remove a user from a group' do
+        admin.groups << user_group
+        post(:update, params: { id: admin.id, user: { group_ids: [admin_group.id] } })
+        admin.reload
+        expect(admin.groups.last.name).to eq 'administrators'
+      end
+
+      it 'cannot add a user to an operator group' do
+        post(:update, params: { id: user.id, user: { group_ids: [user_group.id, operator_group.id] } })
+        user.reload
+        expect(user.groups.pluck(:name)).to eq %w[users]
+      end
+
+      it 'cannot remove a user from an operator group' do
+        user.groups << operator_group
+        expect(user.groups.pluck(:name)).to eq %w[operators]
+        post(:update, params: { id: user.id, user: { username: user.username, group_ids: [] } })
+        user.reload
+        expect(user.groups.pluck(:name)).to eq %w[operators]
+      end
+
+      it 'cannot add a user to an admin group' do
+        expect(user.groups.pluck(:name)).to eq []
+        post(:update, params: { id: user.id, user: { group_ids: [admin_group.id] } })
+        user.reload
+        expect(user.groups.pluck(:name)).to eq []
+      end
+
+      it 'cannot remove a user from an admin group' do
+        expect(admin.groups.pluck(:name)).to eq %w[administrators]
+        post(:update, params: { id: admin.id, user: { username: admin.username, group_ids: [] } })
+        admin.reload
+        expect(admin.groups.pluck(:name)).to eq %w[administrators]
+      end
+    end
+
+    context 'signed in operator' do
+      before do
+        sign_in(operator)
+      end
+
+      it 'Shows the index page' do
+        expect { get :index }.to raise_error(ActionController::RoutingError)
+      end
+    end
+
     context 'signed in admin' do
       before do
         sign_in(admin)
@@ -117,14 +194,14 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         it 'can add a user to a group' do
-          post(:update, params: { id: user.id, user: { group_ids: [group.id, user_group.id] } })
+          post(:update, params: { id: user.id, user: { group_ids: [admin_group.id, user_group.id] } })
           user.reload
           expect(user.groups.pluck(:name)).to eq %w[administrators users]
         end
 
         it 'can remove a user from a group' do
           user.groups << user_group
-          post(:update, params: { id: user.id, user: { group_ids: [group.id] } })
+          post(:update, params: { id: user.id, user: { group_ids: [admin_group.id] } })
           user.reload
           expect(user.groups.last.name).to eq 'administrators'
         end
