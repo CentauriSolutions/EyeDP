@@ -462,7 +462,7 @@ DEPENDENCIES
   devise-i18n
   devise-two-factor!
   devise_fido_usf
-  doorkeeper (~> 5.4)
+  doorkeeper (>= 5.2, < 5.5)
   doorkeeper-openid_connect
   dotenv (~> 2.5.0)
   ed25519
