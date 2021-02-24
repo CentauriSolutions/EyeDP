@@ -24,6 +24,10 @@ To report sensitive or security issues, we prefer that confidential issues be cr
     - [SAML with Gitlab](#saml-with-gitlab)
     - [SAML with Rocket.Chat](#saml-with-rocketchat)
   + [Nginx Auth Request](#nginx-auth-request)
+- [Management](#management)
+  + [Operators](#operators)
+  + [Managers](#managers)
+  + [Administrators](#administrators)
 - [Development](#development)
 
 ## Overview
@@ -334,6 +338,39 @@ that may not have their own acess controls at the Nginx layer. To learn more
 about how to use it, an admin should peruse the [groups](#groups) section of
 the documentetion.
 
+## Management
+
+Managing an identity provider can be a complex task requiring many different
+types of users. 
+
+### Operators
+
+An operator is a type of user that can manage EyeDP itself, but cannot manage
+users or groups. A user becomes an operator when they're added to a group that
+has the operator flag enabled, which can be done in the admin UI by an
+administrator.
+
+### Managers
+
+An operator is a type of user that can manage users and groups, but cannot
+manage EyeDP. A user becomes a manager when they're added to a group that
+has the manager flag enabled, which can be done in the admin UI by an
+administrator.
+
+A manager cannot add or remove a user from an operator or administrator group,
+nor change those flags on other groups. A manager user can add and remove
+additional managers.
+
+### Administrators
+
+A user becomes an administrator when they're added to a group that
+has the admin flag enabled, which can be done in the admin UI by an
+administrator.
+
+An administrator has no restrictions on the actions that they can perform, so
+should be a small group of users. An administrator account is needed to change
+membvership in administrator and operator groups, as well as creating and
+managing these group types.
 
 ## Development
 
