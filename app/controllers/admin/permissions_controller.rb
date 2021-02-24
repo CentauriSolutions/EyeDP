@@ -34,7 +34,7 @@ class Admin::PermissionsController < AdminController
   end
 
   def ensure_user_is_authorized!
-    raise(ActionController::RoutingError, 'Not Found') and return \
+    raise(ActionController::RoutingError, 'Not Found') \
       unless current_user&.admin? || current_user&.operator?
   end
 end

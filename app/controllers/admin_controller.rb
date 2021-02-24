@@ -149,8 +149,8 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
     @model = model.find(params[:id])
   end
 
-  def ensure_user_is_authorized! # rubocop:disable Metrics/CyclomaticComplexity
-    raise(ActionController::RoutingError, 'Not Found') and return \
+  def ensure_user_is_authorized!
+    raise(ActionController::RoutingError, 'Not Found') \
       unless current_user&.admin? || current_user&.operator? || current_user&.manager?
   end
 end
