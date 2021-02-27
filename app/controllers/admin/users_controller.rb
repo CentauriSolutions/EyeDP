@@ -72,8 +72,8 @@ class Admin::UsersController < AdminController
       :password, :last_activity_at, group_ids: []
     )
     p[:group_ids] ||= []
-    # A Manager cannot add a user to an operator or admin group
     if current_user.manager?
+      # A Manager cannot add a user to an operator or admin group
       p[:group_ids] -= Group.where(admin: true).or(Group.where(operator: true)).pluck(:id)
       # A manager cannot remove admin from an admin user nor operator from an operator user
       p[:group_ids] += @model.groups.where(admin: true).or(Group.where(operator: true)).pluck(:id)

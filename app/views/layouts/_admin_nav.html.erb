@@ -7,7 +7,7 @@
   <%- if current_user.admin? || current_user.operator? %>
     <%= nav_link "#{fa_icon("openid")} OpenID Connect Application".html_safe, admin_applications_path %>
     <%= nav_link "#{fa_icon("lock")} Saml Service Providers".html_safe, admin_saml_service_providers_path %>
-  <%= nav_link "#{fa_icon("gear")} Settings".html_safe, admin_settings_path %>
+    <%= nav_link "#{fa_icon("gear")} Settings".html_safe, admin_settings_path %>
     <%= nav_link "- Branding", admin_settings_branding_path %>
     <%= nav_link "- Custom User Data", admin_custom_userdata_types_path %>
     <%= nav_link "- Custom Group Data", admin_custom_group_data_types_path %>
@@ -16,6 +16,8 @@
     <%= nav_link "- SAML", admin_settings_saml_path %>
     <%= nav_link "#{fa_icon("tasks")} Permissions".html_safe, admin_permissions_path %>
   <%- end %>
-  <%= nav_link "#{fa_icon("commenting")} Audit Log".html_safe, admin_audits_path %>
+  <%- if current_user.admin? %>
+    <%= nav_link "#{fa_icon("commenting")} Audit Log".html_safe, admin_audits_path %>
+  <%- end %>
 
 </ul>

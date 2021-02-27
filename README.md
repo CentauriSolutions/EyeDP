@@ -350,9 +350,14 @@ users or groups. A user becomes an operator when they're added to a group that
 has the operator flag enabled, which can be done in the admin UI by an
 administrator.
 
+In this context, managing EyeDP means that an operator can manage SSO
+applications such as OpenID Connect and SAML applications. In additional, they
+can change EyeDP's settings, such as key data for the IdP, hostnames, and
+templates.
+
 ### Managers
 
-An operator is a type of user that can manage users and groups, but cannot
+A manager is a type of user that can manage users and groups, but cannot
 manage EyeDP. A user becomes a manager when they're added to a group that
 has the manager flag enabled, which can be done in the admin UI by an
 administrator.
