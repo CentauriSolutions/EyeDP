@@ -31,4 +31,9 @@ class Admin::SamlServiceProvidersController < AdminController
     p[:response_hosts] = p[:response_hosts].split(/ +/) if p[:response_hosts]
     p
   end
+
+  def ensure_user_is_authorized!
+    raise(ActionController::RoutingError, 'Not Found') \
+      unless current_user&.admin? || current_user&.operator?
+  end
 end

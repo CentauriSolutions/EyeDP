@@ -54,11 +54,11 @@ class Admin::UsersController < AdminController
   end
 
   def show_whitelist_attributes
-    %w[email name username two_factor_enabled? groups expires_at last_activity_at]
+    %w[email name username two_factor_enabled? groups roles expires_at last_activity_at]
   end
 
   def whitelist_attributes
-    %w[email username name two_factor_enabled? groups expired?]
+    %w[email username name two_factor_enabled? groups roles expired?]
   end
 
   def model
@@ -66,12 +66,18 @@ class Admin::UsersController < AdminController
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def model_params
+  def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     p = params.require(:user).permit(
       :email, :username, :email, :name, :expires_at,
       :password, :last_activity_at, group_ids: []
     )
     p[:group_ids] ||= []
+    if current_user.manager?
+      # A Manager cannot add a user to an operator or admin group
+      p[:group_ids] -= Group.where(admin: true).or(Group.where(operator: true)).pluck(:id)
+      # A manager cannot remove admin from an admin user nor operator from an operator user
+      p[:group_ids] += @model.groups.where(admin: true).or(Group.where(operator: true)).pluck(:id)
+    end
     p.delete(:password) if p[:password] && p[:password].empty?
     p
   end
@@ -99,5 +105,10 @@ class Admin::UsersController < AdminController
 
   def custom_userdata_params
     params.require(:custom_data).permit!
+  end
+
+  def ensure_user_is_authorized!
+    raise(ActionController::RoutingError, 'Not Found') \
+      unless current_user&.admin? || current_user&.manager?
   end
 end

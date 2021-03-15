@@ -32,4 +32,9 @@ class Admin::PermissionsController < AdminController
   def model_params
     params.require(:permission).permit(:name, :description)
   end
+
+  def ensure_user_is_authorized!
+    raise(ActionController::RoutingError, 'Not Found') \
+      unless current_user&.admin? || current_user&.operator?
+  end
 end

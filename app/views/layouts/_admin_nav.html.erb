@@ -1,17 +1,23 @@
 <ul class="nav flex-column">
   <%= nav_link "#{fa_icon("dashboard")} Dashboard".html_safe, admin_dashboard_path %>
+  <%- if current_user.admin? || current_user.manager? %>
   <%= nav_link "#{fa_icon("user")} Users".html_safe, admin_users_path %>
   <%= nav_link "#{fa_icon("users")} Groups".html_safe, admin_groups_path %>
-  <%= nav_link "#{fa_icon("openid")} OpenID Connect Application".html_safe, admin_applications_path %>
-  <%= nav_link "#{fa_icon("lock")} Saml Service Providers".html_safe, admin_saml_service_providers_path %>
-  <%= nav_link "#{fa_icon("gear")} Settings".html_safe, admin_settings_path %>
+  <% end %>
+  <%- if current_user.admin? || current_user.operator? %>
+    <%= nav_link "#{fa_icon("openid")} OpenID Connect Application".html_safe, admin_applications_path %>
+    <%= nav_link "#{fa_icon("lock")} Saml Service Providers".html_safe, admin_saml_service_providers_path %>
+    <%= nav_link "#{fa_icon("gear")} Settings".html_safe, admin_settings_path %>
     <%= nav_link "- Branding", admin_settings_branding_path %>
     <%= nav_link "- Custom User Data", admin_custom_userdata_types_path %>
     <%= nav_link "- Custom Group Data", admin_custom_group_data_types_path %>
     <%= nav_link "- Templates", admin_settings_templates_path %>
     <%= nav_link "- OpenID Connect", admin_settings_openid_connect_path %>
     <%= nav_link "- SAML", admin_settings_saml_path %>
-  <%= nav_link "#{fa_icon("tasks")} Permissions".html_safe, admin_permissions_path %>
-  <%= nav_link "#{fa_icon("commenting")} Audit Log".html_safe, admin_audits_path %>
+    <%= nav_link "#{fa_icon("tasks")} Permissions".html_safe, admin_permissions_path %>
+  <%- end %>
+  <%- if current_user.admin? %>
+    <%= nav_link "#{fa_icon("commenting")} Audit Log".html_safe, admin_audits_path %>
+  <%- end %>
 
 </ul>

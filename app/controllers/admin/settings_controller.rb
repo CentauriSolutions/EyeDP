@@ -73,4 +73,9 @@ class Admin::SettingsController < AdminController
       :admin_reset_email_template, :admin_welcome_email_template
     )
   end
+
+  def ensure_user_is_authorized!
+    raise(ActionController::RoutingError, 'Not Found') \
+      unless current_user&.admin? || current_user&.operator?
+  end
 end

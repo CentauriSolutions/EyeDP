@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_10_140728) do
+ActiveRecord::Schema.define(version: 2021_02_23_071108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -131,6 +131,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_140728) do
     t.boolean "requires_2fa", default: false
     t.text "description"
     t.boolean "admin", default: false
+    t.boolean "manager", default: false
+    t.boolean "operator", default: false
     t.index ["parent_id"], name: "index_groups_on_parent_id"
   end
 

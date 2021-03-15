@@ -17,6 +17,41 @@ RSpec.describe Admin::SettingsController, type: :controller do
   end
 
   describe 'User' do
+    context 'signed in manager' do
+      let(:manager_group) { Group.create!(name: 'managers', manager: true) }
+      let(:manager) do
+        user = User.create!(username: 'manager', email: 'manager@localhost', password: 'test1234')
+        user.groups << manager_group
+        user
+      end
+
+      before do
+        sign_in(manager)
+      end
+
+      it 'Shows the index page' do
+        expect { get :index }.to raise_error(ActionController::RoutingError)
+      end
+    end
+
+    context 'signed in operator' do
+      let(:operator_group) { Group.create!(name: 'operators', operator: true) }
+      let(:operator) do
+        user = User.create!(username: 'operator', email: 'operator@localhost', password: 'test1234')
+        user.groups << operator_group
+        user
+      end
+
+      before do
+        sign_in(operator)
+      end
+
+      it 'Shows the index page' do
+        get :index
+        expect(response.status).to eq(200)
+      end
+    end
+
     context 'signed in admin' do
       before do
         sign_in(admin)

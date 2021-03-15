@@ -151,7 +151,15 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def admin?
-    @admin ||= asserted_groups.where(admin: true).present?
+    roles.include?(:admin)
+  end
+
+  def manager?
+    roles.include?(:manager)
+  end
+
+  def operator?
+    roles.include?(:operator)
   end
 
   def to_s
@@ -161,9 +169,9 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   #   %i[awesome internal]
   # end
 
-  # def roles
-  #   %i[admin staff]
-  # end
+  def roles
+    asserted_groups.map(&:roles).flatten.uniq
+  end
 
   def login
     @login || username || email
