@@ -1,0 +1,46 @@
+<h2><%= @model.class.name %> <%= @model %></h2>
+<%= render partial: 'sub_heading' %>
+<div class="row">
+  <%= link_to 'Edit', ['edit', :admin, @model] %> |
+  <%= link_to 'Back', [:admin, @model.class] %> |
+  <%= link_to 'Renew Secret', [:admin, @model, :renew_secret], method: :post, data: { confirm: 'Are you sure? Rotating an Application secret requires updating all users of the secret'}%>
+</div>
+
+<div class="row">
+  <dl>
+    <%- application_attributes.each do |attribute| %>
+      <dt><%= attribute %></dt>
+      <dd>
+        <%- data = @model.send(attribute) %>
+        <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
+          <ul>
+            <%-data.each do |row| %>
+              <li><%= row %></li>
+            <%- end %>
+          </ul>
+        <%- else %>
+          <%- if attribute == 'secret' %>
+            <%- unless @show_secret %>
+                <%- data = '*' * 30 %>
+            <%- end %>
+          <%- end %>
+          <%- if attribute == 'secret' && @show_secret %>
+            <div class="alert alert-danger">
+              This secret will only be displayed once, copy it to another location to use!
+            </div>
+          <%- end %>
+          <%= data %>
+        <%- end %>
+      </dd>
+    <%- end %>
+  </dl>
+</div>
+
+<% begin %>
+  <hr />
+  <div class="row">
+    <%= render partial: 'show' %>
+  </div>
+<% rescue ActionView::MissingTemplate %>
+<% end %>
+
