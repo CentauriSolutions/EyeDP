@@ -21,7 +21,9 @@ Rails.application.routes.draw do
     resources :custom_userdata_types
     resources :custom_group_data_types
     resources :permissions
-    resources :applications
+    resources :applications do
+      post :renew_secret, to: 'applications#renew_secret'
+    end
     resources :saml_service_providers
     resources :audits, only: %i[index show]
     get :settings, to: 'settings#index'
