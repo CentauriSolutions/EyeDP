@@ -31,7 +31,7 @@ RSpec.describe BasicAuthController, type: :controller do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       user.groups << group
       sign_in user
-      warden.session('user')['last_request_at'] = 1.day.ago
+      warden.session('user')['last_request_at'] = 7
       # user.last_acccess = 1.day.ago
       get :create, params: { permission_name: 'use.test_app' }
 

@@ -11,7 +11,9 @@ class BasicAuthController < ApplicationController
     # namely, not logged in causes the `user_signed_in` method to return
     # fakse, but timed out causes ut ti redirect to the login page.
     last_session_activity = session.try(:[], 'warden.user.user.session').try(:[], 'last_request_at')
-    head 401 and return if last_session_activity.present? && last_session_activity < Time.current + User.timeout_in
+    head 401 and return if \
+      last_session_activity.present? && \
+      Time.at(last_session_activity).utc < Time.current + User.timeout_in.seconds
 
     if user_signed_in?
       permission_checks = [params[:permission_name], "#{params[:permission_name]}.#{params[:format]}"]
