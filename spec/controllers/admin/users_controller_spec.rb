@@ -46,10 +46,10 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
 
       it 'can remove a user from a group' do
-        admin.groups << user_group
-        post(:update, params: { id: admin.id, user: { group_ids: [admin_group.id] } })
-        admin.reload
-        expect(admin.groups.last.name).to eq 'administrators'
+        user.groups << user_group
+        post(:update, params: { id: user.id, user: { name: user.name, group_ids: [] } })
+        user.reload
+        expect(user.groups).to eq []
       end
 
       it 'cannot add a user to an operator group' do
@@ -78,6 +78,29 @@ RSpec.describe Admin::UsersController, type: :controller do
         post(:update, params: { id: admin.id, user: { username: admin.username, group_ids: [] } })
         admin.reload
         expect(admin.groups.pluck(:name)).to eq %w[administrators]
+      end
+
+      it 'can update a user' do
+        post(:update, params: { id: user.id, user: { username: 'testing-name' } })
+        expect(response.status).to eq(302)
+        user.reload
+        expect(user.username).to eq('testing-name')
+      end
+
+      it 'cannot update an operator' do
+        user.groups << operator_group
+        post(:update, params: { id: user.id, user: { username: 'testing-name' } })
+        expect(response.status).to eq(302)
+        user.reload
+        expect(user.username).to eq('user')
+      end
+
+      it 'cannot update an admin' do
+        user.groups << admin_group
+        post(:update, params: { id: user.id, user: { username: 'testing-name' } })
+        expect(response.status).to eq(302)
+        user.reload
+        expect(user.username).to eq('user')
       end
     end
 
