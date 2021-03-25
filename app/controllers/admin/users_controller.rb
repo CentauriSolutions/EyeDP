@@ -11,6 +11,17 @@ class Admin::UsersController < AdminController
     @model.send_admin_welcome_email if @model.persisted?
   end
 
+  def update
+    if (@model.admin? || @model.operator?) && !current_user.admin?
+      redirect_to \
+        [:admin, @model], \
+        notice: "#{@model.class.name} was not updated because you lack admin privileges." \
+        and return
+    end
+
+    super
+  end
+
   def reset_password
     @model = User.find(params[:user_id])
     respond_to do |format|
