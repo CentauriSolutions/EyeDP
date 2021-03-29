@@ -7,7 +7,11 @@
     </tr>
     <tr>
       <td>Enable User Registration</td>
-      <td><input type="checkbox" name="setting[registration_enabled]" class="form-control" <% if Setting.registration_enabled %>checked <% end %> value="" /></td>
+      <td>
+        <% # The hidden field below allows sending a false value if the checkbox is empty (false) %>
+        <input type="hidden" name="setting[registration_enabled]" value="false" />
+        <input type="checkbox" name="setting[registration_enabled]" class="form-control" <% if Setting.registration_enabled %>checked <% end %> value="true" />
+      </td>
     </tr>
     <tr>
       <td>Expire User after inactivity</td>
@@ -16,7 +20,11 @@
     </tr>
     <tr>
       <td>User email is permanent</td>
-      <td><input type="checkbox" name="setting[permanent_email]" class="form-control" <% if Setting.permanent_email %>checked <% end %> value="" /></td>
+      <td>
+        <% # The hidden field below allows sending a false value if the checkbox is empty (false) %>
+        <input type="hidden" name="setting[permanent_email]" value="false" />
+        <input type="checkbox" name="setting[permanent_email]" class="form-control" <% if Setting.permanent_email %>checked <% end %> value="true" />
+      </td>
     </tr>
     <tr>
       <td>Reset Password Within</td>

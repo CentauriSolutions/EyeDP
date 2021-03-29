@@ -16,36 +16,12 @@ class Admin::SettingsController < AdminController
 
   # PATCH/PUT /admin/settings/1
   # PATCH/PUT /admin/settings/1.json
-  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/PerceivedComplexity
+  def update # rubocop:disable Metrics/AbcSize
     opts = setting_params
-    opts[:registration_enabled] = if opts[:registration_enabled].nil?
-                                    false
-                                  else
-                                    true
-                                  end
-    opts[:permanent_email] = if opts[:permanent_email].nil?
-                               false
-                             else
-                               true
-                             end
-    opts[:expire_after] = if opts[:expire_after].present?
-                            opts[:expire_after].to_i.days
-                          # The below else is ignored because we need to
-                          # ensure that opts[:expire_after] is nil rather
-                          # than an empty string so that the expiration is
-                          # disabled!
-                          else # rubocop:disable Style/EmptyElse
-                            nil
-                          end
-    opts[:devise_reset_password_within] = if opts[:devise_reset_password_within].present?
-                                            opts[:devise_reset_password_within].to_i.days
-                                          # The below else is ignored because we need to
-                                          # ensure that opts[:expire_after] is nil rather
-                                          # than an empty string so that the expiration is
-                                          # disabled!
-                                          else
-                                            7.days
-                                          end
+    opts[:expire_after] = opts[:expire_after].to_i.days unless opts[:expire_after].nil?
+    opts[:expire_after] = nil if opts[:expire_after].present? && opts[:expire_after] == 0.days
+    opts[:devise_reset_password_within] = opts[:devise_reset_password_within].to_i.days \
+      if opts[:devise_reset_password_within].present?
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end

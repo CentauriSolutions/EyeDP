@@ -76,6 +76,20 @@ RSpec.describe Admin::SettingsController, type: :controller do
           Setting.expire_after = nil
         end
 
+        it "doesn't reset permanent email when changing HTML title" do
+          Setting.permanent_email = true
+          post(:update, params: { setting: { html_title_base: 'Custom EyeDP' } })
+          expect(Setting.html_title_base).to eq 'Custom EyeDP'
+          expect(Setting.permanent_email).to be true
+        end
+
+        it "doesn't reset expire_after when changing HTML title" do
+          Setting.expire_after = 30.days
+          post(:update, params: { setting: { html_title_base: 'Custom EyeDP' } })
+          expect(Setting.html_title_base).to eq 'Custom EyeDP'
+          expect(Setting.expire_after).to eq 30.days
+        end
+
         it 'can update expire time' do
           expect(user.expired?).to be false
           post(:update, params: { setting: { expire_after: 30 } })
@@ -93,27 +107,27 @@ RSpec.describe Admin::SettingsController, type: :controller do
           expect(Setting.expire_after).to eq nil
         end
 
-        it 'can enable permenant usernames' do
+        it 'can enable permenant email' do
           Setting.permanent_email = false
-          post(:update, params: { setting: { permanent_email: '' } })
+          post(:update, params: { setting: { permanent_email: 'true' } })
           expect(Setting.permanent_email).to be true
         end
 
-        it 'can disable permenant usernames' do
+        it 'can disable permenant email' do
           Setting.permanent_email = true
-          post(:update, params: { setting: {} })
+          post(:update, params: { setting: { permanent_email: 'false' } })
           expect(Setting.permanent_email).to be false
         end
 
         it 'can enable user registration' do
           Setting.registration_enabled = false
-          post(:update, params: { setting: { registration_enabled: '' } })
+          post(:update, params: { setting: { registration_enabled: 'true' } })
           expect(Setting.registration_enabled).to be true
         end
 
         it 'can disable user registration' do
           Setting.registration_enabled = true
-          post(:update, params: { setting: {} })
+          post(:update, params: { setting: { registration_enabled: 'false' } })
           expect(Setting.registration_enabled).to be false
         end
 
