@@ -19,7 +19,7 @@ module Deserializable
     end
   end
 
-  def value=(new_value) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def value=(new_value) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if custom_data_type
       new_value = deserialize(new_value, type)
       valid = case type
@@ -31,8 +31,12 @@ module Deserializable
                 is_array
               when 'integer'
                 new_value.is_a?(Integer)
-              else
+              when 'string'
+                raise "Invalid Data: #{new_value} isn't a string" unless new_value.is_a? String
+
                 true
+              else
+                false
               end
       raise "Invalid #{type_s}: #{new_value} isn't an #{type}" unless valid
     end

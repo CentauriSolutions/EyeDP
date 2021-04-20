@@ -54,7 +54,10 @@ Rails.application.routes.draw do
         delete '/', to: 'groups#remove_user'
       end
     end
-    resources :users
+    resources :users do
+      get 'user_data', to: 'users#user_data'
+      match 'user_data', to: 'users#update_user_data', via: %i[put post]
+    end
   end
 
   devise_for :users, controllers: {
