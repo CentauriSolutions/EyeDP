@@ -74,10 +74,26 @@ RSpec.describe ApiKey, type: :model do
       empty_key.write_group_members!
       expect(empty_key.write_group_members?).to be true
     end
+    it 'can enable read_custom attributes' do
+      expect(empty_key.read_custom_data?).to be false
+      empty_key.read_custom_data!
+      expect(empty_key.read_custom_data?).to be true
+    end
+    it 'can enable write_custom attributes' do
+      expect(empty_key.write_custom_data?).to be false
+      empty_key.write_custom_data!
+      expect(empty_key.write_custom_data?).to be true
+    end
     it 'can enable control_admin_groups' do
       expect(empty_key.control_admin_groups?).to be false
       empty_key.control_admin_groups!
       expect(empty_key.control_admin_groups?).to be true
+    end
+
+    it 'can restrict custom attributes' do
+      expect(empty_key.matching_custom_data(%w[name age])).to be false
+      empty_key.custom_data = %w[name age birthday]
+      expect(empty_key.matching_custom_data(%w[name age])).to be true
     end
   end
 end

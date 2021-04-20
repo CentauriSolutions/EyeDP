@@ -12,7 +12,9 @@ class ApiKey < ApplicationRecord
     write_user: 32,
     read_group_members: 64,
     write_group_members: 128,
-    control_admin_groups: 256
+    control_admin_groups: 256,
+    read_custom_data: 512,
+    write_custom_data: 1024
   }.with_indifferent_access
 
   CAPABILITIES.each do |cap, bit|
@@ -34,6 +36,13 @@ class ApiKey < ApplicationRecord
                                   .filter(&:present?)
                                   .map { |cap| CAPABILITIES[cap] }
                                   .reduce(0) { |m, b| m | b }
+  end
+
+  def matching_custom_data(data)
+    return false if custom_data.nil?
+
+    data = Array(data)
+    custom_data.intersection(data) == data
   end
 
   protected

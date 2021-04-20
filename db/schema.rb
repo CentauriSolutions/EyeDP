@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2021_07_04_060019) do
     t.integer "capabilities_mask", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "custom_data", array: true
   end
 
   create_table "audits", force: :cascade do |t|
