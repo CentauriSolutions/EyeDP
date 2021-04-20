@@ -45,6 +45,10 @@ class ApiKey < ApplicationRecord
     custom_data.intersection(data) == data
   end
 
+  def to_s
+    name
+  end
+
   protected
 
   def set_key
