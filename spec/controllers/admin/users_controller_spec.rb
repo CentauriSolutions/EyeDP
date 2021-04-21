@@ -80,6 +80,13 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(admin.groups.pluck(:name)).to eq %w[administrators]
       end
 
+      it 'can create a user' do
+        expect(User.where(email: 'testing@localhost').count).to eq 0
+        post(:create, params: { user: { email: 'testing@localhost', username: 'testing-name' } })
+        expect(response.status).to eq(302)
+        expect(User.where(email: 'testing@localhost').count).to eq 1
+      end
+
       it 'can update a user' do
         post(:update, params: { id: user.id, user: { username: 'testing-name' } })
         expect(response.status).to eq(302)
