@@ -40,12 +40,12 @@ module AuthenticatesWithTwoFactor
     end
   end
 
-  def authenticate_with_two_factor_via_otp(user) # rubocop:disable Metrics/AbcSize
+  def authenticate_with_two_factor_via_otp(user)
     if valid_otp_attempt?(user)
       # Remove any lingering user data from login
       clear_two_factor_attempt!
 
-      remember_me(user) if user_params[:remember_me] == '1'
+      # remember_me(user) if user_params[:remember_me] == '1'
       user.save!
       sign_in(user, message: :two_factor_authenticated, event: :authentication)
     else
@@ -90,7 +90,7 @@ module AuthenticatesWithTwoFactor
     # Remove any lingering user data from login
     clear_two_factor_attempt!
 
-    remember_me(user) if user_params[:remember_me] == '1'
+    # remember_me(user) if user_params[:remember_me] == '1'
     sign_in(user, message: :two_factor_authenticated, event: :authentication)
   end
 

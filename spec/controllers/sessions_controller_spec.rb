@@ -97,12 +97,11 @@ RSpec.describe SessionsController do
       context 'remember_me field' do
         it 'sets a remember_user_token cookie when enabled' do
           allow(controller).to receive(:find_user).and_return(user)
-          expect(controller)
-            .to receive(:remember_me).with(user).and_call_original
+          expect(controller).not_to receive(:remember_me)
 
           authenticate_2fa({ remember_me: '1', otp_attempt: user.current_otp })
 
-          expect(response.cookies['remember_user_token']).to be_present
+          expect(response.cookies['remember_user_token']).to be_nil
         end
 
         it 'does nothing when disabled' do
@@ -213,13 +212,11 @@ RSpec.describe SessionsController do
       context 'remember_me field' do
         it 'sets a remember_user_token cookie when enabled' do
           allow(User).to receive(:u2f_authenticate).and_return(true)
-          allow(controller).to receive(:find_user).and_return(user)
-          expect(controller)
-            .to receive(:remember_me).with(user).and_call_original
+          expect(controller).not_to receive(:remember_me)
 
           authenticate_2fa_u2f(remember_me: '1', login: user.username, device_response: '{}')
 
-          expect(response.cookies['remember_user_token']).to be_present
+          expect(response.cookies['remember_user_token']).to be_nil
         end
 
         it 'does nothing when disabled' do
