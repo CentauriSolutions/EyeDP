@@ -16,6 +16,9 @@ class BasicAuthController < ApplicationController
       Time.at(last_session_activity).utc < Time.current - User.timeout_in.seconds
 
     if user_signed_in?
+      # we have to manually update the last_activity_at because we're
+      # not letting warden do much
+      session['warden.user.user.session']['last_request_at'] = Time.now.to_i
       permission_checks = [params[:permission_name], "#{params[:permission_name]}.#{params[:format]}"]
       groups = current_user.asserted_groups
       effective_permissions = groups
