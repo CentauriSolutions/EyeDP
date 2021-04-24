@@ -21,6 +21,10 @@ main {
   margin-top: 30px; // accommodate the navbar
 }
 
+body.peek-enabled {
+   margin-bottom: 35px;
+ }
+
 #peek {
   position: fixed;
   bottom: 0;
