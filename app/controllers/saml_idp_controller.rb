@@ -29,7 +29,7 @@ class SamlIdpController < SamlIdp::IdpController
 
   def authn_context_classref
     # Recommended via https://wiki.cac.washington.edu/display/infra/Configure+a+Service+Provider+for+Two-Factor+Authentication
-    return 'https://refeds.org/profile/mfa' if current_user.two_factor_enabled?
+    return 'https://refeds.org/profile/mfa' if user_signed_in? && current_user.two_factor_enabled?
 
     super
   end
