@@ -3,10 +3,10 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th></th>
+      <th>&nbsp;</th>
       <th>User</th>
       <%- model_attributes.each do |attr_name| %>
-        <th>
+        <th class="text-nowrap">
           <%= attr_name %>
           <%- if sort_whitelist.include? attr_name %>
             <%= link_to fa_icon("sort-asc"), current_page_params.merge(sort_by: attr_name, sort_dir: 'asc') %>
@@ -34,9 +34,10 @@
   <tbody>
     <% @models.each do |model| %>
       <tr>
-        <td><nobr><%= link_to fa_icon('eye', title: 'Show'), admin_audit_path(model.id) %>
-          </nobr></td>
-        <td><%= model.user.try(:username) %></td>
+        <td class="text-nowrap">
+          <%= link_to fa_icon('eye', title: 'Show'), admin_audit_path(model.id) %>
+        </td>
+        <td class="text-nowrap"><%= model.user.try(:username) %></td>
         <%- model_attributes.each do |attr_name| %>
           <td class="<%= attr_name.gsub(/[^\w\s]/, '') %>">
             <%- data = model.send(attr_name) %>
