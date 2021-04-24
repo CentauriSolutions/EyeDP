@@ -1,7 +1,7 @@
 <h1>Dashboard</h1>
 
 <div class="row">
-  <div class="col-xl-4 col-lg-6 col-sm-12 card">
+  <div class="col-12 card">
     <div class="card-body">
       <h5 class="card-title">Login rate</h5>
       <%= line_chart Login.group_by_day(:created_at).count %>
