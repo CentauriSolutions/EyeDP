@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Profile::AdditionalPropertiesController < ApplicationController
+  before_action :authenticate_user!
+
   def index; end
 
   def update # rubocop:disable Metrics/MethodLength
