@@ -23,7 +23,6 @@
               <%= link_to _('Delete'), user_two_factor_auth_path(otp_only: true),
               method: :delete,
               data: { confirm: ('Are you sure? This will invalidate your registered applications and U2F devices.') } %> |
-              <%= link_to _('Regenerate recovery codes'), user_2fa_codes_path %>
             </td>
           </tr>
         <%- end %>
@@ -43,5 +42,6 @@
       <%= link_to _('Enable TOTP 2FA'), new_user_2fa_registration_path, class: 'btn btn-primary' %>
     <%- end %>
     <%= link_to t('devise.registrations.register_u2f'), new_user_fido_usf_registration_path, class: "btn btn-primary" %>
+    <%= link_to _('Regenerate recovery codes'), user_2fa_codes_path, class: "btn btn-danger" %>
   </div>
 </div>
