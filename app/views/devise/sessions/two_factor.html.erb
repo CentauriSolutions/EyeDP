@@ -3,7 +3,7 @@
     <% resource_params = params[resource_name].presence || params %>
     <%= f.hidden_field :remember_me, value: resource_params.fetch(:remember_me, 0) %>
     <%= f.hidden_field :redirect_to, value: resource_params.fetch(:redirect_to, 0) %>
-    <div>
+    <div class="form-group">
       <%= f.label 'Two-Factor Authentication code', name: :otp_attempt %>
       <%= f.text_field :otp_attempt, class: 'form-control', required: true, autofocus: true, autocomplete: 'off', title: 'This field is required.', data: { qa_selector: 'two_fa_code_field' } %>
       <p class="form-text text-muted hint">Enter the code from the two-factor app on your mobile device. If you've lost your device, you may enter one of your recovery codes.</p>
