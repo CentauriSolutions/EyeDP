@@ -37,7 +37,7 @@
       <tr>
         <td><nobr><%= link_to fa_icon('eye', title: 'Show'), admin_audit_path(model.id) %>
           </nobr></td>
-        <td><%= model.user.username %></td>
+        <td><%= model.user.try(:username) %></td>
         <%- model_attributes.each do |attr_name| %>
           <td class="<%= attr_name.gsub(/[^\w\s]/, '') %>">
             <%- data = model.send(attr_name) %>
