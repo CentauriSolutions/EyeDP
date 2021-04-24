@@ -22,13 +22,15 @@
           <%- end %>
           <%= f.text_field :name %>
           <hr />
-          <p><%= _("To edit any details on this page, you must confirm your current password.") %></p>
-          <%= f.password_field :password, autocomplete: "off", help: _("Leave blank if you don't want to change your password") %>
-          <%= f.password_field :password_confirmation, autocomplete: "off" %>
-          <%= f.password_field :current_password, autocomplete: "off", help: _("We need your current password to confirm your changes to update your account details") %>
-          <%= f.submit _('Save Changes'), class: 'btn btn-success', style: "float: left" %>
+          <p>
+            <%= _("To edit any details on this page, you must confirm your current password.") %></p>
+            <%= f.password_field :password, autocomplete: "off", help: _("Leave blank if you don't want to change your password") %>
+            <%= f.password_field :password_confirmation, autocomplete: "off" %>
+            <%= f.password_field :current_password, autocomplete: "off", help: _("We need your current password to confirm your changes to update your account details") %>
+            <%= f.submit _('Save Changes'), class: 'btn btn-success', style: "float: left" %>
+          </p>
         <% end %>
-        <%= button_to _('Permanently delete account'), registration_path(resource_name), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete %></p>
+        <%= button_to _('Permanently delete account'), registration_path(resource_name), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete %>
         <hr>
     <%- if @logins %>
       <h2><%= _("Sites to which you've recently authenticated") %></h2>
