@@ -30,7 +30,9 @@
             <%= f.submit _('Save Changes'), class: 'btn btn-success', style: "float: left" %>
           </p>
         <% end %>
-        <%= button_to _('Permanently delete account'), registration_path(resource_name), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete %>
+        <div class="ml-1 d-inline-block">
+          <%= button_to _('Permanently delete account'), registration_path(resource_name), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete %>
+        </div>
         <hr>
     <%- if @logins %>
       <h2><%= _("Sites to which you've recently authenticated") %></h2>
