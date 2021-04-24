@@ -20,21 +20,11 @@ class CustomGroupdatum < ApplicationRecord
     custom_group_data_type.custom_type
   end
 
-  def value=(new_value) # rubocop:disable Metrics/MethodLength
-    new_value = deserialize(new_value, custom_group_data_type.custom_type)
-    if custom_group_data_type
-      valid = case custom_group_data_type.custom_type
-              when 'boolean'
-                new_value.is_a?(TrueClass) || new_value.is_a?(FalseClass)
-              when 'array'
-                new_value.is_a?(Array)
-              when 'integer'
-                new_value.is_a?(Integer)
-              else
-                true
-              end
-      raise "Invalid User Data: #{new_value} isn't an #{custom_group_data_type.custom_type}" unless valid
-    end
-    self.value_raw = new_value
+  def custom_data_type
+    custom_group_data_type
+  end
+
+  def type_s
+    'Group Data'
   end
 end

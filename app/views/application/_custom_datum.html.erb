@@ -5,8 +5,15 @@
     <%= hidden_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value || false %>
     <%= check_box_tag "custom_data[#{custom_datum.name}]", true, custom_datum.value, disabled: disabled %>
   <%- when 'array' %>
-    <%= text_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value.try(:join, '; '), class: 'form-control', disabled: disabled %>
-    <p class="small">Please separate multiple values with a semicolon (";")</p>
+    <div id="<%= custom_datum.name %>">
+      <%- if custom_datum.value %>
+        <%- custom_datum.value.each do |value| %>
+          <%= text_field_tag "custom_data[#{custom_datum.name}][]", value, class: 'form-control', disabled: disabled %>
+        <%- end %>
+      <%- end %>
+      <%= text_field_tag "custom_data[#{custom_datum.name}][]", nil, class: 'form-control', disabled: disabled, placeholder: 'Add Value' %>
+    </div>
+    <button  type="button" onclick="add_field(this)" data-name="custom_data[<%= custom_datum.name %>]" data-target="<%= custom_datum.name %>" class="btn btn-info"><%= fa_icon 'plus' %> Add Item</button>
   <%- when 'integer' %>
     <%= number_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
   <%- else %>

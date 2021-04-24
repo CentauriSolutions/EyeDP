@@ -12,6 +12,8 @@ class Profile::AdditionalPropertiesController < ApplicationController
         user_id: current_user.id,
         custom_userdata_type: custom_type
       ).first_or_initialize
+      next if custom_datum.read_only
+
       begin
         custom_datum.value = value
         custom_datum.save
@@ -25,6 +27,6 @@ class Profile::AdditionalPropertiesController < ApplicationController
   protected
 
   def custom_userdata_params
-    params.require(:custom_data).permit(CustomUserdataType.where.not(user_read_only: true).pluck(:name))
+    params.require(:custom_data).permit!
   end
 end
