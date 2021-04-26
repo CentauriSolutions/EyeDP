@@ -34,7 +34,7 @@
     <tr>
       <td>Session Timeout</td>
       <td>
-        <input type="text" name="setting[session_timeout]" class="form-control" value="<%= Setting.session_timeout.parts[:hours] if Setting.session_timeout %>"/>
+        <input type="text" name="setting[session_timeout_in]" class="form-control" value="<%= Setting.session_timeout_in.parts[:hours] if Setting.session_timeout_in %>"/>
         <p class="small">How many hours should an inactive session last.</p>
       </td>
     </tr>
