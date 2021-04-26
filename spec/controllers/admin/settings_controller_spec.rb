@@ -153,6 +153,22 @@ RSpec.describe Admin::SettingsController, type: :controller do
           expect(Setting.devise_reset_password_within).to eq 30.days
           expect(Devise.reset_password_within).to eq 30.days
         end
+
+        it 'can set the session timeout' do
+          expect(Setting.session_timeout_in).to eq 6.hours
+          expect(Devise.timeout_in).to eq 6.hours
+          post(:update, params: { setting: { session_timeout_in: '24' } })
+          expect(Setting.session_timeout_in).to eq 24.hours
+          expect(Devise.timeout_in).to eq 24.hours
+        end
+
+        it 'can reset the session timeout to default' do
+          Setting.session_timeout_in = 24.hours
+          expect(Devise.timeout_in).to eq 24.hours
+          post(:update, params: { setting: { session_timeout_in: '' } })
+          expect(Setting.session_timeout_in).to eq 6.hours
+          expect(Devise.timeout_in).to eq 6.hours
+        end
       end
     end
 
