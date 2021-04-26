@@ -31,6 +31,13 @@
       <td><input type="text" name="setting[devise_reset_password_within]" class="form-control" value="<%= Setting.devise_reset_password_within.parts[:days] if Setting.devise_reset_password_within %>"/>
         <p class="small">How many days to allow a password reset token to be valid.</p></td>
     </tr>
+    <tr>
+      <td>Session Timeout</td>
+      <td>
+        <input type="text" name="setting[session_timeout]" class="form-control" value="<%= Setting.session_timeout.parts[:hours] if Setting.session_timeout %>"/>
+        <p class="small">How many hours should an inactive session last.</p>
+      </td>
+    </tr>
     <!-- Logo settings -->
   </table>
   <button class="btn btn-primary">Save</button>
