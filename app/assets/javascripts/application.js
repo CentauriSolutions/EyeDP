@@ -21,3 +21,4 @@
 //= require peek
 //= require peek/views/performance_bar
 //= require tipsy
+//= require profile
