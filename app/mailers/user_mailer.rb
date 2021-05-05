@@ -33,6 +33,7 @@ class UserMailer < ApplicationMailer
   def template_variables(user)
     {
       'username' => user.username,
+      'name' => user.name,
       'email' => user.email
     }
   end
