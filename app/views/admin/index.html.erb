@@ -1,4 +1,4 @@
-<h1><%= @models.klass.name.pluralize %> <%= link_to "New #{@models.klass.name}", ['new', :admin, @models.klass.name.underscore.gsub('/', '_')], class: 'btn btn-small btn-success' %></h1>
+<h1><%= @models.klass.name.pluralize %> <%= link_to "New #{@models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: 'btn btn-small btn-success' %></h1>
 
 
 <table class="table table-striped">
@@ -35,7 +35,7 @@
     <% @models.each do |model| %>
       <tr>
         <td><nobr><%= link_to fa_icon('eye', title: 'Show'), [:admin, model] %>
-        <%= link_to fa_icon('pencil', title: 'Edit'), ['edit', :admin, model] %>
+        <%= link_to fa_icon('pencil', title: 'Edit'), [:edit, :admin, model] %>
         <%- if can_destroy? %>
           <%= link_to fa_icon('trash-o', title: "Delete"), [:admin, model], method: :delete, data: { confirm: 'Are you sure?' } %>
         <%- end %>

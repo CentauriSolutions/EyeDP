@@ -1,7 +1,7 @@
 <h2><%= @model.class.name %> <%= @model %></h2>
 <%= render partial: 'sub_heading' %>
 <div class="row">
-  <%= link_to 'Edit', ['edit', :admin, @model] %> |
+  <%= link_to 'Edit', [:edit, :admin, @model] %> |
   <%= link_to 'Back', [:admin, @model.class] %> |
   <%= link_to 'Renew Secret', [:admin, @model, :renew_secret], method: :post, data: { confirm: 'Are you sure? Rotating an Application secret requires updating all users of the secret'}%>
 </div>
