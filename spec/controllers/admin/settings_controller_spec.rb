@@ -155,8 +155,8 @@ RSpec.describe Admin::SettingsController, type: :controller do
         end
 
         it 'can set the session timeout' do
-          expect(Setting.session_timeout_in).to eq 6.hours
-          expect(Devise.timeout_in).to eq 6.hours
+          expect(Setting.session_timeout_in).to be nil
+          expect(Devise.timeout_in).to be nil
           post(:update, params: { setting: { session_timeout_in: '24' } })
           expect(Setting.session_timeout_in).to eq 24.hours
           expect(Devise.timeout_in).to eq 24.hours
@@ -166,8 +166,8 @@ RSpec.describe Admin::SettingsController, type: :controller do
           Setting.session_timeout_in = 24.hours
           expect(Devise.timeout_in).to eq 24.hours
           post(:update, params: { setting: { session_timeout_in: '' } })
-          expect(Setting.session_timeout_in).to eq 6.hours
-          expect(Devise.timeout_in).to eq 6.hours
+          expect(Setting.session_timeout_in).to be nil
+          expect(Devise.timeout_in).to be nil
         end
       end
     end

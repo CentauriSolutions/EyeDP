@@ -10,15 +10,17 @@ class BasicAuthController < ApplicationController
     # warden handles user timeout in a subtly different way to not logged in,
     # namely, not logged in causes the `user_signed_in` method to return
     # fakse, but timed out causes ut ti redirect to the login page.
-    last_session_activity = session.try(:[], 'warden.user.user.session').try(:[], 'last_request_at')
-    head 401 and return if \
-      last_session_activity.present? && \
-      Time.at(last_session_activity).utc < Time.current - User.timeout_in.seconds
-
+    if Setting.session_timeout_in.present?
+      last_session_activity = session.try(:[], 'warden.user.user.session').try(:[], 'last_request_at')
+      head 401 and return if \
+        last_session_activity.present? && \
+        Time.at(last_session_activity).utc < Time.current - User.timeout_in.seconds
+    end
     if user_signed_in?
       # we have to manually update the last_activity_at because we're
       # not letting warden do much
-      session['warden.user.user.session']['last_request_at'] = Time.now.to_i
+      session['warden.user.user.session']['last_request_at'] = Time.now.to_i \
+        if Setting.session_timeout_in.present?
       permission_checks = [params[:permission_name], "#{params[:permission_name]}.#{params[:format]}"]
       groups = current_user.asserted_groups
       effective_permissions = groups

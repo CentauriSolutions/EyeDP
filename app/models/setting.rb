@@ -156,7 +156,7 @@ class Setting < ApplicationRecord
   field :logo_height, default: 50, type: :integer
   field :logo_width, default: 100, type: :integer
   field :devise_reset_password_within, type: :time, default: 7.days.iso8601
-  field :session_timeout_in, type: :time, default: 6.hours.iso8601
+  field :session_timeout_in, type: :time
 
   field :home_template, default: '', type: :string
   field :registered_home_template, default: '', type: :string

@@ -35,7 +35,7 @@
       <td>Session Timeout</td>
       <td>
         <input type="text" name="setting[session_timeout_in]" class="form-control" value="<%= Setting.session_timeout_in.parts[:hours] if Setting.session_timeout_in %>"/>
-        <p class="small">How many hours should an inactive session last.</p>
+        <p class="small">How many hours should an inactive session last. Empty disables this feature.</p>
       </td>
     </tr>
     <!-- Logo settings -->
