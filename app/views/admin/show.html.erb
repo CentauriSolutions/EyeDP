@@ -1,7 +1,7 @@
 <h2><%= @model.class.name %> <%= @model %></h2>
 <%= render partial: 'sub_heading' %>
 <div class="row">
-  <%= link_to 'Edit', ['edit', :admin, @model] %> |
+  <%= link_to 'Edit', [:edit, :admin, @model] %> |
   <%= link_to 'Back', [:admin, @model.class] %>
 </div>
 

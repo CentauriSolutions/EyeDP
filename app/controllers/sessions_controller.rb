@@ -41,7 +41,7 @@ class SessionsController < Devise::SessionsController
   end
 
   def find_user # rubocop:disable Metrics/AbcSize
-    @find_user ||= begin
+    @find_user ||=
       if session[:otp_user_id] && user_params[:login]
         User.by_id_and_login(session[:otp_user_id], user_params[:login]).first
       elsif session[:otp_user_id]
@@ -49,7 +49,6 @@ class SessionsController < Devise::SessionsController
       elsif user_params[:login]
         User.find_for_database_authentication(login: user_params[:login])
       end
-    end
   end
 
   def two_factor_enabled?
