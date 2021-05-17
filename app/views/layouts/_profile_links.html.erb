@@ -1,4 +1,4 @@
-<%- if current_user.admin? %>
+<%- if [:admin, :manager, :operator].intersection(current_user.roles).any? %>
   <%= nav_link 'Admin Dashboard', admin_dashboard_path %>
 <%- end %>
 <%= nav_link current_user.name || current_user.username, root_path %>
