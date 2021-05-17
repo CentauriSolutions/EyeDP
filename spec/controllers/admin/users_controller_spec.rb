@@ -109,6 +109,18 @@ RSpec.describe Admin::UsersController, type: :controller do
         user.reload
         expect(user.username).to eq('user')
       end
+
+      context 'edit' do
+        render_views
+
+        it 'does not show admin groups' do
+          admin_group
+          get :edit, params: { id: user.id }
+          expect(response.status).to eq(200)
+          expect(response.body).not_to include(%(type="checkbox" value="#{admin_group.id}" name="user[group_ids][]"))
+          expect(response.body).to include(%(type="checkbox" value="#{manager_group.id}" name="user[group_ids][]"))
+        end
+      end
     end
 
     context 'signed in operator' do
@@ -182,6 +194,17 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
 
       context 'Edit' do
+        context 'with views' do
+          render_views
+
+          it 'shows admin groups' do
+            manager_group
+            get :edit, params: { id: user.id }
+            expect(response.status).to eq(200)
+            expect(response.body).to include(%(type="checkbox" value="#{admin_group.id}" name="user[group_ids][]"))
+            expect(response.body).to include(%(type="checkbox" value="#{manager_group.id}" name="user[group_ids][]"))
+          end
+        end
         it 'can expire a user' do
           expect(user.expired?).to be false
           post(:update, params: { id: user.id, user: { expires_at: 10.minutes.ago } })

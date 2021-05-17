@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::UsersController < AdminController
+class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLength
   def show
     super
     @logins = @model.logins.includes(:service_provider).order(created_at: :desc).limit(50)
@@ -83,11 +83,12 @@ class Admin::UsersController < AdminController
       :password, :last_activity_at, group_ids: []
     )
     p[:group_ids] ||= []
-    if current_user.manager?
+    if current_user.manager? && !current_user.admin?
       # A Manager cannot add a user to an operator or admin group
       p[:group_ids] -= Group.where(admin: true).or(Group.where(operator: true)).pluck(:id)
       # A manager cannot remove admin from an admin user nor operator from an operator user
       p[:group_ids] += @model.groups.where(admin: true).or(Group.where(operator: true)).pluck(:id) unless @model.nil?
+      p[:group_ids].uniq!
     end
     p.delete(:password) if p[:password] && p[:password].empty?
     p
