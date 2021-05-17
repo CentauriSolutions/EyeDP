@@ -1,11 +1,12 @@
 <%- if not new_model %>
   <div class="form-group">
     <div class="row">
-      <div class="col-sm-2">
-        <Label>Password</Label>
-      </div>
-      <div class="col-sm-10">
-        <%= link_to 'Reset Password', [:admin, model, :reset_password], method: :post, data: { confirm: 'Are you sure? Clicking reset multiple times will send multiple reset emails to the user.'}, class: "btn btn-warning"  %>
+      <div class="col-sm-12">
+        <%= form_with(model: [:admin, model], local: true, class: 'form-inline') do |form| %>
+
+          <%= link_to 'Reset Password', [:admin, model, :reset_password], method: :post, data: { confirm: 'Are you sure? Clicking reset multiple times will send multiple reset emails to the user.'}, class: "btn btn-warning"  %>
+          <%= render partial: 'toggle_user', locals: { model: model, form: form } %>
+        <%- end %>
       </div>
     </div>
   </div>

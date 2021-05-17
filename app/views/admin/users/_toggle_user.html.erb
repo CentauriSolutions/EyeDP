@@ -1,0 +1,7 @@
+<%- if model.expired? %>
+  <%= form.hidden_field :expires_at, class: 'form-control', value: nil %>
+  <%= form.submit _('Enable User'), class: 'btn btn-success' %>
+<%- else %>
+  <%= form.hidden_field :expires_at, class: 'form-control', value: 1.minute.ago.utc %>
+  <%= form.submit _('Disable User'), class: 'btn btn-warning' %>
+<%- end %>

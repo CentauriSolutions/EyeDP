@@ -3,4 +3,10 @@
       <%= content_tag :div, "This user is expired" %>
     </div>
 <%- end %>
-<%= link_to 'Reset Password', [:admin, @model, :reset_password], method: :post, data: { confirm: 'Are you sure? Clicking reset multiple times will send multiple reset emails to the user.'}, class: "btn btn-warning"  %>
+<div class="col-sm-12">
+  <%= form_with(model: [:admin, @model], local: true, class: 'form-inline') do |form| %>
+
+    <%= link_to 'Reset Password', [:admin, @model, :reset_password], method: :post, data: { confirm: 'Are you sure? Clicking reset multiple times will send multiple reset emails to the user.'}, class: "btn btn-warning"  %>
+    <%= render partial: 'toggle_user', locals: { model: @model, form: form } %>
+  <%- end %>
+</div>
