@@ -119,7 +119,11 @@
   <%- end %>
 
   <div class="actions">
+    <%- if new_model %>
+    <%= form.submit _('Create User'), class: 'btn btn-success' %>
+    <%- else %>
     <%= form.submit _('Update User'), class: 'btn btn-success' %>
+    <%- end %>
   </div>
 <% end %>
   <%- unless new_model %>
