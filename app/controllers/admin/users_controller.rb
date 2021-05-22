@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::UsersController < AdminController
+class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLength
   def show
     super
     @logins = @model.logins.includes(:service_provider).order(created_at: :desc).limit(50)
@@ -22,6 +22,31 @@ class Admin::UsersController < AdminController
     update_custom_attributes if params[:custom_data]
 
     super
+  end
+
+  def disable_two_factor # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    @model = User.find(params[:user_id])
+    if (@model.admin? || @model.operator?) && !current_user.admin?
+      redirect_to \
+        [:admin, @model], \
+        notice: "#{@model.class.name} was not updated because you lack admin privileges." \
+        and return
+    end
+
+    respond_to do |format|
+      if @model.disable_two_factor!
+        format.html do
+          redirect_to [:edit, :admin, @model], notice: 'Two factor was disabled successfully'
+        end
+        format.json { render :show, status: :ok, location: [:admin, @model] }
+      else
+        format.html do
+          redirect_to [:admin, @model, :edit], notice: "There was a problem disabling the user's two factor"
+        end
+
+        format.json { render json: @model.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def reset_password

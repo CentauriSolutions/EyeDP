@@ -116,6 +116,24 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(user.username).to eq('user')
       end
 
+      it 'cannot disable 2fa for an operator' do
+        user.groups << operator_group
+        user.update!({ otp_required_for_login: true })
+        post(:disable_two_factor, params: { user_id: user.id })
+        expect(response.status).to eq(302)
+        user.reload
+        expect(user.otp_required_for_login).to be true
+      end
+
+      it 'cannot disable 2fa for an admin' do
+        user.groups << admin_group
+        user.update!({ otp_required_for_login: true })
+        post(:disable_two_factor, params: { user_id: user.id })
+        expect(response.status).to eq(302)
+        user.reload
+        expect(user.otp_required_for_login).to be true
+      end
+
       context 'edit' do
         render_views
 
@@ -275,6 +293,33 @@ RSpec.describe Admin::UsersController, type: :controller do
           data = user.custom_userdata.first
           expect(data.name).to eq('Has pets')
           expect(data.value).to be true
+        end
+
+        it 'can disable 2fa for a manager' do
+          user.groups << manager_group
+          user.update!({ otp_required_for_login: true })
+          post(:disable_two_factor, params: { user_id: user.id })
+          expect(response.status).to eq(302)
+          user.reload
+          expect(user.otp_required_for_login).to be false
+        end
+
+        it 'can disable 2fa for an operator' do
+          user.groups << operator_group
+          user.update!({ otp_required_for_login: true })
+          post(:disable_two_factor, params: { user_id: user.id })
+          expect(response.status).to eq(302)
+          user.reload
+          expect(user.otp_required_for_login).to be false
+        end
+
+        it 'can disable 2fa for an admin' do
+          user.groups << admin_group
+          user.update!({ otp_required_for_login: true })
+          post(:disable_two_factor, params: { user_id: user.id })
+          expect(response.status).to eq(302)
+          user.reload
+          expect(user.otp_required_for_login).to be false
         end
       end
     end
