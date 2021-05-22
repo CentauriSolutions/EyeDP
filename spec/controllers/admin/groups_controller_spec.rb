@@ -118,7 +118,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
         context 'update' do
           it "Can update a group's custom attributes" do
             CustomGroupDataType.create(name: 'alias', custom_type: 'string')
-            post :update_custom_attributes, params: { group_id: group.id, custom_data: { 'alias': 'ahoy' } }
+            post :update, params: { id: group.id, group: { name: group.name }, custom_data: { 'alias': 'ahoy' } }
             data = group.custom_groupdata.first
             expect(data.name).to eq('alias')
             expect(data.value).to eq('ahoy')
