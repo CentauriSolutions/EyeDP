@@ -261,7 +261,11 @@ RSpec.describe Admin::UsersController, type: :controller do
 
         it "Can update a user's custom attributes" do
           CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean')
-          post :update_custom_attributes, params: { user_id: user.id, custom_data: { 'Has pets': true } }
+          post :update, params: {
+            id: user.id,
+            user: { username: user.username },
+            custom_data: { 'Has pets': true }
+          }
           data = user.custom_userdata.first
           expect(data.name).to eq('Has pets')
           expect(data.value).to be true
