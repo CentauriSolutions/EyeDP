@@ -1,7 +1,7 @@
 <h2>Audit</h2>
 <%= render partial: 'sub_heading' %>
 <div class="row">
-  <%= link_to 'Back', [:admin, 'audits'] %>
+  <%= link_to 'Back', [:admin, :audits] %>
 </div>
 
 <div class="row">
@@ -10,7 +10,20 @@
         <%= render partial: @model.auditable_type.underscore.gsub('/', '_') %>
     <% rescue ActionView::MissingTemplate %>
       <h4>
-        <%= @model.action %> - <%= link_to "#{@model.auditable_type} '#{@model.auditable}'", [:admin, @model.auditable] %>
+        <%= @model.action %> - 
+        <%- if @model.auditable_type == "CustomUserdatum" %>
+          <%= link_to "#{@model.auditable_type} 'Custom Userdata' for User '#{@model.auditable.user}'", [:admin, 
+            @model.auditable.user] %>
+
+        <%- elsif @model.auditable_type == 'CustomGroupdatum' %>
+          <%= link_to "#{@model.auditable_type} 'Custom Data' for Group '#{@model.auditable.group}'", [:admin, 
+            @model.auditable.group] %>
+        <%- elsif @model.auditable_type == 'GroupPermission' %>
+          <%= link_to "#{@model.auditable_type} 'Group Permission' for Group '#{@model.auditable.group}'", [:admin, 
+            @model.auditable.group] %>
+        <%- else %>
+          <%= link_to "#{@model.auditable_type} '#{@model.auditable}'", [:admin, @model.auditable] %>
+          <%- end %>
       </h4>
       <%=  @model.created_at.to_formatted_s(:rfc822) %>
       <hr />
