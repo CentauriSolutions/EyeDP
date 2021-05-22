@@ -21,6 +21,15 @@ RSpec.describe BasicAuthController, type: :controller do
         Setting.session_timeout_in = nil
       end
 
+      it 'sets username and email as headers' do
+        user.groups << group
+        sign_in user
+        get :create, params: { permission_name: 'use.test_app' }
+        expect(response.status).to eq(200)
+        expect(response.headers['EyeDP-Username']).to eq user.username
+        expect(response.headers['EyeDP-Email']).to eq user.email
+      end
+
       it 'allows authenticated role with group' do
         start = user.last_activity_at
         @request.env['devise.mapping'] = Devise.mappings[:user]

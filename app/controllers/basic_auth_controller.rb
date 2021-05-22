@@ -29,6 +29,8 @@ class BasicAuthController < ApplicationController
                               .uniq
                               .detect { |f| permission_checks.include? f.name }
       if effective_permissions
+        response.set_header('EyeDP-Username', current_user.username)
+        response.set_header('EyeDP-Email', current_user.email)
         head :ok
       else
         head 403

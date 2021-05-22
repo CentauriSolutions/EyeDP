@@ -338,6 +338,11 @@ that may not have their own acess controls at the Nginx layer. To learn more
 about how to use it, an admin should peruse the [groups](#groups) section of
 the documentetion.
 
+In the Nging Auth Request backend, a user's email and username are set as
+response headers: `EyeDP-Email` and `EyeDP-Username`. As a result, Nginx is
+capable of interpreting these headers and send them to other appication
+backends!
+
 ## Management
 
 Managing an identity provider can be a complex task requiring many different
