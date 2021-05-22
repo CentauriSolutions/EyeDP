@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLength
+class Admin::UsersController < AdminController
   def show
     super
     @logins = @model.logins.includes(:service_provider).order(created_at: :desc).limit(50)
@@ -18,6 +18,8 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
         notice: "#{@model.class.name} was not updated because you lack admin privileges." \
         and return
     end
+
+    update_custom_attributes if params[:custom_data]
 
     super
   end
@@ -37,7 +39,6 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   end
 
   def update_custom_attributes # rubocop:disable Metrics/MethodLength
-    @model = User.find(params[:user_id])
     custom_userdata_params.each do |name, value|
       custom_type = CustomUserdataType.where(name: name).first
       custom_datum = CustomUserdatum.where(
@@ -48,10 +49,9 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
         custom_datum.value = value
         custom_datum.save
       rescue RuntimeError
-        flash[:error] = 'Failed to update userdata, invalid value'
+        flash[:error] << 'Failed to update userdata, invalid value'
       end
     end
-    redirect_to [:edit, :admin, @model]
   end
 
   private
@@ -79,7 +79,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   # Never trust parameters from the scary internet, only allow the white list through.
   def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     p = params.require(:user).permit(
-      :email, :username, :email, :name, :expires_at,
+      :email, :username, :name, :expires_at,
       :password, :last_activity_at, group_ids: []
     )
     p[:group_ids] ||= []

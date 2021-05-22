@@ -16,7 +16,6 @@ Rails.application.routes.draw do
     end
     resources :users do
       post :reset_password, to: 'users#reset_password'
-      post :custom_attributes, to: 'users#update_custom_attributes'
     end
     resources :custom_userdata_types
     resources :custom_group_data_types
