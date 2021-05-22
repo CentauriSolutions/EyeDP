@@ -8,7 +8,7 @@ class Admin::AuditsController < AdminController
   end
 
   def whitelist_attributes
-    %w[auditable_type audited_changes]
+    %w[auditable_type action audited_changes]
   end
 
   def ensure_user_is_authorized!

@@ -44,7 +44,11 @@
             <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
               <%- data =  data.join ", " %>
             <%- end %>
-            <%= data %>
+            <%- if attr_name == 'audited_changes' %>
+                <pre><code><%= data.to_yaml %></code></pre>
+            <%- else %>
+              <%= data %>
+              <%- end %>
           </td>
         <%- end %>
       </tr>
