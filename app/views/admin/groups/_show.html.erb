@@ -1,16 +1,11 @@
 <div class="col-md-12 col-lg-12">
   <h2>Additional Properties</h2>
-  <%= form_with(url: admin_group_custom_attributes_path(group_id: @model.id), local: true, class: 'form') do |f| %>
-    <%- custom_groupdata = @model.custom_groupdata.includes([:custom_group_data_type]).group_by(&:custom_group_data_type_id) %>
-    <%- CustomGroupDataType.all.each do |data_type| %>
-      <%- custom_groupdatum = custom_groupdata[data_type.id].try(:first) || CustomGroupdatum.new(group: @model, custom_group_data_type: data_type) %>
-      <%= render partial: 'custom_datum', locals: { data_type: data_type, custom_datum: custom_groupdatum, disabled: true } %>
-    <%- end %>
-    <hr />
-    <%= f.submit _('Save Changes'), class: 'btn btn-success' %>
+  <%- custom_groupdata = @model.custom_groupdata.includes([:custom_group_data_type]).group_by(&:custom_group_data_type_id) %>
+  <%- CustomGroupDataType.all.each do |data_type| %>
+    <%- custom_groupdatum = custom_groupdata[data_type.id].try(:first) || CustomGroupdatum.new(group: @model, custom_group_data_type: data_type) %>
+    <%= render partial: 'custom_datum', locals: { data_type: data_type, custom_datum: custom_groupdatum, disabled: true } %>
   <%- end %>
 </div>
-
 
 <h4>Welcome Email Preview</h4>
 <iframe class="col-sm-12" src="<%= @model.id %>/email" sandbox></iframe>

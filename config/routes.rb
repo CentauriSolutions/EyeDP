@@ -12,7 +12,6 @@ Rails.application.routes.draw do
     # get 'dashboard/index'
     resources :groups do
       get :email, to: 'groups#email'
-      post :custom_attributes, to: 'groups#update_custom_attributes'
     end
     resources :users do
       post :reset_password, to: 'users#reset_password'

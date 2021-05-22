@@ -8,12 +8,12 @@
     <div id="<%= custom_datum.name %>">
       <%- if custom_datum.value %>
         <%- custom_datum.value.each do |value| %>
-          <div class="input-group" id="input-group-<%= custom_datum.name %>-<%= value %>">
+          <div class="input-group" id="input-group-<%= custom_datum.name %>-<%= value.gsub('.', '_') %>">
             <%= text_field_tag "custom_data[#{custom_datum.name}][]", value, class: 'form-control', disabled: disabled %>
 
             <%- unless disabled %>
               <div class="input-group-append">
-                <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-<%= custom_datum.name %>-<%= value %>">Remove</button>
+                <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-<%= custom_datum.name %>-<%= value.gsub('.', '_') %>">Remove</button>
               </div>
               <%- end %>
           </div>

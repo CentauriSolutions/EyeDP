@@ -6,8 +6,12 @@ class Admin::GroupsController < AdminController
     render :email, layout: nil
   end
 
+  def update
+    update_custom_attributes if params[:custom_data]
+    super
+  end
+
   def update_custom_attributes # rubocop:disable Metrics/MethodLength
-    @model = Group.find(params[:group_id])
     custom_groupdata_params.each do |name, value|
       custom_type = CustomGroupDataType.where(name: name).first
       custom_datum = CustomGroupdatum.where(
@@ -18,10 +22,9 @@ class Admin::GroupsController < AdminController
         custom_datum.value = value
         custom_datum.save
       rescue RuntimeError
-        flash[:error] = 'Failed to update group data, invalid value'
+        flash[:error] << 'Failed to update group data, invalid value'
       end
     end
-    redirect_to [:edit, :admin, @model]
   end
 
   private
