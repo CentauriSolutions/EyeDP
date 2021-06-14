@@ -6,5 +6,12 @@
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <%= content_tag :div, msg, :id => "flash_#{name}" %>
     </div>
+  <%- elsif msg.is_a? Array %>
+    <%- msg.each do |msg| %>
+      <div class="alert alert-<%= name.to_s == 'notice' ? 'success' : 'danger' %>" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <%= content_tag :div, msg, :id => "flash_#{name}" %>
+      </div>
+    <%- end %>
   <% end %>
 <% end %>

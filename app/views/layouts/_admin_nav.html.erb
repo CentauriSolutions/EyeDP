@@ -5,6 +5,7 @@
   <%= nav_link "#{fa_icon("users")} Groups".html_safe, admin_groups_path %>
   <% end %>
   <%- if current_user.admin? || current_user.operator? %>
+    <%= nav_link "#{fa_icon("paper-plane")} Jobs".html_safe, admin_jobs_path %>
     <%= nav_link "#{fa_icon("openid")} OpenID Connect Application".html_safe, admin_applications_path %>
     <%= nav_link "#{fa_icon("lock")} Saml Service Providers".html_safe, admin_saml_service_providers_path %>
     <%= nav_link "#{fa_icon("gear")} Settings".html_safe, admin_settings_path %>
@@ -19,5 +20,4 @@
   <%- if current_user.admin? %>
     <%= nav_link "#{fa_icon("commenting")} Audit Log".html_safe, admin_audits_path %>
   <%- end %>
-
 </ul>

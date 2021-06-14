@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   # before_action :authenticate_user!
+  before_action :check_for_redis
 
   before_action :set_locale
 
@@ -80,5 +81,18 @@ class ApplicationController < ActionController::Base
                           SamlServiceProvider.where(
                             '? = ANY ("saml_service_providers"."response_hosts")', hostname
                           ).any?
+  end
+
+  def check_for_redis
+    return unless current_user&.admin?
+
+    begin
+      Sidekiq.redis(&:info)
+    rescue Redis::CannotConnectError
+      flash[:warning] ||= []
+      msg = 'Redis is not currently available but is necessary. Please check the ' \
+            'documentation about setting up Redis with EyeDP!'
+      flash[:warning] << msg unless flash[:warning].include? msg
+    end
   end
 end
