@@ -77,6 +77,8 @@ gem 'groupdate'
 
 gem 'liquid'
 
+gem 'sidekiq'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'

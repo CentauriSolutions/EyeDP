@@ -54,6 +54,8 @@ EYEdP is a fairly standard Rails application that expects a database connection.
 
 Alternately, a normal Ruby on Rails environment can be used to setup EYEdP, such as Heroku, a normal virtual machine, or a dedicated machine. The only required setup to get the application running it to configure the database.yml with the necessary options to configure the PostgreSQL database. The easiest way to configure the database is to export a `DATABASE_URL` environment veriable to the Rails process. Before starting EYEdP for the first time, the administrator should ensure that they run `bin/setup` to ensure that the database is ready for use.
 
+In addition to Postgres, Redis is a required component of an EyeDP installation. The default settings will look for redis hosted at `127.0.0.1:6379` but can be configured with `REDIS_URL`
+
 ### Getting Started
 
 The first thing to do after the initial setup is to log in as the initial admin
@@ -113,33 +115,56 @@ should be places behind a load-balancer, such as Traefik or Nginx.
 ```yaml
 version: '3'
 services:
- db:
-  image: postgres
-  volumes:
-    - 'postgres:/var/lib/postgresql/data'
-  environment:
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=super-secure-password
- web:
-  image: centaurisolutions/eyedp
-  volumes:
-    - ./log:/eyedp/log
-  ports:
-    - "3000:3000"
-  depends_on:
-    - db
-  links:
-    - db
-  environment:
-    - RAILS_ENV=production
-    - DATABASE_URL=postgres://postgres:super-secure-password@db:5432/eyedp
-    - SECRET_KEY_BASE=o8w64gurfvwtiu64wlyregfvcw74iu6eryfV
-    - DISABLE_SSL=true
-    - RAILS_SERVE_STATIC_FILES=true
-    - SSO_DOMAIN=.example.com
-    - TOTP_ENCRYPTION_KEY=something-really-awesome-that's-at-least-32-bytes
+  db:
+    image: postgres
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=super-secure-password
+  redis:
+    image: redis
+    volumes:
+      - 'redis:/data'
+  web:
+    image: centaurisolutions/eyedp
+    volumes:
+      - ./log:/eyedp/log
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+    links:
+      - db
+      - redis
+    environment:
+      - RAILS_ENV=production
+      - DATABASE_URL=postgres://postgres:super-secure-password@db:5432/eyedp
+      - SECRET_KEY_BASE=o8w64gurfvwtiu64wlyregfvcw74iu6eryfV
+      - DISABLE_SSL=true
+      - RAILS_SERVE_STATIC_FILES=true
+      - SSO_DOMAIN=.example.com
+      - TOTP_ENCRYPTION_KEY=something-really-awesome-that's-at-least-32-bytes
+  sidekiq:
+    image: centaurisolutions/eyedp
+    command: bundle exec sidekiq
+    volumes:
+      - ./log:/eyedp/log
+    depends_on:
+      - db
+      - redis
+    links:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: postgres://postgres:super-secure-password@db:5432/myapp_development
+      TOTP_ENCRYPTION_KEY: something-really-awesome-that's-at-least-32-bytes
+      REDIS_URL: redis://redis:6379
+      RAILS_ENV: development
 volumes:
   postgres:
+  redis:
 ```
 
 After configuring this how you want it, you can initialize the database and

@@ -13,6 +13,7 @@
     </title>
     <%= csrf_meta_tags %>
     <%= action_cable_meta_tag %>
+    <link rel="icon" type="image/ico" href="/favicon.ico">
     <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
   <body>
@@ -22,10 +23,10 @@
     </header>
     <main role="main">
       <div class="row">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <%= render partial: 'layouts/admin_nav' %>
         </div>
-        <div class="col-12 col-md-8" %>
+        <div class="col-12 col-md-9" %>
           <%= render 'layouts/messages' %>
           <%= yield %>
           <div class="mb-5"></div>

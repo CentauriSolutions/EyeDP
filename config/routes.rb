@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   use_doorkeeper do
     # it accepts :authorizations, :tokens, :token_info, :applications and :authorized_applications
@@ -32,6 +34,12 @@ Rails.application.routes.draw do
     get 'settings/branding', to: 'settings#branding'
     get 'settings/templates', to: 'settings#templates'
     # end
+
+    get 'jobs', to: 'dashboard#jobs'
+
+    authenticate :user, ->(user) { user.admin? || user.operator? } do
+      mount Sidekiq::Web => '/sidekiq'
+    end
   end
 
   devise_for :users, controllers: {
