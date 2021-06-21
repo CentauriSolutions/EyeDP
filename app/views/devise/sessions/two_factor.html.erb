@@ -24,7 +24,7 @@
   <%= hidden_field_tag 'user[device_response]' %>
   <%= hidden_field_tag 'user[remember_me]', value: resource_params.fetch(:remember_me, 0) %>
   <%- if resource_params.fetch(:redirect_to, nil) %>
-    <%= hidden_field_tag 'redirect_to', value: resource_params.fetch(:redirect_to) %>
+    <%= hidden_field_tag 'user[redirect_to]', value: resource_params.fetch(:redirect_to) %>
   <%- end %>
 <% end %>
 <%= javascript_tag nonce: true do -%>
