@@ -1,8 +1,11 @@
+<%- resource_params = params[resource_name].presence || params %>
+<%- redirect_to = params.fetch(:redirect_to, nil) %>
 <% if @user.two_factor_otp_enabled? %>
   <%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post, html: { class: "edit_user gl-show-field-errors js-2fa-form" }) do |f| %>
-    <% resource_params = params[resource_name].presence || params %>
     <%= f.hidden_field :remember_me, value: resource_params.fetch(:remember_me, 0) %>
-    <%= f.hidden_field :redirect_to, value: resource_params.fetch(:redirect_to, 0) %>
+    <%- if redirect_to %>
+      <%= hidden_field_tag :redirect_to, redirect_to %>
+    <%- end %>
     <div class="form-group">
       <%= f.label 'Two-Factor Authentication code', name: :otp_attempt %>
       <%= f.number_field :otp_attempt, class: 'form-control', required: true, autofocus: true, autocomplete: 'off', title: 'This field is required.', data: { qa_selector: 'two_fa_code_field' }, inputmode: "numeric", pattern: "[0-9]*" %>
@@ -20,11 +23,10 @@
 <p id="waiting">Waiting...</p>
 <p id="error" class="d-none"></p>
 <%= form_tag send("new_user_session_path"), method: 'post' do %>
-  <% resource_params = params[resource_name].presence || params %>
   <%= hidden_field_tag 'user[device_response]' %>
-  <%= hidden_field_tag 'user[remember_me]', value: resource_params.fetch(:remember_me, 0) %>
-  <%- if resource_params.fetch(:redirect_to, nil) %>
-    <%= hidden_field_tag 'user[redirect_to]', value: resource_params.fetch(:redirect_to) %>
+  <%= hidden_field_tag 'user[remember_me]', resource_params.fetch(:remember_me, 0) %>''
+  <%- if redirect_to %>
+    <%= hidden_field_tag 'redirect_to', redirect_to %>
   <%- end %>
 <% end %>
 <%= javascript_tag nonce: true do -%>
