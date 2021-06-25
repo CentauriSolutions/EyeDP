@@ -56,10 +56,6 @@ class Admin::UsersController < AdminController
 
   private
 
-  def can_destroy?
-    false
-  end
-
   def includes
     [:groups]
   end

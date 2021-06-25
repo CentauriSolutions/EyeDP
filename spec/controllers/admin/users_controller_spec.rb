@@ -94,6 +94,12 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(user.username).to eq('testing-name')
       end
 
+      it 'can delete a user' do
+        delete(:destroy, params: { id: user.id })
+        expect(response.status).to eq(302)
+        expect(User.where(username: user.username).count).to eq 0
+      end
+
       it 'cannot update an operator' do
         user.groups << operator_group
         post(:update, params: { id: user.id, user: { username: 'testing-name' } })
