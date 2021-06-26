@@ -3,8 +3,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, prepend: true
   # before_action :authenticate_user!
-  before_action :check_for_redis
 
+  after_action :set_useragent_and_ip_in_session
   before_action :set_locale
 
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -83,16 +83,8 @@ class ApplicationController < ActionController::Base
                           ).any?
   end
 
-  def check_for_redis
-    return unless current_user&.admin?
-
-    begin
-      Sidekiq.redis(&:info)
-    rescue Redis::CannotConnectError
-      flash[:warning] ||= []
-      msg = 'Redis is not currently available but is necessary. Please check the ' \
-            'documentation about setting up Redis with EyeDP!'
-      flash[:warning] << msg unless flash[:warning].include? msg
-    end
+  def set_useragent_and_ip_in_session
+    session['ip'] = request.remote_ip
+    session['user-agent'] = request.user_agent
   end
 end

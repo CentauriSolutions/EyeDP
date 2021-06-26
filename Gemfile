@@ -26,6 +26,7 @@ gem 'uglifier', '>= 1.3.0'
 
 gem 'jbuilder', '~> 2.5'
 gem 'redis', '~> 4.0'
+gem 'redis-actionpack'
 # gem 'turbolinks', '~> 5'
 
 gem 'bootsnap', '>= 1.3.2', require: false
