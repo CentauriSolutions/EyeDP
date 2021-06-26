@@ -1,0 +1,24 @@
+<h1>Sessions</h1>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th></th>
+			<th><nobr>User</nobr></th>
+			<th><nobr>Last Activity</nobr></th>
+			<th><nobr>Access IP</nobr></th>
+			<th><nobr>User Agent</nobr></th>
+		</tr>
+	</thead>
+	<tbody>
+		<%- @sessions.each do |session| %>
+		<tr>
+			<td><%= link_to fa_icon('trash-o', title: "Delete"), admin_session_path(session[:id]), method: :delete, data: { confirm: "Are you sure you want to terminate this user's session?" } %></td>
+			<td><%= link_to session[:user].username, [:admin, session[:user]] %></td>
+			<td><%= time_ago_in_words DateTime.strptime(session[:last_request_at].to_s,'%s') %></td>
+			<td><%= session[:ip] %> </td>
+			<td><%= session[:user_agent] %></td>
+		</tr>
+		<%- end %>
+	</tbody>
+</table>

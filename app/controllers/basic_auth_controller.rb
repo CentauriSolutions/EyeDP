@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class BasicAuthController < ApplicationController
-  skip_before_action :check_for_redis
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/CyclomaticComplexity

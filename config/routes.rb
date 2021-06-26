@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     get 'settings/templates', to: 'settings#templates'
     # end
 
+    resources :sessions, only: %i[index destroy]
+
     get 'jobs', to: 'dashboard#jobs'
 
     authenticate :user, ->(user) { user.admin? || user.operator? } do
