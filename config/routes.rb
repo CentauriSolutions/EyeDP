@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       post :renew_secret, to: 'applications#renew_secret'
     end
     resources :saml_service_providers
+    resources :web_hooks
     resources :audits, only: %i[index show]
     get :settings, to: 'settings#index'
     post :settings, to: 'settings#update'
