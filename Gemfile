@@ -78,6 +78,7 @@ gem 'groupdate'
 
 gem 'liquid'
 
+gem 'attr_encrypted', '~> 3.1.0'
 gem 'sidekiq'
 
 group :development, :test do

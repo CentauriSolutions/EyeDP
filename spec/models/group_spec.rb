@@ -33,4 +33,33 @@ RSpec.describe Group, type: :model do
   it 'uses name for to_s' do
     expect(root_group.to_s).to eq 'root'
   end
+
+  context 'webhooks' do
+    let(:create_webhook) { WebHook.create!(url: 'https://example.com', user_created_events: true) }
+    let(:update_webhook) { WebHook.create!(url: 'https://example.com', user_updated_events: true) }
+    let(:delete_webhook) { WebHook.create!(url: 'https://example.com', user_deleted_events: true) }
+
+    it 'queues a webhook on create' do
+      create_webhook
+      expect do
+        root_group
+      end.to change(NotificationSetupWorker.jobs, :size).by(1)
+    end
+
+    it 'queues a webhook on update' do
+      update_webhook
+      root_group
+      expect do
+        root_group.update!(name: 'root2')
+      end.to change(NotificationSetupWorker.jobs, :size).by(1)
+    end
+
+    it 'queues a webhook on delete' do
+      delete_webhook
+      root_group
+      expect do
+        root_group.destroy
+      end.to change(NotificationSetupWorker.jobs, :size).by(1)
+    end
+  end
 end

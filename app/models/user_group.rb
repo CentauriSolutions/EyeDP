@@ -22,12 +22,16 @@
 #
 
 class UserGroup < ApplicationRecord
+  extend Notifiable
+
   audited
 
   belongs_to :user
   belongs_to :group
 
   after_create :send_welcome_email
+
+  notify_for %i[create destroy]
 
   def send_welcome_email
     UserMailer.group_welcome_email(user, group).deliver_later if group.welcome_email.present?

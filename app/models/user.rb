@@ -25,6 +25,8 @@
 #
 
 class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  extend Notifiable
+
   audited
 
   alias_attribute :real_name, :name
@@ -43,7 +45,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   devise :expirable
 
   has_many :user_groups, dependent: :destroy
-  has_many :groups, through: :user_groups
+  has_many :groups, through: :user_groups, dependent: :destroy
   has_many :group_permissions, through: :groups
   has_many :permissions, through: :group_permissions
 
@@ -66,6 +68,15 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :validate_username
 
   before_validation :ensure_password
+
+  notify_for %i[create update destroy]
+
+  def notification_attributes
+    {
+      username: username,
+      email: email
+    }
+  end
 
   attr_writer :login
 

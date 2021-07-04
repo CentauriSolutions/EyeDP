@@ -3,12 +3,8 @@
 class Admin::WebHooksController < AdminController
   private
 
-  # def model_attributes
-  #   %w[name description]
-  # end
-
-  def new_fields
-    f = %w[headers template disabled_until]
+  def model_attributes
+    f = %w[headers template url token disabled_until]
     %w[user group].each do |rel|
       f << "#{rel}_created_events"
       f << "#{rel}_updated_events"
@@ -19,15 +15,9 @@ class Admin::WebHooksController < AdminController
     f
   end
 
-  # def form_relations
-  #   {
-  #     parent: {
-  #       type: :select,
-  #       options: { prompt: 'No Parent' },
-  #       finder: -> { Group.all.collect { |u| [u.name, u.id] } }
-  #     }
-  #   }
-  # end
+  def new_fields
+    model_attributes
+  end
 
   def includes
     [:web_hook_logs]
