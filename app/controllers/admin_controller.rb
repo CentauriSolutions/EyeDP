@@ -144,6 +144,9 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
   helper_method :edit_fields
 
+  def help_text(field_name); end
+  helper_method :help_text
+
   # Use callbacks to share common setup or constraints between actions.
   def set_model
     @model = model.find(params[:id])
