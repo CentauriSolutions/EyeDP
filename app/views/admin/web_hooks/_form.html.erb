@@ -18,20 +18,25 @@
           <%= form.label attribute %>
         </div>
         <div class="col-sm-10">
-          <%- text = help_text attribute %>
-          <%- case model.class.columns_hash[attribute].type %>
-          <%- when :boolean  %>
-            <%= form.check_box attribute, class: 'form-check' %>
-          <%- when :datetime%>
-            <%= form.date_field attribute, class: 'form-control' %>
-          <%- when :json %>
-            <%= form.text_area attribute, class: 'form-control' %>
+
+          <%- if model.class.columns_hash[attribute].nil? %>
+              <%= form.text_field attribute, class: 'form-control' %>
           <%- else %>
-            <%= form.text_field attribute, class: 'form-control' %>
-          <%- end %>
-          <%- if text %>
-            <small class="form-text text-muted"><%= text %></small>
-          <%- end %>
+            <%- case model.class.columns_hash[attribute].type %>
+            <%- when :boolean  %>
+              <%= form.check_box attribute, class: 'form-check' %>
+            <%- when :datetime%>
+              <%= form.date_field attribute, class: 'form-control' %>
+            <%- when :json %>
+              <%= form.text_area attribute, class: 'form-control' %>
+            <%- else %>
+              <%= form.text_field attribute, class: 'form-control' %>
+            <%- end %>
+            <%- end %>
+            <%- text = help_text attribute %>
+            <%- if text %>
+              <small class="form-text text-muted"><%= text %></small>
+            <%- end %>
         </div>
       </div>
     </div>

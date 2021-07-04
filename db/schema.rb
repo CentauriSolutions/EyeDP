@@ -268,6 +268,11 @@ ActiveRecord::Schema.define(version: 2021_07_04_060019) do
   create_table "web_hooks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.json "headers"
     t.json "template"
+    t.text "encrypted_url"
+    t.text "encrypted_url_iv"
+    t.text "encrypted_token"
+    t.text "encrypted_token_iv"
+    t.boolean "enable_ssl_verification", default: true
     t.integer "recent_failures", limit: 2, default: 0
     t.integer "backoff_count", limit: 2, default: 0
     t.datetime "disabled_until"

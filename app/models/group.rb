@@ -16,6 +16,8 @@
 #
 
 class Group < ApplicationRecord
+  extend Notifiable
+
   audited
 
   acts_as_tree order: 'name'
@@ -42,9 +44,11 @@ class Group < ApplicationRecord
   #  WHERE "group_permissions"."group_id" IN #{ancestors.pluck(:id) << id}' }
 
   has_many :user_groups, dependent: :destroy
-  has_many :users, through: :user_groups
+  has_many :users, through: :user_groups, dependent: :destroy
 
   has_many :custom_groupdata, dependent: :destroy
+
+  notify_for %i[create update destroy]
 
   def to_s
     name

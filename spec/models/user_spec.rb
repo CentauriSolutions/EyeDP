@@ -192,4 +192,59 @@ RSpec.describe User, type: :model do
   end
   it_behaves_like 'two_factor_authenticatable'
   it_behaves_like 'two_factor_backupable'
+
+  context 'webhooks' do
+    let(:create_webhook) { WebHook.create!(url: 'https://example.com', user_created_events: true) }
+    let(:update_webhook) { WebHook.create!(url: 'https://example.com', user_updated_events: true) }
+    let(:delete_webhook) { WebHook.create!(url: 'https://example.com', user_deleted_events: true) }
+
+    it 'queues a webhook on create' do
+      create_webhook
+      expect do
+        User.create!(email: 'test@example.com', username: 'test_user', password: 'test1234')
+      end.to change(NotificationSetupWorker.jobs, :size).by(1)
+    end
+
+    it 'queues a webhook on update' do
+      update_webhook
+      user
+      expect do
+        user.update!(username: 'testing')
+      end.to change(NotificationSetupWorker.jobs, :size).by(1)
+    end
+
+    it 'queues a webhook on delete' do
+      delete_webhook
+      user
+      expect do
+        user.destroy
+      end.to change(NotificationSetupWorker.jobs, :size).by(1)
+    end
+
+    context 'group membership' do
+      let(:create_webhook) { WebHook.create!(url: 'https://example.com', group_membership_created_events: true) }
+      let(:delete_webhook) { WebHook.create!(url: 'https://example.com', group_membership_deleted_events: true) }
+
+      it 'queues a webhook on group membership create' do
+        create_webhook
+        user
+        group
+        expect(user.groups).to eq []
+        expect do
+          user.groups << group
+          expect(user.groups).to eq [group]
+        end.to change(NotificationSetupWorker.jobs, :size).by(1)
+      end
+
+      it 'queues a webhook on group membership delete' do
+        delete_webhook
+        user.groups << group
+        expect(user.groups).to eq [group]
+        expect do
+          user.groups = []
+          expect(user.groups).to eq []
+        end.to change(NotificationSetupWorker.jobs, :size).by(1)
+      end
+    end
+  end
 end
