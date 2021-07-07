@@ -35,9 +35,9 @@ RSpec.describe Group, type: :model do
   end
 
   context 'webhooks' do
-    let(:create_webhook) { WebHook.create!(url: 'https://example.com', user_created_events: true) }
-    let(:update_webhook) { WebHook.create!(url: 'https://example.com', user_updated_events: true) }
-    let(:delete_webhook) { WebHook.create!(url: 'https://example.com', user_deleted_events: true) }
+    let(:create_webhook) { WebHook.create!(url: 'https://example.com', user_create_events: true) }
+    let(:update_webhook) { WebHook.create!(url: 'https://example.com', user_update_events: true) }
+    let(:delete_webhook) { WebHook.create!(url: 'https://example.com', user_destroy_events: true) }
 
     it 'queues a webhook on create' do
       create_webhook

@@ -254,7 +254,6 @@ ActiveRecord::Schema.define(version: 2021_07_04_060019) do
     t.uuid "web_hook_id", null: false
     t.text "trigger"
     t.text "url"
-    t.text "request_headers"
     t.text "request_data"
     t.text "response_headers"
     t.text "response_data"
@@ -276,14 +275,14 @@ ActiveRecord::Schema.define(version: 2021_07_04_060019) do
     t.integer "recent_failures", limit: 2, default: 0
     t.integer "backoff_count", limit: 2, default: 0
     t.datetime "disabled_until"
-    t.boolean "user_created_events", default: false
-    t.boolean "user_updated_events", default: false
-    t.boolean "user_deleted_events", default: false
-    t.boolean "group_created_events", default: false
-    t.boolean "group_updated_events", default: false
-    t.boolean "group_deleted_events", default: false
-    t.boolean "group_membership_created_events", default: false
-    t.boolean "group_membership_deleted_events", default: false
+    t.boolean "user_create_events", default: false
+    t.boolean "user_update_events", default: false
+    t.boolean "user_destroy_events", default: false
+    t.boolean "group_create_events", default: false
+    t.boolean "group_update_events", default: false
+    t.boolean "group_destroy_events", default: false
+    t.boolean "group_membership_create_events", default: false
+    t.boolean "group_membership_destroy_events", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

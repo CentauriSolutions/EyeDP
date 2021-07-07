@@ -169,4 +169,6 @@ class Setting < ApplicationRecord
   field :admin_welcome_email_template, default: '', type: :string
 
   field :html_title_base, default: 'EyeDP', type: :string
+
+  field :webhook_timeout, default: 60, type: :integer
 end

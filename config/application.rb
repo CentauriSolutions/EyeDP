@@ -43,11 +43,13 @@ module EyedP
 
     config.autoload_paths += %W[
       #{config.root}/app/workers
+      #{config.root}/app/wervices
       #{config.root}/lib
     ]
 
     config.eager_load_paths += %W[
       #{config.root}/app/workers
+      #{config.root}/app/wervices
       #{config.root}/lib
     ]
 

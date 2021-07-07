@@ -32,13 +32,33 @@
       "note": "Setting.home_template is only configurable by an admin"
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "758ccf9becbd15fe137b40d2ac5592ff9a17b57fecf2b2b184f17f09120143e4",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/workers/notification_setup_worker.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "WebHook.enabled.where(\"#{JSON.parse(event, :object_class => (NotificationEvent)).model_type}_#{JSON.parse(event, :object_class => (NotificationEvent)).event_type}_events\" => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "NotificationSetupWorker",
+        "method": "perform"
+      },
+      "user_input": "JSON.parse(event, :object_class => (NotificationEvent)).model_type",
+      "confidence": "Medium",
+      "note": "A NotificationEvent is only created in code, via an admin action (creating, updating ,or deleting certain models). The specific fields noted (model_type and event_type) are generated from the model's class name and the lifeclcye callback name."
+    },
+    {
       "warning_type": "Mass Assignment",
       "warning_code": 70,
       "fingerprint": "86776df2032c54b0deebbb7b7a31742c34c687854582b7dafa13348fac94fdd3",
       "check_name": "MassAssignment",
       "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
       "file": "app/controllers/profile/additional_properties_controller.rb",
-      "line": 26,
+      "line": 30,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:custom_data).permit!",
       "render_path": null,
@@ -120,7 +140,7 @@
       "check_name": "MassAssignment",
       "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
       "file": "app/controllers/admin/groups_controller.rb",
-      "line": 76,
+      "line": 87,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:custom_data).permit!",
       "render_path": null,
@@ -140,7 +160,7 @@
       "check_name": "MassAssignment",
       "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
       "file": "app/controllers/admin/users_controller.rb",
-      "line": 101,
+      "line": 115,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:custom_data).permit!",
       "render_path": null,
@@ -174,6 +194,6 @@
       "note": "This is an admin only controller, and is restricted by a whitelist of acceptable options"
     }
   ],
-  "updated": "2020-12-09 14:50:51 +0100",
-  "brakeman_version": "4.10.0"
+  "updated": "2021-07-07 21:42:25 +0200",
+  "brakeman_version": "5.0.1"
 }

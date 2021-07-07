@@ -14,16 +14,16 @@ class CreateWebhooks < ActiveRecord::Migration[6.1]
       t.integer :backoff_count, default: 0, nil: false, limit: 2
       t.timestamp :disabled_until
 
-      t.boolean :user_created_events, default: false, nil: false
-      t.boolean :user_updated_events, default: false, nil: false
-      t.boolean :user_deleted_events, default: false, nil: false
+      t.boolean :user_create_events, default: false, nil: false
+      t.boolean :user_update_events, default: false, nil: false
+      t.boolean :user_destroy_events, default: false, nil: false
 
-      t.boolean :group_created_events, default: false, nil: false
-      t.boolean :group_updated_events, default: false, nil: false
-      t.boolean :group_deleted_events, default: false, nil: false
+      t.boolean :group_create_events, default: false, nil: false
+      t.boolean :group_update_events, default: false, nil: false
+      t.boolean :group_destroy_events, default: false, nil: false
 
-      t.boolean :group_membership_created_events, default: false, nil: false
-      t.boolean :group_membership_deleted_events, default: false, nil: false
+      t.boolean :group_membership_create_events, default: false, nil: false
+      t.boolean :group_membership_destroy_events, default: false, nil: false
 
       t.timestamps
     end
