@@ -194,9 +194,9 @@ RSpec.describe User, type: :model do
   it_behaves_like 'two_factor_backupable'
 
   context 'webhooks' do
-    let(:create_webhook) { WebHook.create!(url: 'https://example.com', user_created_events: true) }
-    let(:update_webhook) { WebHook.create!(url: 'https://example.com', user_updated_events: true) }
-    let(:delete_webhook) { WebHook.create!(url: 'https://example.com', user_deleted_events: true) }
+    let(:create_webhook) { WebHook.create!(url: 'https://example.com', user_create_events: true) }
+    let(:update_webhook) { WebHook.create!(url: 'https://example.com', user_update_events: true) }
+    let(:delete_webhook) { WebHook.create!(url: 'https://example.com', user_destroy_events: true) }
 
     it 'queues a webhook on create' do
       create_webhook
@@ -222,8 +222,8 @@ RSpec.describe User, type: :model do
     end
 
     context 'group membership' do
-      let(:create_webhook) { WebHook.create!(url: 'https://example.com', group_membership_created_events: true) }
-      let(:delete_webhook) { WebHook.create!(url: 'https://example.com', group_membership_deleted_events: true) }
+      let(:create_webhook) { WebHook.create!(url: 'https://example.com', group_membership_create_events: true) }
+      let(:delete_webhook) { WebHook.create!(url: 'https://example.com', group_membership_destroy_events: true) }
 
       it 'queues a webhook on group membership create' do
         create_webhook

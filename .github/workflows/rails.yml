@@ -74,6 +74,10 @@ jobs:
           --health-interval 1s
           --health-timeout 1s
           --health-retries 10
+      redis:
+        image: redis:alpine
+        ports: ["6379:6379"]
+        options: --entrypoint redis-server
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

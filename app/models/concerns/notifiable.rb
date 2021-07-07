@@ -9,13 +9,9 @@ module Notifiable
                 else
                   model.attributes
                 end
+
         NotificationSetupWorker.perform_async(
-          NotificationEvent.new(
-            model_type: model.class.name,
-            model_id: model.id,
-            event_type: 'create',
-            attributes: attrs
-          )
+          NotificationEvent.new(model.class.name.downcase, model.id, action, attrs).to_json
         )
       end
     end

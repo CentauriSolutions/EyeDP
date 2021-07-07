@@ -4,7 +4,6 @@ class CreateWebHookLogs < ActiveRecord::Migration[6.1]
       t.references :web_hook, null: false, foreign_key: true, type: :uuid
       t.text :trigger
       t.text :url
-      t.text :request_headers
       t.text :request_data
       t.text :response_headers
       t.text :response_data
