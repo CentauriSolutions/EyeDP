@@ -13,7 +13,7 @@ class BasicAuthController < ApplicationController
     # fakse, but timed out causes ut ti redirect to the login page.
     if Setting.session_timeout_in.present?
       last_session_activity = session.try(:[], 'warden.user.user.session').try(:[], 'last_request_at')
-      head 401 and return if \
+      head :unauthorized and return if \
         last_session_activity.present? && \
         Time.at(last_session_activity).utc < Time.current - User.timeout_in.seconds
     end
@@ -34,10 +34,10 @@ class BasicAuthController < ApplicationController
         response.set_header('EyeDP-Email', current_user.email)
         head :ok
       else
-        head 403
+        head :forbidden
       end
     else
-      head 401
+      head :unauthorized
     end
   end
   # rubocop:enable Metrics/AbcSize
