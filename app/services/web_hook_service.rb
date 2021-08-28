@@ -77,7 +77,7 @@ class WebHookService
   def build_headers
     @build_headers ||= {
       'Content-Type' => 'application/json',
-        'User-Agent' => 'EyeDP/1.0'
+      'User-Agent' => 'EyeDP/1.0'
     }.tap do |hash|
       hash['EyeDP-Token'] = hook.token if hook.token.present?
     end
