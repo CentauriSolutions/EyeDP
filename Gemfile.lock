@@ -359,12 +359,10 @@ GEM
     ruby-graphviz (1.2.5)
       rexml
     ruby-progressbar (1.11.0)
-    saml_idp (0.14.0)
-      activesupport (>= 5.2)
+    saml_idp (0.12.0)
+      activesupport (>= 3.2)
       builder (>= 3.0)
       nokogiri (>= 1.6.2)
-      rexml
-      xmlenc (>= 0.7.1)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -438,13 +436,6 @@ GEM
     will_paginate (3.3.1)
     will_paginate-bootstrap4 (0.2.2)
       will_paginate (~> 3.0, >= 3.0.0)
-    xmlenc (0.8.0)
-      activemodel (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      nokogiri (>= 1.6.0, < 2.0.0)
-      xmlmapper (>= 0.7.3)
-    xmlmapper (0.8.1)
-      nokogiri (~> 1.11)
     zeitwerk (2.4.2)
 
 PLATFORMS
