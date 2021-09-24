@@ -1,5 +1,8 @@
 <ul class="nav flex-column">
   <%= nav_link "#{fa_icon("dashboard")} Dashboard".html_safe, admin_dashboard_path %>
+  <%- if current_user.admin? %>
+    <%= nav_link "#{fa_icon("key")} API Keys".html_safe, admin_api_keys_path %>
+  <%- end %>
   <%- if current_user.admin? || current_user.manager? %>
   <%= nav_link "#{fa_icon("user")} Users".html_safe, admin_users_path %>
   <%= nav_link "#{fa_icon("users")} Groups".html_safe, admin_groups_path %>

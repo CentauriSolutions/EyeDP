@@ -1,0 +1,55 @@
+<h2><%= @model.class.name %> <%= @model %></h2>
+<%= render partial: 'sub_heading' %>
+<div class="row">
+  <%= link_to 'Edit', ['edit', :admin, @model] %> |
+  <%= link_to 'Back', [:admin, @model.class] %> |
+   <%= link_to 'Delete', [:admin, @model], method: :delete, data: { confirm: 'Are you sure?' } %>
+</div>
+
+<div class="row">
+  <dl>
+      <dt>Name</dt>
+      <dd>
+        <%= @model.name %>
+      </dd>
+
+      <dt>API Key</dt>
+      <dd>
+        <code><%= @model.key %></code>
+      </dd>
+
+      <dt>Description</dt>
+      <dd>
+        <%= @model.description %>
+      </dd>
+
+      <%- if @model.write_custom_data? || @model.read_custom_data? %>
+        <dt>Custom Data</dt>
+        <dd>
+          <ul>
+            <%- for data in @model.custom_data %>
+              <li><%= data %></li>
+            <%- end %>
+          </ul>
+        </dd>
+      <%- end %>
+
+      <dt>Capabilities</dt>
+      <dd>
+        <ul>
+          <%- for cap in @model.capabilities %>
+            <li><%= cap %></li>
+          <%- end %>
+        </ul>
+      </dd>
+  </dl>
+</div>
+
+<% begin %>
+  <hr />
+  <div class="row">
+    <%= render partial: 'show' %>
+  </div>
+<% rescue ActionView::MissingTemplate %>
+<% end %>
+
