@@ -24,7 +24,7 @@
 <p id="error" class="d-none"></p>
 <%= form_tag send("new_user_session_path"), method: 'post' do %>
   <%= hidden_field_tag 'user[device_response]' %>
-  <%= hidden_field_tag 'user[remember_me]', resource_params.fetch(:remember_me, 0) %>''
+  <%= hidden_field_tag 'user[remember_me]', resource_params.fetch(:remember_me, 0) %>
   <%- if redirect_to %>
     <%= hidden_field_tag 'redirect_to', redirect_to %>
   <%- end %>
