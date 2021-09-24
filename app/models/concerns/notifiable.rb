@@ -9,9 +9,13 @@ module Notifiable
                 else
                   model.attributes
                 end
-
+        name = if model.respond_to?(:notifiable_name)
+                 model.notifiable_name
+               else
+                 model.class.name.downcase
+               end
         NotificationSetupWorker.perform_async(
-          NotificationEvent.new(model.class.name.downcase, model.id, action, attrs).to_json
+          NotificationEvent.new(name, model.id, action, attrs).to_json
         )
       end
     end

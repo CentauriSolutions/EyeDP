@@ -36,4 +36,8 @@ class UserGroup < ApplicationRecord
   def send_welcome_email
     UserMailer.group_welcome_email(user, group).deliver_later if group.welcome_email.present?
   end
+
+  def notifiable_name
+    'group_membership'
+  end
 end
