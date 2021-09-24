@@ -6,12 +6,12 @@ class Admin::WebHooksController < AdminController
   def model_attributes
     f = %w[headers template url token disabled_until]
     %w[user group].each do |rel|
-      f << "#{rel}_created_events"
-      f << "#{rel}_updated_events"
-      f << "#{rel}_deleted_events"
+      f << "#{rel}_create_events"
+      f << "#{rel}_update_events"
+      f << "#{rel}_destroy_events"
     end
-    f << 'group_membership_created_events'
-    f << 'group_membership_deleted_events'
+    f << 'group_membership_create_events'
+    f << 'group_membership_destroy_events'
     f
   end
 
