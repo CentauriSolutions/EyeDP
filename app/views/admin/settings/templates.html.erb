@@ -13,8 +13,16 @@
     <textarea name="setting[admin_reset_email_template]" class="form-control" ><%= Setting.admin_reset_email_template %></textarea>
   </div>
   <div class="form-group">
+    <label for="settings[admin_reset_email_template_plaintext]">Password reset plaintext email template</label>
+    <textarea name="setting[admin_reset_email_template_plaintext]" class="form-control" ><%= Setting.admin_reset_email_template_plaintext %></textarea>
+  </div>
+  <div class="form-group">
     <label for="settings[admin_welcome_email_template]">Admin created user welcome template</label>
     <textarea name="setting[admin_welcome_email_template]" class="form-control" ><%= Setting.admin_welcome_email_template %></textarea>
+  </div>
+  <div class="form-group">
+    <label for="settings[admin_welcome_email_template_plaintext]">Admin created user welcome plaintext template</label>
+    <textarea name="setting[admin_welcome_email_template_plaintext]" class="form-control" ><%= Setting.admin_welcome_email_template_plaintext %></textarea>
   </div>
   <button class="btn btn-primary">Save</button>
 <%- end %>

@@ -1,0 +1,11 @@
+<%- if @text_template %>
+<%- vars = template_variables(@user) %>
+<%- vars['reset_link'] = edit_password_url(@user, reset_password_token: @token) %>
+<%= @text_template.render(vars) %>
+<%- else %>
+Hello <%= @user.email %>!
+
+An administrator of <%= root_url %> has created an account for you. To login, you will first need to set your passsword which can be done through the link below.</p>
+
+Update your password: <%= edit_password_url(@user, reset_password_token: @token) %>
+<%- end %>

@@ -16,6 +16,9 @@ class UserMailer < ApplicationMailer
     if Setting.admin_reset_email_template.present?
       @template = Liquid::Template.parse(Setting.admin_reset_email_template)
     end
+    if Setting.admin_reset_email_template_plaintext.present?
+      @text_template = Liquid::Template.parse(Setting.admin_reset_email_template_plaintext)
+    end
     mail(to: @user.email,
          subject: 'Password Changed')
   end
@@ -25,6 +28,9 @@ class UserMailer < ApplicationMailer
     @token = token
     if Setting.admin_welcome_email_template.present?
       @template = Liquid::Template.parse(Setting.admin_welcome_email_template)
+    end
+    if Setting.admin_welcome_email_template_plaintext.present?
+      @text_template = Liquid::Template.parse(Setting.admin_reset_email_template_plaintext)
     end
     mail(to: @user.email,
          subject: 'Your account has been created')

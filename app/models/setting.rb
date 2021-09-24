@@ -166,7 +166,9 @@ class Setting < ApplicationRecord
   field :permanent_email, type: :boolean, default: true
 
   field :admin_reset_email_template, default: '', type: :string
+  field :admin_reset_email_template_plaintext, default: '', type: :string
   field :admin_welcome_email_template, default: '', type: :string
+  field :admin_welcome_email_template_plaintext, default: '', type: :string
 
   field :html_title_base, default: 'EyeDP', type: :string
 

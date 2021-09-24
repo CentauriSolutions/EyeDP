@@ -119,6 +119,8 @@ group :development do
   gem 'capistrano-rails',   require: false
   gem 'capistrano-rvm',     require: false
   gem 'ed25519',            require: false
+
+  gem 'mailcatcher'
 end
 
 group :test do
