@@ -17,6 +17,7 @@
 
 class Group < ApplicationRecord
   extend Notifiable
+  include Notifiable
 
   audited
 
@@ -48,7 +49,11 @@ class Group < ApplicationRecord
 
   has_many :custom_groupdata, dependent: :destroy
 
-  notify_for %i[create update destroy]
+  notify_for %i[create update destroy], check: :notify_if
+
+  def notify_if
+    saved_changes.keys.reject { |k| %w[updated_at].include?(k) }.any?
+  end
 
   def to_s
     name
