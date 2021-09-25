@@ -23,6 +23,7 @@
 
 class UserGroup < ApplicationRecord
   extend Notifiable
+  include Notifiable
 
   audited
 

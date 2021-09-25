@@ -213,6 +213,22 @@ RSpec.describe User, type: :model do
       end.to change(NotificationSetupWorker.jobs, :size).by(1)
     end
 
+    it 'does not queue a webhook on update of updated_at' do
+      update_webhook
+      user
+      expect do
+        user.update!(updated_at: Time.zone.now)
+      end.not_to change(NotificationSetupWorker.jobs, :size)
+    end
+
+    it 'does not queue a webhook on update of last_activity_at' do
+      update_webhook
+      user
+      expect do
+        user.update!(last_activity_at: Time.zone.now)
+      end.not_to change(NotificationSetupWorker.jobs, :size)
+    end
+
     it 'queues a webhook on delete' do
       delete_webhook
       user

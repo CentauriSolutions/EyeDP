@@ -54,6 +54,14 @@ RSpec.describe Group, type: :model do
       end.to change(NotificationSetupWorker.jobs, :size).by(1)
     end
 
+    it 'does not queue a webhook on update of updated_at' do
+      update_webhook
+      root_group
+      expect do
+        root_group.update!(updated_at: Time.zone.now)
+      end.not_to change(NotificationSetupWorker.jobs, :size)
+    end
+
     it 'queues a webhook on delete' do
       delete_webhook
       root_group

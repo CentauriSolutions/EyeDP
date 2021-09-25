@@ -26,6 +26,7 @@
 
 class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   extend Notifiable
+  include Notifiable
 
   audited
 
@@ -69,7 +70,13 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   before_validation :ensure_password
 
-  notify_for %i[create update destroy]
+  notify_for %i[create update destroy], check: :notify_if
+
+  def notify_if
+    saved_changes.keys.reject do |k|
+      %w[updated_at last_activity_at].include?(k)
+    end.any?
+  end
 
   def notification_attributes
     {
