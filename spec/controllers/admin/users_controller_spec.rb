@@ -156,6 +156,22 @@ RSpec.describe Admin::UsersController, type: :controller do
           expect(response.body).not_to include(%(type="checkbox" value="#{admin_group.id}" name="user[group_ids][]"))
           expect(response.body).to include(%(type="checkbox" value="#{manager_group.id}" name="user[group_ids][]"))
         end
+
+        it "shows a user's custom attributes" do
+          t = CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean')
+          manager.custom_userdata << CustomUserdatum.create(custom_userdata_type: t, value: true)
+
+          # get self
+          get(:edit, params: { id: manager.id })
+          # The checkbox below has a value of true, and is checked
+          expect(response.body).to include('id="custom_data_Has_pets" value="true"')
+          # get other
+          get(:edit, params: { id: user.id })
+          # The hiddn field below has a value of false, allowing us to set an empty checkbox
+          expect(response.body).to include(
+            'type="hidden" name="custom_data[Has pets]" id="custom_data_Has_pets" value="false"'
+          )
+        end
       end
     end
 
@@ -250,6 +266,22 @@ RSpec.describe Admin::UsersController, type: :controller do
             expect(response.status).to eq(200)
             expect(response.body).to include(%(type="checkbox" value="#{admin_group.id}" name="user[group_ids][]"))
             expect(response.body).to include(%(type="checkbox" value="#{manager_group.id}" name="user[group_ids][]"))
+          end
+
+          it "shows a user's custom attributes" do
+            t = CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean')
+            admin.custom_userdata << CustomUserdatum.create(custom_userdata_type: t, value: true)
+
+            # get self
+            get(:edit, params: { id: admin.id })
+            # The checkbox below has a value of true, and is checked
+            expect(response.body).to include('id="custom_data_Has_pets" value="true"')
+            # get other
+            get(:edit, params: { id: user.id })
+            # The hiddn field below has a value of false, allowing us to set an empty checkbox
+            expect(response.body).to include(
+              'type="hidden" name="custom_data[Has pets]" id="custom_data_Has_pets" value="false"'
+            )
           end
         end
         it 'can expire a user' do
