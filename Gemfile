@@ -64,10 +64,13 @@ gem 'scout_apm'
 # gem 'ledermann-rails-settings'
 # gem 'rails-settings-cached'
 
-gem 'peek'
-gem 'peek-gc'
-gem 'peek-performance_bar'
-gem 'peek-pg'
+# profiling
+gem 'rack-mini-profiler'
+# For memory profiling
+gem 'memory_profiler'
+# For call-stack profiling flamegraphs
+gem 'stackprof'
+
 gem 'tipsy-rails'
 
 # SAML the things!
