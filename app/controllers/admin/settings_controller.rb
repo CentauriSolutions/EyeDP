@@ -41,6 +41,7 @@ class Admin::SettingsController < AdminController
   def setting_params # rubocop:disable Metrics/MethodLength
     params.fetch(:setting, {}).permit(
       :idp_base, :html_title_base,
+      :profiler_enabled,
       :devise_reset_password_within,
       :session_timeout_in,
       :saml_certificate, :saml_key,

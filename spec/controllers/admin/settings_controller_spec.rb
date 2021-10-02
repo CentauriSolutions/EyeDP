@@ -131,6 +131,18 @@ RSpec.describe Admin::SettingsController, type: :controller do
           expect(Setting.registration_enabled).to be false
         end
 
+        it 'can enable profiling' do
+          Setting.profiler_enabled = false
+          post(:update, params: { setting: { profiler_enabled: 'true' } })
+          expect(Setting.profiler_enabled).to be true
+        end
+
+        it 'can disable profiling' do
+          Setting.profiler_enabled = true
+          post(:update, params: { setting: { profiler_enabled: 'false' } })
+          expect(Setting.profiler_enabled).to be false
+        end
+
         it 'can set password reset template' do
           post(:update, params: { setting: { admin_reset_email_template: 'Password was reset!' } })
           expect(Setting.admin_reset_email_template).to eq 'Password was reset!'

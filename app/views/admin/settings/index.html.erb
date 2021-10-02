@@ -38,7 +38,14 @@
         <p class="small">How many hours should an inactive session last. Empty disables this feature.</p>
       </td>
     </tr>
-    <!-- Logo settings -->
+    <tr>
+      <td>Enable Profiler for Admins</td>
+      <td>
+        <% # The hidden field below allows sending a false value if the checkbox is empty (false) %>
+        <input type="hidden" name="setting[profiler_enabled]" value="false" />
+        <input type="checkbox" name="setting[profiler_enabled]" class="form-control" <% if Setting.profiler_enabled %>checked <% end %> value="true" />
+      </td>
+    </tr>
   </table>
   <button class="btn btn-primary">Save</button>
 <%- end %>

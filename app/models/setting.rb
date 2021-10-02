@@ -173,4 +173,6 @@ class Setting < ApplicationRecord
   field :html_title_base, default: 'EyeDP', type: :string
 
   field :webhook_timeout, default: 60, type: :integer
+
+  field :profiler_enabled, default: false, type: :boolean
 end

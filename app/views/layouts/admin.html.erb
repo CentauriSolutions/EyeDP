@@ -17,7 +17,6 @@
     <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
   <body>
-    <%= render 'peek/bar' %>
     <header>
       <%= render 'layouts/navigation' %>
     </header>
@@ -35,6 +34,5 @@
     </main>
     <%= javascript_include_tag 'application' %>
     <%= yield :charts_js %>
-    <%= javascript_tag "$('#peek').parent().addClass('peek-enabled');" %>
   </body>
 </html>

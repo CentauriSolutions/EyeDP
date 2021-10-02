@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class BasicAuthController < ApplicationController
+  skip_before_action :authorize_rack_mini_profiler
+
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/CyclomaticComplexity

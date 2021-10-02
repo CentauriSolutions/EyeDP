@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
 
   after_action :set_useragent_and_ip_in_session
   before_action :set_locale
+  before_action :authorize_rack_mini_profiler
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -27,8 +28,8 @@ class ApplicationController < ActionController::Base
     request.env['omniauth.origin'] || redirect || stored_location_for(resource) || root_url
   end
 
-  def peek_enabled?
-    super || current_user&.admin?
+  def authorize_rack_mini_profiler
+    Rack::MiniProfiler.authorize_request if current_user&.admin? && Setting.profiler_enabled
   end
 
   # U2F (universal 2nd factor) devices need a unique identifier for the application
