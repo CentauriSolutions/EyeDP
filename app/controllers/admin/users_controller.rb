@@ -2,13 +2,19 @@
 
 class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLength
   def show
+    @reset_token = session[:reset_token]
+    session[:reset_token] = nil
     super
     @logins = @model.logins.includes(:service_provider).order(created_at: :desc).limit(50)
   end
 
   def create
     super
-    @model.send_admin_welcome_email if @model.persisted?
+    if params[:send_welcome_email]
+      @model.send_admin_welcome_email
+    else
+      session[:reset_token] = @model.send(:set_reset_password_token)
+    end
   end
 
   def update

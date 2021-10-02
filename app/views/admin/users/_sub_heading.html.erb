@@ -1,7 +1,7 @@
 <%- if @model.expired? %>
   <div class="alert alert-warning" role="alert">
-      <%= content_tag :div, "This user is expired" %>
-    </div>
+    <%= content_tag :div, "This user is expired" %>
+  </div>
 <%- end %>
 <div class="col-sm-12">
   <%= form_with(model: [:admin, @model], local: true, class: 'form-inline') do |form| %>
@@ -10,3 +10,12 @@
     <%= render partial: 'toggle_user', locals: { model: @model, form: form } %>
   <%- end %>
 </div>
+<%- if @reset_token %>
+  <%- url = edit_password_url(@model, reset_password_token: @reset_token) %>
+  <div class="alert alert-info" role="alert">
+    <%= content_tag :div do %>
+      <p>This link will only be shown once!</p>
+      <p>Password reset link: <%= url %></p>
+    <%- end %>
+  </div>
+<%- end %>

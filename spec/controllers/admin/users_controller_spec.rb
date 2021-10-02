@@ -82,9 +82,21 @@ RSpec.describe Admin::UsersController, type: :controller do
 
       it 'can create a user' do
         expect(User.where(email: 'testing@localhost').count).to eq 0
-        post(:create, params: { user: { email: 'testing@localhost', username: 'testing-name' } })
+        post(:create,
+             params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
         expect(response.status).to eq(302)
         expect(User.where(email: 'testing@localhost').count).to eq 1
+      end
+
+      it 'can create a user and retrieve reset link' do
+        expect do
+          perform_enqueued_jobs do
+            expect(User.where(email: 'testing@localhost').count).to eq 0
+            post(:create, params: { user: { email: 'testing@localhost', username: 'testing-name' } })
+            expect(response.status).to eq(302)
+            expect(User.where(email: 'testing@localhost').count).to eq 1
+          end
+        end.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
 
       it 'can update a user' do
@@ -187,10 +199,21 @@ RSpec.describe Admin::UsersController, type: :controller do
         it 'can create a user' do
           expect do
             perform_enqueued_jobs do
-              post(:create, params: { user: { email: 'test@example.com', username: 'test' } })
+              post(:create, params: { send_welcome_email: true, user: { email: 'test@example.com', username: 'test' } })
               expect(response.status).to eq(302)
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        it 'can create a user and retrieve reset link' do
+          expect do
+            perform_enqueued_jobs do
+              expect(User.where(email: 'testing@localhost').count).to eq 0
+              post(:create, params: { user: { email: 'testing@localhost', username: 'testing-name' } })
+              expect(response.status).to eq(302)
+              expect(User.where(email: 'testing@localhost').count).to eq 1
+            end
+          end.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
 
