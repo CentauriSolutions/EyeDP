@@ -19,35 +19,68 @@ RSpec.describe OauthApplicationsController, type: :controller do
       sign_in(user)
     end
 
-    describe 'Existing Login' do
-      it 'updates user activity' do
-        start = user.last_activity_at
-        get :create, params: params
-        user.reload
-        expect(user.last_activity_at).not_to eq(start)
+    context 'with sudo enabled' do
+      render_views
+      before do
+        Setting.sudo_for_sso = true
+        Setting.sudo_enabled = true
       end
+      after do
+        Setting.sudo_for_sso = true
+        Setting.sudo_enabled = true
+      end
+      describe 'New login' do
+        it 'updates user activity' do
+          start = user.last_activity_at
+          get :create, params: params
+          user.reload
+          expect(user.last_activity_at).not_to eq(start)
+        end
 
-      it 'records the login' do
-        # @request.env['devise.mapping'] = Devise.mappings[:user]
-        get :create, params: params
-        expect(response.status).to eq(302)
-        expect(Login.count).to eq 1
+        it 'records the login' do
+          # @request.env['devise.mapping'] = Devise.mappings[:user]
+          get :create, params: params
+          expect(response.status).to eq(200)
+          expect(Login.count).to eq 0
+          expect(response.body).to include 'Confirm password to continue'
+        end
       end
     end
+    context 'with sudo disabled' do
+      before do
+        Setting.sudo_for_sso = false
+        Setting.sudo_enabled = false
+      end
+      describe 'Existing Login' do
+        it 'updates user activity' do
+          start = user.last_activity_at
+          get :create, params: params
+          user.reload
+          expect(user.last_activity_at).not_to eq(start)
+        end
 
-    describe 'New login' do
-      it 'updates user activity' do
-        start = user.last_activity_at
-        get :create, params: params
-        user.reload
-        expect(user.last_activity_at).not_to eq(start)
+        it 'records the login' do
+          # @request.env['devise.mapping'] = Devise.mappings[:user]
+          get :create, params: params
+          expect(response.status).to eq(302)
+          expect(Login.count).to eq 1
+        end
       end
 
-      it 'records the login' do
-        # @request.env['devise.mapping'] = Devise.mappings[:user]
-        get :create, params: params
-        expect(response.status).to eq(302)
-        expect(Login.count).to eq 1
+      describe 'New login' do
+        it 'updates user activity' do
+          start = user.last_activity_at
+          get :create, params: params
+          user.reload
+          expect(user.last_activity_at).not_to eq(start)
+        end
+
+        it 'records the login' do
+          # @request.env['devise.mapping'] = Devise.mappings[:user]
+          get :create, params: params
+          expect(response.status).to eq(302)
+          expect(Login.count).to eq 1
+        end
       end
     end
   end

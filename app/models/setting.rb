@@ -158,6 +158,10 @@ class Setting < ApplicationRecord
   field :devise_reset_password_within, type: :time, default: 7.days.iso8601
   field :session_timeout_in, type: :time
 
+  field :sudo_enabled, default: false, type: :boolean
+  field :sudo_session_duration, type: :time
+  field :sudo_for_sso, default: false, type: :boolean
+
   field :home_template, default: '', type: :string
   field :registered_home_template, default: '', type: :string
 

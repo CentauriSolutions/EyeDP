@@ -4,6 +4,8 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   # before_action :authenticate_user!
   before_action :ensure_user_is_authorized!
   before_action :set_model, only: %i[show edit update destroy]
+  sudo
+
   # GET /admin/#{model}
   # GET /admin/#{model}.json
   def index

@@ -1,1 +1,9 @@
 en:
+  sudo:
+    page_header: Confirm password to continue
+    button: Confirm password
+    password: Password
+    forgot_pass: Forgot your password?
+    invalid_pass: Invalid password
+    tip: |-
+      We won’t ask for your password again for <i>%{session_duration}</i>.

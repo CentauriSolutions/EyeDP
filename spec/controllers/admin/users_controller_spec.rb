@@ -38,6 +38,29 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(response.status).to eq(200)
       end
 
+      context 'with sudo enabled' do
+        render_views
+        before do
+          Setting.sudo_enabled = true
+          @controller.reset_sudo_session!
+        end
+        after do
+          Setting.sudo_enabled = false
+        end
+        it 'Asks for password confirmation' do
+          get :index
+          expect(response.status).to eq(200)
+          expect(response.body).to include 'Confirm password to continue'
+        end
+
+        it 'Works with a sudo session' do
+          @controller.extend_sudo_session!
+          get :index
+          expect(response.status).to eq(200)
+          expect(response.body).not_to include 'Confirm password to continue'
+        end
+      end
+
       it 'can add a user to a group' do
         expect(user.groups.pluck(:name)).to eq []
         post(:update, params: { id: user.id, user: { group_ids: [user_group.id] } })
@@ -196,6 +219,28 @@ RSpec.describe Admin::UsersController, type: :controller do
         it 'Shows the index page' do
           get :index
           expect(response.status).to eq(200)
+        end
+
+        context 'with sudo enabled' do
+          before do
+            Setting.sudo_enabled = true
+            @controller.reset_sudo_session!
+          end
+          after do
+            Setting.sudo_enabled = false
+          end
+          it 'Asks for password confirmation' do
+            get :index
+            expect(response.status).to eq(200)
+            expect(response.body).to include 'Confirm password to continue'
+          end
+
+          it 'Works with a sudo session' do
+            @controller.extend_sudo_session!
+            get :index
+            expect(response.status).to eq(200)
+            expect(response.body).not_to include 'Confirm password to continue'
+          end
         end
 
         it 'shows if a user has two factor enabled' do

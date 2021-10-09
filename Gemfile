@@ -85,6 +85,8 @@ gem 'attr_encrypted', '~> 3.1.0'
 gem 'httparty'
 gem 'sidekiq'
 
+gem 'sudo_rails'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
