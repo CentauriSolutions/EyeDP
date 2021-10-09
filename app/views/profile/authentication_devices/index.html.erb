@@ -42,6 +42,8 @@
       <%= link_to _('Enable TOTP 2FA'), new_user_2fa_registration_path, class: 'btn btn-primary' %>
     <%- end %>
     <%= link_to t('devise.registrations.register_u2f'), new_user_fido_usf_registration_path, class: "btn btn-primary" %>
-    <%= link_to _('Regenerate recovery codes'), user_2fa_codes_path, class: "btn btn-danger" %>
+    <%= form_tag user_2fa_codes_path, {style: 'display: inline-block', method: :post} do |f| %>
+      <%= submit_tag _('Regenerate recovery codes'), class: 'btn btn-danger' %>
+    <% end %>
   </div>
 </div>
