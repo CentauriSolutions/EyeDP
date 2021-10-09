@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OauthApplicationsController < Doorkeeper::AuthorizationsController
+  sudo if: -> { Setting.sudo_for_sso }
+
   def new
     super
     Login.create(

@@ -39,6 +39,29 @@
       </td>
     </tr>
     <tr>
+      <td>Enable Sudo mode</td>
+      <td>
+        <input type="hidden" name="setting[sudo_enabled]" value="false" />
+        <input type="checkbox" name="setting[sudo_enabled]" class="form-control" <% if Setting.sudo_enabled %>checked <% end %> value="true" />
+        <p class="small">Sudo mode enables password confirmation for sensitive actions</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Sudo Mode Timeout</td>
+      <td>
+        <input type="text" name="setting[sudo_session_duration]" class="form-control" value="<%= Setting.sudo_session_duration.parts[:minutes] if Setting.sudo_session_duration %>"/>
+        <p class="small">How many minutes should elevated priveleges last?</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Sudo mode for SSO</td>
+      <td>
+        <input type="hidden" name="setting[sudo_for_sso]" value="false" />
+        <input type="checkbox" name="setting[sudo_for_sso]" class="form-control" <% if Setting.sudo_for_sso %>checked <% end %> value="true" />
+        <p class="small">Is escalation required for SSO activities</p>
+      </td>
+    </tr>
+    <tr>
       <td>Enable Profiler for Admins</td>
       <td>
         <% # The hidden field below allows sending a false value if the checkbox is empty (false) %>

@@ -24,6 +24,11 @@ class Admin::SettingsController < AdminController
       if opts[:devise_reset_password_within].present?
     opts[:session_timeout_in] = opts[:session_timeout_in].to_i.hours unless opts[:session_timeout_in].nil?
     opts[:session_timeout_in] = nil if opts[:session_timeout_in].present? && opts[:session_timeout_in] == 0.seconds
+    opts[:sudo_session_duration] = opts[:sudo_session_duration].to_i.minutes unless opts[:sudo_session_duration].nil?
+    if opts[:sudo_session_duration].present? && opts[:sudo_session_duration] == 0.seconds
+      opts[:sudo_session_duration] =
+        nil
+    end
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
@@ -44,6 +49,7 @@ class Admin::SettingsController < AdminController
       :profiler_enabled,
       :devise_reset_password_within,
       :session_timeout_in,
+      :sudo_session_duration, :sudo_enabled, :sudo_for_sso,
       :saml_certificate, :saml_key,
       :oidc_signing_key,
       :registration_enabled, :permanent_email,

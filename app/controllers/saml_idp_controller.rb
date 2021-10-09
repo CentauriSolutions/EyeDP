@@ -4,6 +4,7 @@ class SamlIdpController < SamlIdp::IdpController
   # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :authenticate_user!, except: [:show]
   # rubocop:enable Rails/LexicallyScopedActionFilter
+  sudo except :show, if: -> { Setting.sudo_for_sso }
 
   # override create and make sure to set both "GET" and "POST" requests to /saml/auth to #create
   # rubocop:disable Metrics/MethodLength

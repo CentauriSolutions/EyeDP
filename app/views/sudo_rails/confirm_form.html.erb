@@ -1,0 +1,26 @@
+<div class='sudo-header'>
+  <% if SudoRails.custom_logo %>
+    <img src="<%= SudoRails.custom_logo %>">
+  <% end %>
+
+  <h2><%= t('sudo.page_header') %></h2>
+</div>
+
+
+<%= form_tag '/sudo_rails/confirm' do |f| %>
+  <%= hidden_field_tag :locale, I18n.locale %>
+  <%= hidden_field_tag :target_path, params[:target_path] || request.url %>
+  <div class='form-group'>
+    <%= password_field_tag :password, nil, required: true, placeholder: t('sudo.password') %>
+  </div>
+  <div class="actions form-group">
+    <%= submit_tag t('sudo.button') %>
+    <% unless SudoRails.sudo_session_duration.nil? %>
+    <p class='small'>
+      <%= t('sudo.tip', session_duration: time_ago_in_words(SudoRails.sudo_session_duration.ago)).html_safe %>
+    </p>
+  <% end %>
+  </div>
+<% end %>
+
+<%= link_to t(".forgot_your_password"), new_password_path('user') %><br />
