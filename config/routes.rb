@@ -61,7 +61,7 @@ Rails.application.routes.draw do
 
   get 'users/2fa', to: 'users#new_2fa', as: 'new_user_2fa_registration'
   post 'users/2fa', to: 'users#create_2fa', as: 'user_two_factor_auth'
-  match 'users/2fa/codes', to: 'users#codes', as: 'user_2fa_codes', via: %i[get post]
+  post 'users/2fa/codes', to: 'users#codes', as: 'user_2fa_codes'
   delete '/users/2fa', to: 'users#disable_2fa'
   # SAMLv2 IdP
   get '/saml/auth' => 'saml_idp#create'
