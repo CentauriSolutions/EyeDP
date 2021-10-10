@@ -207,8 +207,14 @@ RSpec.describe Api::GroupsController, type: :controller do
     end
 
     context 'valid API key' do
-      let(:api_key) { ApiKey.create(capabilities_mask: ApiKey::CAPABILITIES.values.sum) }
-      it 'lists users' do
+      let(:api_key) do
+        ApiKey.create(
+          list_groups: true, read_group: true, write_group: true,
+          control_admin_groups: true, read_group_members: true, write_group_members: true
+        )
+      end
+
+      it 'lists groups' do
         get :index, params: { api_key: api_key.key }
         expect(response.status).to eq(200)
       end
@@ -251,7 +257,7 @@ RSpec.describe Api::GroupsController, type: :controller do
             expect(group.admin).to be false
           end
           it 'key without admin permission' do
-            api_key.capabilities_mask -= 256
+            api_key.control_admin_groups = false
             api_key.save
             group.update(admin: true)
             expect(group.admin).to be true

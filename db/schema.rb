@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_04_060019) do
+ActiveRecord::Schema.define(version: 2021_10_10_060638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -20,10 +20,20 @@ ActiveRecord::Schema.define(version: 2021_07_04_060019) do
     t.text "key", null: false
     t.text "name"
     t.text "description"
-    t.integer "capabilities_mask", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "custom_data", array: true
+    t.boolean "list_groups", default: false
+    t.boolean "read_group", default: false
+    t.boolean "write_group", default: false
+    t.boolean "list_users", default: false
+    t.boolean "read_user", default: false
+    t.boolean "write_user", default: false
+    t.boolean "read_group_members", default: false
+    t.boolean "write_group_members", default: false
+    t.boolean "control_admin_groups", default: false
+    t.boolean "read_custom_data", default: false
+    t.boolean "write_custom_data", default: false
   end
 
   create_table "audits", force: :cascade do |t|

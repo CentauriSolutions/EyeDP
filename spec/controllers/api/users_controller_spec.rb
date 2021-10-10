@@ -6,7 +6,13 @@ RSpec.describe Api::UsersController, type: :controller do
   let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
 
   let(:empty_key) { ApiKey.create }
-  let(:api_key) { ApiKey.create(capabilities_mask: ApiKey::CAPABILITIES.values.sum) }
+
+  let(:api_key) do
+    ApiKey.create(
+      list_users: true, read_user: true, write_user: true,
+      read_custom_data: true, write_custom_data: true
+    )
+  end
 
   describe 'list groups' do
     context 'missing key' do

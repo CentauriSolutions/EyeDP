@@ -1,20 +1,5 @@
 <div class="form-group">
   <div class="row">
-    <div class="col-sm-2">Capabilities</div>
-    <div class="col-sm-8">
-      <%- ApiKey::CAPABILITIES.each do |cap, value| %>
-      <div class="form-check">
-          <%= check_box_tag "capabilities[#{cap}]", value, @model.send("#{cap}?"), class: 'form-check-input', id: "checkbox-#{ cap }" %>
-          <label class="form-check-label" for="checkbox-<%= cap %>">
-            <%= cap.humanize %>
-          </label>
-      </div>
-      <%- end %>
-    </div>
-  </div>
-</div>
-<div class="form-group">
-  <div class="row">
     <div class="col-sm-2">
       <%= form.label :custom_data %>
     </div>
@@ -25,8 +10,4 @@
       </small>
     </div>
   </div>
-  <!-- <label for="inputPassword6">Password</label>
-  <input type="password" id="inputPassword6" class="form-control mx-sm-3" aria-describedby="passwordHelpInline">
-
-  </small> -->
 </div>
