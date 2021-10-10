@@ -8,12 +8,16 @@ class Admin::ApiKeysController < AdminController
   end
 
   def model_attributes
-    %w[name description capabilities]
+    if action_name == 'index'
+      %w[name description]
+    else
+      super
+    end
   end
 
-  def new_fields
-    %w[name description]
-  end
+  # def new_fields
+  #   %w[name description]
+  # end
 
   def ensure_user_is_authorized!
     raise(ActionController::RoutingError, 'Not Found') \
@@ -21,12 +25,10 @@ class Admin::ApiKeysController < AdminController
   end
 
   def model_params
-    p = params.require('api_key').permit(
-      :name, :description, :custom_data
+    params.require('api_key').permit(
+      :name, :description, :custom_data, :list_groups, :read_group, :write_group,
+      :list_users, :read_user, :write_user, :read_group_members, :write_group_members,
+      :control_admin_groups, :read_custom_data, :write_custom_data
     )
-    p[:capabilities_mask] = params[:capabilities].values.map(&:to_i).sum \
-      if params[:capabilities]
-    p[:custom_data] = p[:custom_data].split(';') if p[:custom_data]
-    p
   end
 end
