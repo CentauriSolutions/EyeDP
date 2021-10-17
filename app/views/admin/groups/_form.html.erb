@@ -64,7 +64,7 @@
   <div class="form-group">
     <div class="row">
       <div class="col-sm-2">
-        <%= form.label :groups %>
+        <%= form.label :permissions %>
       </div>
       <div class="col-sm-10">
       <%= form.collection_check_boxes :permission_ids, Permission.all, :id, :name do |group| %>
