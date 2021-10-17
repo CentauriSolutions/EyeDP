@@ -7,6 +7,10 @@ class Admin::AuditsController < AdminController
     Audited::Audit
   end
 
+  def default_sort_dir
+    :desc
+  end
+
   def whitelist_attributes
     %w[auditable_type action audited_changes]
   end
