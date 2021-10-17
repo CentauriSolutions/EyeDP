@@ -103,8 +103,11 @@
       <%- end %>
     </div>
     <%- end %>
-
-  <div class="actions">
-    <%= form.submit _('Update Group'), class: 'btn btn-success' %>
-  </div>
+    <div class="actions">
+      <%- if new_model %>
+      <%= form.submit _('Create Group'), class: 'btn btn-success' %>
+      <%- else %>
+      <%= form.submit _('Update Group'), class: 'btn btn-success' %>
+      <%- end %>
+    </div>
 <% end %>
