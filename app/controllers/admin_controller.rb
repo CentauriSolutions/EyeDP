@@ -114,11 +114,15 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   def order # rubocop:disable Metrics/AbcSize
     sort = {
       sort_by: :created_at,
-      sort_dir: :asc
+      sort_dir: default_sort_dir
     }
     sort[:sort_by] = params[:sort_by] if params[:sort_by] && sort_whitelist.include?(params[:sort_by])
     sort[:sort_dir] = params[:sort_dir] if params[:sort_dir] && %w[asc desc].include?(params[:sort_dir])
     { sort[:sort_by] => sort[:sort_dir] }
+  end
+
+  def default_sort_dir
+    :asc
   end
 
   def filter_whitelist
