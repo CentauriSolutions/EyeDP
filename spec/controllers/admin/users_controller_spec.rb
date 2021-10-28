@@ -111,6 +111,20 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(User.where(email: 'testing@localhost').count).to eq 1
       end
 
+      context 'duplicate' do
+        render_views
+
+        it 'can see errors' do
+          User.create!(username: 'test', email: 'testing@localhost')
+          expect(User.where(email: 'testing@localhost').count).to eq 1
+          post(:create,
+              params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
+          expect(response.status).to eq(200)
+          expect(response.body).to include('Email has already been taken')
+          expect(User.where(email: 'testing@localhost').count).to eq 1
+        end
+      end
+
       it 'can create a user and retrieve reset link' do
         expect do
           perform_enqueued_jobs do
@@ -264,6 +278,20 @@ RSpec.describe Admin::UsersController, type: :controller do
               expect(response.status).to eq(302)
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        context 'duplicate' do
+          render_views
+
+          it 'can see errors' do
+            User.create!(username: 'test', email: 'testing@localhost')
+            expect(User.where(email: 'testing@localhost').count).to eq 1
+            post(:create,
+                params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
+            expect(response.status).to eq(200)
+            expect(response.body).to include('Email has already been taken')
+            expect(User.where(email: 'testing@localhost').count).to eq 1
+          end
         end
 
         it 'can create a user and retrieve reset link' do
