@@ -118,7 +118,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           User.create!(username: 'test', email: 'testing@localhost')
           expect(User.where(email: 'testing@localhost').count).to eq 1
           post(:create,
-              params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
+               params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
           expect(response.status).to eq(200)
           expect(response.body).to include('Email has already been taken')
           expect(User.where(email: 'testing@localhost').count).to eq 1
@@ -287,7 +287,7 @@ RSpec.describe Admin::UsersController, type: :controller do
             User.create!(username: 'test', email: 'testing@localhost')
             expect(User.where(email: 'testing@localhost').count).to eq 1
             post(:create,
-                params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
+                 params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
             expect(response.status).to eq(200)
             expect(response.body).to include('Email has already been taken')
             expect(User.where(email: 'testing@localhost').count).to eq 1
