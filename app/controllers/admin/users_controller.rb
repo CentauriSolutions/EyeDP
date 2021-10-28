@@ -10,12 +10,12 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
 
   def create
     super
-    if @model.persisted?
-      if params[:send_welcome_email]
-        @model.send_admin_welcome_email
-      else
-        session[:reset_token] = @model.send(:set_reset_password_token)
-      end
+    return unless @model.persisted?
+
+    if params[:send_welcome_email]
+      @model.send_admin_welcome_email
+    else
+      session[:reset_token] = @model.send(:set_reset_password_token)
     end
   end
 
