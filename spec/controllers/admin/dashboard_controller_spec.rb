@@ -96,27 +96,33 @@ RSpec.describe Admin::DashboardController, type: :controller do
         get :index
         expect(response.status).to eq(200)
       end
-
-      context 'with sudo enabled' do
+      context 'with rendered views' do
         render_views
-        before do
-          Setting.sudo_enabled = true
-          @controller.reset_sudo_session!
-        end
-        after do
-          Setting.sudo_enabled = true
-        end
-        it 'Asks for password confirmation' do
-          get :index
-          expect(response.status).to eq(200)
-          expect(response.body).to include 'Confirm password to continue'
+        context 'with sudo enabled' do
+          before do
+            Setting.sudo_enabled = true
+            @controller.reset_sudo_session!
+          end
+          after do
+            Setting.sudo_enabled = true
+          end
+          it 'Asks for password confirmation' do
+            get :index
+            expect(response.status).to eq(200)
+            expect(response.body).to include 'Confirm password to continue'
+          end
+
+          it 'Works with a sudo session' do
+            @controller.extend_sudo_session!
+            get :index
+            expect(response.status).to eq(200)
+            expect(response.body).not_to include 'Confirm password to continue'
+          end
         end
 
-        it 'Works with a sudo session' do
-          @controller.extend_sudo_session!
+        it 'shows the current git hash' do
           get :index
-          expect(response.status).to eq(200)
-          expect(response.body).not_to include 'Confirm password to continue'
+          expect(response.body).to include EyedP::Application::GIT_SHA
         end
       end
     end

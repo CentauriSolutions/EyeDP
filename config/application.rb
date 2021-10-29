@@ -66,5 +66,7 @@ module EyedP
     end
 
     config.action_mailer.default_url_options = { host: ENV['EMAIL_DOMAIN'] }
+
+    GIT_SHA = `git rev-parse HEAD`.chomp
   end
 end
