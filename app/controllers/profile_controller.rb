@@ -5,7 +5,7 @@ class ProfileController < ApplicationController
   before_action :check_group_2fa
   before_action :set_flash_on_restrictions
 
-  def show
+  def show # rubocop:disable Metrics/MethodLength
     @template = Liquid::Template.parse(Setting.registered_home_template)
     @logins = current_user
               .logins
@@ -15,6 +15,8 @@ class ProfileController < ApplicationController
               )
               .order(service_provider_id: :desc, created_at: :desc)
               .limit(10)
+              .sort_by(&:created_at)
+              .reverse
   end
 
   def template_variables # rubocop:disable Metrics/MethodLength
