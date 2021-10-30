@@ -2,6 +2,7 @@
 
 class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLength
   def show
+    @email = Email.new(user: @model)
     @reset_token = session[:reset_token]
     session[:reset_token] = nil
     super
@@ -39,6 +40,22 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
       email = @model.emails.find_by(address: old_email)
       email.primary = false
       email.save
+    end
+  end
+
+  def emails
+    @model = User.find(params[:user_id])
+    show
+    @email = Email.new(email_params)
+    respond_to do |format|
+      if @email.save
+        @email.send_confirmation_instructions
+        format.html { redirect_to admin_user_path(@model), notice: "Email was successfully created." }
+        format.json { render :index, status: :created, location: [:admin, @email] }
+      else
+        format.html { render :show }
+        format.json { render json: @email.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -156,6 +173,12 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
 
   def custom_userdata_params
     params.require(:custom_data).permit!
+  end
+
+  def email_params
+    p = params.require(:email).permit!
+    p[:user_id] = @model.id
+    p
   end
 
   def ensure_user_is_authorized!

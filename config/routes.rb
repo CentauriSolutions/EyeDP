@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       post :reset_password, to: 'users#reset_password'
 
       post :disable_two_factor, to: 'users#disable_two_factor'
+      post :emails, to: 'users#emails'
     end
     resources :custom_userdata_types
     resources :custom_group_data_types

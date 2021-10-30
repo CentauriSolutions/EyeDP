@@ -1,6 +1,9 @@
 
 <div class="col-md-9 col-lg-10">
-  <h2>Email Addresses</h2>
+  <h2>
+    Email Addresses
+  </h2>
+  <p class="small">To update the primary address, edit the user to set their email</p>
   <table class="table table-striped">
     <tbody>
       <%- @model.emails.each do |email| %>
@@ -27,6 +30,29 @@
       <% end %>
     </tbody>
   </table>
+  <div class="row">
+    <div class="col-12">
+      <h3>Add email address</h3>
+
+      <%= bootstrap_form_for @email, url: admin_user_emails_path(@model) do |f| %>
+        <% if @email.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@email.errors.count, "error") %> prohibited this email from being saved:</h2>
+
+            <ul>
+            <% @email.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="input-group">
+          <%= f.email_field :address %>
+        </div>
+        <%= f.submit _('Save Changes'), class: 'btn btn-success', style: "float: left" %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 <div class="col-md-9 col-lg-10">
