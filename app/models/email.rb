@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 class Email < ApplicationRecord
   belongs_to :user
 
-  validates :address, presence: true, uniqueness: { case_sensitive: false } # rubocop:disable Rails/UniqueValidationWithoutIndex
+  validates :address, presence: true, uniqueness: { case_sensitive: false }
 
   def email
     address
   end
 
-  def email=thing
-    address=thing
+  def email=(thing)
+    self.address = thing
   end
 
   def will_save_change_to_email?

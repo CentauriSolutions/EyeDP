@@ -12,7 +12,8 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   def create
     super
     return unless @model.persisted?
-    @model.primary_email_record.confirmed_at = Time.now
+
+    @model.primary_email_record.confirmed_at = Time.zone.now
     @model.primary_email_record.save
     if params[:send_welcome_email]
       @model.send_admin_welcome_email
@@ -21,7 +22,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     end
   end
 
-  def update
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     if (@model.admin? || @model.operator?) && !current_user.admin?
       redirect_to \
         [:admin, @model], \
@@ -33,24 +34,24 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     old_email = @model.email
     super
     address = model_params.delete(:email)
-    if address and address != old_email
-      email = @model.emails.find_by(address: address)
-      email.primary = true
-      email.save
-      email = @model.emails.find_by(address: old_email)
-      email.primary = false
-      email.save
-    end
+    return unless address && address != old_email
+
+    email = @model.emails.find_by(address: address)
+    email.primary = true
+    email.save
+    email = @model.emails.find_by(address: old_email)
+    email.primary = false
+    email.save
   end
 
-  def emails
+  def emails # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @model = User.find(params[:user_id])
     show
     @email = Email.new(email_params)
     respond_to do |format|
       if @email.save
         @email.send_confirmation_instructions
-        format.html { redirect_to admin_user_path(@model), notice: "Email was successfully created." }
+        format.html { redirect_to admin_user_path(@model), notice: 'Email was successfully created.' }
         format.json { render :index, status: :created, location: [:admin, @email] }
       else
         format.html { render :show }
@@ -63,7 +64,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     model = User.find(params[:user_id])
     email = model.emails.find_by(id: params[:id])
     email.destroy
-    redirect_to admin_user_path(model), notice: "Email was successfully destroyed."
+    redirect_to admin_user_path(model), notice: 'Email was successfully destroyed.'
   end
 
   def disable_two_factor # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -124,7 +125,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   private
 
   def includes
-    [:groups, :emails]
+    %i[groups emails]
   end
 
   def show_whitelist_attributes

@@ -19,14 +19,14 @@ class Api::UsersController < ApiController
     }
   end
 
-  def update # rubocop:disable Metrics/MethodLength
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     error('missing permission') and return unless @api_key.write_user?
 
     user = User.find(params[:id])
     old_email = user.email
     if user.update(user_params)
       address = user_params.delete(:email)
-      if address and address != old_email
+      if address && (address != old_email)
         email = user.emails.find_by(address: address)
         email.primary = true
         email.save

@@ -28,7 +28,7 @@ class RegistrationsController < Devise::RegistrationsController
     old_email = resource.email
     resource_updated = update_resource(resource, account_update_params)
     address = account_update_params.delete(:email)
-    if address and address != old_email
+    if address && (address != old_email)
       email = resource.emails.find_by(address: address)
       email.primary = true
       email.save
@@ -50,7 +50,7 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def update_needs_confirmation? resource, previous
+  def update_needs_confirmation?(_resource, _previous)
     false
   end
 end

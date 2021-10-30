@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::UsersController, type: :controller do
   include ActiveJob::TestHelper
-    let(:user) do
+  let(:user) do
     user = User.create!(username: 'user', email: 'user@localhost', password: 'test1234')
     user.confirm!
     user
@@ -111,11 +111,11 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
 
       it 'can create a user' do
-        expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 0
+        expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 0
         post(:create,
              params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
         expect(response.status).to eq(302)
-        expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 1
+        expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
       end
 
       context 'duplicate' do
@@ -123,22 +123,22 @@ RSpec.describe Admin::UsersController, type: :controller do
 
         it 'can see errors' do
           User.create!(username: 'test', email: 'testing@localhost')
-          expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 1
+          expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
           post(:create,
                params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
           expect(response.status).to eq(200)
           expect(response.body).to include('Address has already been taken')
-          expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 1
+          expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
         end
       end
 
       it 'can create a user and retrieve reset link' do
         expect do
           perform_enqueued_jobs do
-            expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 0
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 0
             post(:create, params: { user: { email: 'testing@localhost', username: 'testing-name' } })
             expect(response.status).to eq(302)
-            expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 1
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
           end
         end.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
@@ -292,22 +292,22 @@ RSpec.describe Admin::UsersController, type: :controller do
 
           it 'can see errors' do
             User.create!(username: 'test', email: 'testing@localhost')
-            expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 1
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
             post(:create,
                  params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
             expect(response.status).to eq(200)
             expect(response.body).to include('Address has already been taken')
-            expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 1
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
           end
         end
 
         it 'can create a user and retrieve reset link' do
           expect do
             perform_enqueued_jobs do
-              expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 0
+              expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 0
               post(:create, params: { user: { email: 'testing@localhost', username: 'testing-name' } })
               expect(response.status).to eq(302)
-              expect(User.joins(:emails).where(emails: {address: 'testing@localhost'}).count).to eq 1
+              expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(0)
         end

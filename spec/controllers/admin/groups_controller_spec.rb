@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::GroupsController, type: :controller do
-    let(:user) do
+  let(:user) do
     user = User.create!(username: 'user', email: 'user@localhost', password: 'test1234')
     user.confirm!
     user
