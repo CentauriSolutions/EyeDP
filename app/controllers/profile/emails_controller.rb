@@ -43,7 +43,7 @@ class Profile::EmailsController < ApplicationController
   protected
 
   def email_params
-    p = params.require(:email).permit!
+    p = params.require(:email).permit('address')
     p[:user_id] = current_user.id
     p
   end

@@ -184,7 +184,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   end
 
   def email_params
-    p = params.require(:email).permit!
+    p = params.require(:email).permit('address')
     p[:user_id] = @model.id
     p
   end
