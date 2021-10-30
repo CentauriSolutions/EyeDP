@@ -15,7 +15,12 @@ default_groups.each do |group_name|
 end
 Group.where(name: 'administrators').update({ admin: true })
 
-user = User.find_or_initialize_by(email: ENV['SEED_EMAIL'].presence || 'admin@example.com')
+email = Email.find_by(address: ENV['SEED_EMAIL'].presence || 'admin@example.com')
+user = if email
+         email.user
+       else
+         User.new(email: ENV['SEED_EMAIL'].presence || 'admin@example.com')
+       end
 if user.persisted?
   puts "User with email '#{user.email}' already exists, not seeding."
   exit
