@@ -29,6 +29,7 @@ class Admin::SettingsController < AdminController
       opts[:sudo_session_duration] =
         nil
     end
+    opts[:logo] = nil if opts[:logo] && opts[:logo].empty?
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
