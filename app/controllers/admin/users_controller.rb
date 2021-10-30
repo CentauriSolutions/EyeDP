@@ -100,11 +100,11 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   private
 
   def includes
-    [:groups]
+    [:groups, :emails]
   end
 
   def show_whitelist_attributes
-    %w[email name username two_factor_enabled? groups roles expires_at last_activity_at]
+    %w[primary_email name username two_factor_enabled? groups roles expires_at last_activity_at]
   end
 
   def whitelist_attributes

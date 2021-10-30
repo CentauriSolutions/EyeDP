@@ -112,9 +112,9 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     UserMailer.admin_welcome_email(self, token).deliver_later
   end
 
-  # def email
-  #   primary_email.try(:address)
-  # end
+  def primary_email
+    primary_email_record.try(:address)
+  end
 
   # def primary_email
   #   @primary_email ||= emails.where(primary: true).first
