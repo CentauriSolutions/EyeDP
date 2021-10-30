@@ -4,7 +4,11 @@ require 'rails_helper'
 
 RSpec.describe RegistrationsController, type: :controller do
   include DeviseHelpers
-  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
+  let(:user) do
+    user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+    user.confirm!
+    user
+  end
 
   before do
     set_devise_mapping(context: @request)

@@ -38,6 +38,7 @@ gem 'devise'
 gem 'devise_fido_usf'
 gem 'devise-i18n'
 gem 'friendly_id'
+gem 'devise-multi_email', github: 'indietools/devise-multi_email'
 # Do TOTP 2FA
 gem 'devise-two-factor', github: 'centaurisolutions/devise-two-factor'
 gem 'rqrcode'

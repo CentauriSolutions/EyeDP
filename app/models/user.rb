@@ -30,6 +30,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   audited
 
+  has_many :emails, dependent: :destroy
+
   alias_attribute :real_name, :name
 
   devise :two_factor_authenticatable,
@@ -40,10 +42,14 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   # :rememberable
-  devise :registerable, :recoverable, :validatable,
+  devise :registerable, #:recoverable,
          :fido_usf_registerable, :timeoutable
 
+  devise :multi_email_authenticatable,
+         :multi_email_recoverable, :multi_email_confirmable
+
   devise :expirable
+
 
   has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups, dependent: :destroy
@@ -88,7 +94,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   attr_writer :login
 
   def validate_username
-    errors.add(:username, :invalid) if User.exists?(email: username)
+    errors.add(:username, :invalid) if User.joins(:emails).exists?(emails: {address: username})
   end
 
   def force_password_reset!
@@ -104,6 +110,26 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def send_admin_welcome_email
     token = set_reset_password_token
     UserMailer.admin_welcome_email(self, token).deliver_later
+  end
+
+  # def email
+  #   primary_email.try(:address)
+  # end
+
+  # def primary_email
+  #   @primary_email ||= emails.where(primary: true).first
+  # end
+
+  def confirmed?(address=nil)
+    if address.nil?
+      !!primary_email_record.confirmed_at
+    else
+      !!address.confirmed_at
+    end
+  end
+
+  def confirm!
+    primary_email_record.update!({confirmed_at: Time.now})
   end
 
   def self.u2f_authenticate(user, app_id, json_response, challenges) # rubocop:disable Metrics/MethodLength
@@ -202,9 +228,18 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def self.database_authentication_rel(conditions)
     if (login = conditions.delete(:login))
-      where(conditions.to_h).where(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }])
-    elsif conditions.key?(:username) || conditions.key?(:email)
+      joins(:emails)
+        .where(conditions.to_h)
+        .where(['lower(username) = :value OR lower("emails"."address") = :value', { value: login.downcase }])
+    elsif conditions.key?(:email)
+      email = conditions.delete(:email)
+      joins(:emails)
+        .where(conditions.to_h)
+        .where(['lower("emails"."address") = :value', { value: login.downcase }])
+    elsif conditions.key?(:username)
       where(conditions.to_h)
+    else
+      super
     end
   end
 

@@ -3,7 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe ProfileController, type: :controller do
-  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
+  let(:user) do
+    user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+    user.confirm!
+    user
+  end
   let(:app) do
     Application.create!(
       uid: 'test',
@@ -68,8 +72,7 @@ RSpec.describe ProfileController, type: :controller do
       it 'can edit email' do
         get :show
         expect(response.body).to include(
-          '<input autofocus="autofocus" class="form-control" type="email" value="test@localhost" ' \
-          'name="user[email]" id="user_email" />'
+          'select name="user[email]" id="user_email"'
         )
       end
     end

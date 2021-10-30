@@ -3,13 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe Admin::GroupsController, type: :controller do
-  let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
+    let(:user) do
+    user = User.create!(username: 'user', email: 'user@localhost', password: 'test1234')
+    user.confirm!
+    user
+  end
   let(:group) { Group.create!(name: 'administrators', admin: true) }
   let(:users_group) { Group.create!(name: 'usesr') }
   let(:permission) { Permission.create!(name: 'test permission') }
   let(:admin) do
     user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
     user.groups << group
+    user.confirm!
     user
   end
 
@@ -19,6 +24,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
       let(:manager) do
         user = User.create!(username: 'manager', email: 'manager@localhost', password: 'test1234')
         user.groups << manager_group
+        user.confirm!
         user
       end
 
@@ -60,6 +66,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
       let(:operator) do
         user = User.create!(username: 'operator', email: 'operator@localhost', password: 'test1234')
         user.groups << operator_group
+        user.confirm!
         user
       end
 

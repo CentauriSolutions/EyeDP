@@ -9,6 +9,13 @@ GIT
       railties (< 6.2)
       rotp (~> 6.0)
 
+GIT
+  remote: https://github.com/indietools/devise-multi_email.git
+  revision: b73f118e77ca70119410eb447a7cd8451298c4d0
+  specs:
+    devise-multi_email (3.0.0)
+      devise
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -521,6 +528,7 @@ DEPENDENCIES
   database_cleaner-active_record
   devise
   devise-i18n
+  devise-multi_email!
   devise-two-factor!
   devise_fido_usf
   doorkeeper (>= 5.2, < 5.5)

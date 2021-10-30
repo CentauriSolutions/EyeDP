@@ -23,7 +23,17 @@ class Api::UsersController < ApiController
     error('missing permission') and return unless @api_key.write_user?
 
     user = User.find(params[:id])
+    old_email = user.email
     if user.update(user_params)
+      address = user_params.delete(:email)
+      if address and address != old_email
+        email = user.emails.find_by(address: address)
+        email.primary = true
+        email.save
+        email = user.emails.find_by(address: old_email)
+        email.primary = false
+        email.save
+      end
       render json: {
         status: 'ok',
         result: user

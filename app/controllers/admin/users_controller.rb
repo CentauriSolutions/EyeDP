@@ -11,7 +11,8 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   def create
     super
     return unless @model.persisted?
-
+    @model.primary_email_record.confirmed_at = Time.now
+    @model.primary_email_record.save
     if params[:send_welcome_email]
       @model.send_admin_welcome_email
     else
@@ -28,8 +29,17 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     end
 
     update_custom_attributes if params[:custom_data]
-
+    old_email = @model.email
     super
+    address = model_params.delete(:email)
+    if address and address != old_email
+      email = @model.emails.find_by(address: address)
+      email.primary = true
+      email.save
+      email = @model.emails.find_by(address: old_email)
+      email.primary = false
+      email.save
+    end
   end
 
   def disable_two_factor # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

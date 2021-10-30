@@ -91,5 +91,8 @@ Rails.application.routes.draw do
     get 'account_activity', to: 'account_activity#index'
     get 'additional_properties', to: 'additional_properties#index'
     post 'additional_properties', to: 'additional_properties#update'
+    resources :emails do
+      post 'resend_confirmation', to: 'emails#resend_confirmation', as: :resend_confirmation
+    end
   end
 end

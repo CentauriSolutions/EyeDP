@@ -21,7 +21,11 @@ RSpec.describe SessionsController do
       end
 
       context 'when using valid password' do
-        let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
+        let(:user) do
+          user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+          user.confirm!
+          user
+        end
         let(:user_params) { { login: user.username, password: user.password } }
 
         it 'authenticates user correctly' do
@@ -86,6 +90,7 @@ RSpec.describe SessionsController do
         user.otp_required_for_login = true
         user.otp_secret = User.generate_otp_secret(32)
         user.generate_otp_backup_codes!
+        user.confirm!
         user.save!
         user
       end
@@ -145,6 +150,7 @@ RSpec.describe SessionsController do
             user.otp_required_for_login = true
             user.otp_secret = User.generate_otp_secret(32)
             user.generate_otp_backup_codes!
+            user.confirm!
             user.save!
             user
           end
@@ -201,6 +207,7 @@ RSpec.describe SessionsController do
         user.otp_required_for_login = true
         user.otp_secret = User.generate_otp_secret(32)
         user.generate_otp_backup_codes!
+        user.confirm!
         user.save!
         user
       end
