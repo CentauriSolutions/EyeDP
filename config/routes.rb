@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
       post :disable_two_factor, to: 'users#disable_two_factor'
       post :emails, to: 'users#emails'
+      delete :emails, to: 'users#destroy_email', as: 'delete_email'
     end
     resources :custom_userdata_types
     resources :custom_group_data_types
