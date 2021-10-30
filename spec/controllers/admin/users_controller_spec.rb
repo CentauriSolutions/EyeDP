@@ -316,6 +316,16 @@ RSpec.describe Admin::UsersController, type: :controller do
       context 'Show' do
         render_views
 
+        it 'can reset a password with multiple emails' do
+          expect do
+            perform_enqueued_jobs do
+              Email.create(user: user, address: 'user2@localhost')
+              post(:reset_password, params: { user_id: user.id })
+              expect(response.status).to eq(302)
+            end
+          end.to change { ActionMailer::Base.deliveries.count }.by(2)
+        end
+
         it 'Can see if a user has two factor enabled' do
           user.update({ otp_required_for_login: true })
           get(:show, params: { id: user.id })

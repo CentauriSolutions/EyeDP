@@ -35,7 +35,9 @@ class UserGroup < ApplicationRecord
   notify_for %i[create destroy]
 
   def send_welcome_email
-    UserMailer.group_welcome_email(user, group).deliver_later if group.welcome_email.present?
+    user.emails.each do |email|
+      UserMailer.group_welcome_email(user, group, email.address).deliver_later if group.welcome_email.present?
+    end
   end
 
   def notifiable_name
