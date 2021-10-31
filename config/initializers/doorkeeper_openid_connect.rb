@@ -56,8 +56,8 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.email
     end
 
-    claim :email_verified do |_resource_owner|
-      true
+    claim :email_verified, scope: :openid do |resource_owner|
+      resource_owner.primary_email_record.confirmed?
     end
 
     claim :groups, scope: :openid do |resource_owner|
