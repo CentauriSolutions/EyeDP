@@ -398,6 +398,9 @@ GEM
     ruby-graphviz (1.2.5)
       rexml
     ruby-progressbar (1.11.0)
+    ruby-saml (1.13.0)
+      nokogiri (>= 1.10.5)
+      rexml
     ruby2_keywords (0.0.5)
     saml_idp (0.12.0)
       activesupport (>= 3.2)
@@ -564,6 +567,7 @@ DEPENDENCIES
   rspec-rails (~> 4)
   rubocop
   rubocop-rails
+  ruby-saml (>= 1.7.2)
   saml_idp
   sass-rails (~> 6.0)
   scout_apm
