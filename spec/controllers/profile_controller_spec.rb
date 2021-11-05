@@ -40,7 +40,7 @@ RSpec.describe ProfileController, type: :controller do
       expect(response.body).to include('it requires two factor')
     end
 
-    context 'with permenant usernames' do
+    context 'with permenant email' do
       before do
         Setting.permanent_email = true
       end
@@ -59,7 +59,7 @@ RSpec.describe ProfileController, type: :controller do
       end
     end
 
-    context 'without permenant usernames' do
+    context 'without permenant email' do
       before do
         Setting.permanent_email = false
       end

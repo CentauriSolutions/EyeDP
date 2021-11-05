@@ -15,7 +15,7 @@ RSpec.describe RegistrationsController, type: :controller do
     sign_in(user)
   end
 
-  context 'with permenant usernames' do
+  context 'with permenant email' do
     before do
       Setting.permanent_email = true
     end
@@ -35,7 +35,7 @@ RSpec.describe RegistrationsController, type: :controller do
     end
   end
 
-  context 'without permenant usernames' do
+  context 'without permenant email' do
     before do
       Setting.permanent_email = false
     end

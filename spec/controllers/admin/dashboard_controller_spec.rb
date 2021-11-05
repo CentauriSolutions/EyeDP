@@ -128,6 +128,7 @@ RSpec.describe Admin::DashboardController, type: :controller do
         end
 
         it 'shows the current git hash' do
+          EyedP::Application::GIT_SHA ||= 'Test SHA String'
           get :index
           expect(response.body).to include EyedP::Application::GIT_SHA
         end

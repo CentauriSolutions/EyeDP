@@ -119,10 +119,6 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     primary_email_record.try(:address)
   end
 
-  # def primary_email
-  #   @primary_email ||= emails.where(primary: true).first
-  # end
-
   def confirmed?(address = nil)
     if address.nil?
       !!primary_email_record.confirmed_at
