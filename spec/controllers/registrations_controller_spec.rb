@@ -4,14 +4,18 @@ require 'rails_helper'
 
 RSpec.describe RegistrationsController, type: :controller do
   include DeviseHelpers
-  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
+  let(:user) do
+    user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+    user.confirm!
+    user
+  end
 
   before do
     set_devise_mapping(context: @request)
     sign_in(user)
   end
 
-  context 'with permenant usernames' do
+  context 'with permenant email' do
     before do
       Setting.permanent_email = true
     end
@@ -31,7 +35,7 @@ RSpec.describe RegistrationsController, type: :controller do
     end
   end
 
-  context 'without permenant usernames' do
+  context 'without permenant email' do
     before do
       Setting.permanent_email = false
     end

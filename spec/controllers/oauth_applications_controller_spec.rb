@@ -3,7 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe OauthApplicationsController, type: :controller do
-  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
+  let(:user) do
+    user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+    user.confirm!
+    user
+  end
   let(:app) { Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test') }
   let(:params) do
     {

@@ -24,6 +24,7 @@
         <% # The hidden field below allows sending a false value if the checkbox is empty (false) %>
         <input type="hidden" name="setting[permanent_email]" value="false" />
         <input type="checkbox" name="setting[permanent_email]" class="form-control" <% if Setting.permanent_email %>checked <% end %> value="true" />
+        <p class="small">A user can still add additional emails to their account but they cannot change their primary email address</p>
       </td>
     </tr>
     <tr>

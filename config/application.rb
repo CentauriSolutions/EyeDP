@@ -68,6 +68,6 @@ module EyedP
     config.action_mailer.default_url_options = { host: ENV['EMAIL_DOMAIN'] }
     hash = `git rev-parse HEAD`.chomp.squeeze!
     hash ||= ENV['HEROKU_SLUG_COMMIT']
-    GIT_SHA = hash unless hash.nil?
+    GIT_SHA = hash
   end
 end

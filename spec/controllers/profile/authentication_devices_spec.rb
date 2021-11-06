@@ -4,11 +4,9 @@ require 'rails_helper'
 
 RSpec.describe Profile::AuthenticationDevicesController, type: :controller do
   let(:user) do
-    User.create!(
-      username: 'example',
-      email: 'test@localhost',
-      password: 'test1234'
-    )
+    user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+    user.confirm!
+    user
   end
 
   context 'index' do

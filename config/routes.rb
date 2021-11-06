@@ -19,6 +19,8 @@ Rails.application.routes.draw do
       post :reset_password, to: 'users#reset_password'
 
       post :disable_two_factor, to: 'users#disable_two_factor'
+      post :emails, to: 'users#emails'
+      delete :emails, to: 'users#destroy_email', as: 'delete_email'
     end
     resources :custom_userdata_types
     resources :custom_group_data_types
@@ -91,5 +93,8 @@ Rails.application.routes.draw do
     get 'account_activity', to: 'account_activity#index'
     get 'additional_properties', to: 'additional_properties#index'
     post 'additional_properties', to: 'additional_properties#update'
+    resources :emails do
+      post 'resend_confirmation', to: 'emails#resend_confirmation', as: :resend_confirmation
+    end
   end
 end

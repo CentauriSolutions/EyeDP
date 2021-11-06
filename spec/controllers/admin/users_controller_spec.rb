@@ -4,12 +4,17 @@ require 'rails_helper'
 
 RSpec.describe Admin::UsersController, type: :controller do
   include ActiveJob::TestHelper
-  let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
+  let(:user) do
+    user = User.create!(username: 'user', email: 'user@localhost', password: 'test1234')
+    user.confirm!
+    user
+  end
   let(:admin_group) { Group.create!(name: 'administrators', admin: true) }
   let(:user_group) { Group.create!(name: 'users') }
   let(:admin) do
     user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
     user.groups << admin_group
+    user.confirm!
     user
   end
 
@@ -17,6 +22,7 @@ RSpec.describe Admin::UsersController, type: :controller do
   let(:operator) do
     user = User.create!(username: 'operator', email: 'operator@localhost', password: 'test1234')
     user.groups << operator_group
+    user.confirm!
     user
   end
 
@@ -24,6 +30,7 @@ RSpec.describe Admin::UsersController, type: :controller do
   let(:manager) do
     user = User.create!(username: 'manager', email: 'manager@localhost', password: 'test1234')
     user.groups << manager_group
+    user.confirm!
     user
   end
 
@@ -104,11 +111,11 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
 
       it 'can create a user' do
-        expect(User.where(email: 'testing@localhost').count).to eq 0
+        expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 0
         post(:create,
              params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
         expect(response.status).to eq(302)
-        expect(User.where(email: 'testing@localhost').count).to eq 1
+        expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
       end
 
       context 'duplicate' do
@@ -116,22 +123,22 @@ RSpec.describe Admin::UsersController, type: :controller do
 
         it 'can see errors' do
           User.create!(username: 'test', email: 'testing@localhost')
-          expect(User.where(email: 'testing@localhost').count).to eq 1
+          expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
           post(:create,
                params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
           expect(response.status).to eq(200)
-          expect(response.body).to include('Email has already been taken')
-          expect(User.where(email: 'testing@localhost').count).to eq 1
+          expect(response.body).to include('Address has already been taken')
+          expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
         end
       end
 
       it 'can create a user and retrieve reset link' do
         expect do
           perform_enqueued_jobs do
-            expect(User.where(email: 'testing@localhost').count).to eq 0
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 0
             post(:create, params: { user: { email: 'testing@localhost', username: 'testing-name' } })
             expect(response.status).to eq(302)
-            expect(User.where(email: 'testing@localhost').count).to eq 1
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
           end
         end.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
@@ -285,22 +292,22 @@ RSpec.describe Admin::UsersController, type: :controller do
 
           it 'can see errors' do
             User.create!(username: 'test', email: 'testing@localhost')
-            expect(User.where(email: 'testing@localhost').count).to eq 1
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
             post(:create,
                  params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
             expect(response.status).to eq(200)
-            expect(response.body).to include('Email has already been taken')
-            expect(User.where(email: 'testing@localhost').count).to eq 1
+            expect(response.body).to include('Address has already been taken')
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
           end
         end
 
         it 'can create a user and retrieve reset link' do
           expect do
             perform_enqueued_jobs do
-              expect(User.where(email: 'testing@localhost').count).to eq 0
+              expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 0
               post(:create, params: { user: { email: 'testing@localhost', username: 'testing-name' } })
               expect(response.status).to eq(302)
-              expect(User.where(email: 'testing@localhost').count).to eq 1
+              expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
@@ -308,6 +315,16 @@ RSpec.describe Admin::UsersController, type: :controller do
 
       context 'Show' do
         render_views
+
+        it 'can reset a password with multiple emails' do
+          expect do
+            perform_enqueued_jobs do
+              Email.create(user: user, address: 'user2@localhost')
+              post(:reset_password, params: { user_id: user.id })
+              expect(response.status).to eq(302)
+            end
+          end.to change { ActionMailer::Base.deliveries.count }.by(2)
+        end
 
         it 'Can see if a user has two factor enabled' do
           user.update({ otp_required_for_login: true })

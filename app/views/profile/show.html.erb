@@ -18,7 +18,7 @@
           <%- if Setting.permanent_email %>
             <%= f.email_field :email, autofocus: true, disabled: true %>
           <%- else %>
-            <%= f.email_field :email, autofocus: true %>
+            <%= select_tag 'user[email]', options_from_collection_for_select(resource.emails.select(&:confirmed?), :address, :address, selected: resource.email)%>
           <%- end %>
           <%= f.text_field :name %>
           <hr />

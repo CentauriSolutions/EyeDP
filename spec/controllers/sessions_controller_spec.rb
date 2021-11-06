@@ -21,7 +21,11 @@ RSpec.describe SessionsController do
       end
 
       context 'when using valid password' do
-        let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
+        let(:user) do
+          user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+          user.confirm!
+          user
+        end
         let(:user_params) { { login: user.username, password: user.password } }
 
         it 'authenticates user correctly' do
@@ -77,6 +81,35 @@ RSpec.describe SessionsController do
           expect(response.status).to eq(302)
           expect(response.headers['Location']).to eq('http://test.host/')
         end
+
+        context 'with multiple emails' do
+          let(:user) do
+            user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+            user.confirm!
+            Email.create!(address: 'test2@localhost', user: user).confirm
+            user
+          end
+
+          it 'allows login with the primary email' do
+            post(:create, params: { user: { login: user.email, password: 'test1234' } })
+
+            expect(subject.current_user).to eq user
+          end
+
+          it 'allows login with additional emails' do
+            user
+            post(:create, params: { user: { login: 'test2@localhost', password: 'test1234' } })
+            expect(subject.current_user).to eq user
+          end
+
+          it 'requires additional emails to be confirmed for login' do
+            Email.create!(address: 'test3@localhost', user: user)
+            post(:create, params: { user: { login: 'test3@localhost', password: 'test1234' } })
+            expect(subject.current_user).to be_nil
+            expect(controller)
+              .to set_flash.now[:alert].to(/Invalid Login or password/)
+          end
+        end
       end
     end
 
@@ -86,6 +119,7 @@ RSpec.describe SessionsController do
         user.otp_required_for_login = true
         user.otp_secret = User.generate_otp_secret(32)
         user.generate_otp_backup_codes!
+        user.confirm!
         user.save!
         user
       end
@@ -145,6 +179,7 @@ RSpec.describe SessionsController do
             user.otp_required_for_login = true
             user.otp_secret = User.generate_otp_secret(32)
             user.generate_otp_backup_codes!
+            user.confirm!
             user.save!
             user
           end
@@ -201,6 +236,7 @@ RSpec.describe SessionsController do
         user.otp_required_for_login = true
         user.otp_secret = User.generate_otp_secret(32)
         user.generate_otp_backup_codes!
+        user.confirm!
         user.save!
         user
       end
@@ -209,24 +245,53 @@ RSpec.describe SessionsController do
         post(:create, params: { user: user_params }, session: { otp_user_id: user.id })
       end
 
+      def create_u2f_device(user, key_handle, public_key, certificate, attributes = {})
+        attrib = {
+          user: user,
+          name: 'Unnamed 1',
+          key_handle: key_handle,
+          public_key: public_key,
+          certificate: certificate,
+          counter: 0,
+          last_authenticated_at: Time.zone.now
+        }.update(attributes)
+        FidoUsf::FidoUsfDevice.create!(attrib)
+      end
+
+      def setup_u2f(controller)
+        setup_u2f_with_appid(controller.u2f_app_id)
+      end
+
+      def setup_u2f_with_appid(app_id)
+        device = U2F::FakeU2F.new(app_id)
+        key_handle = U2F.urlsafe_encode64(device.key_handle_raw)
+        certificate = Base64.strict_encode64(device.cert_raw)
+        public_key = device.origin_public_key_raw
+        { device: device, key_handle: key_handle, certificate: certificate, public_key: public_key }
+      end
+
       context 'remember_me field' do
         it 'sets a remember_user_token cookie when enabled' do
-          allow(User).to receive(:u2f_authenticate).and_return(true)
           expect(controller).not_to receive(:remember_me)
-
-          authenticate_2fa_u2f(remember_me: '1', login: user.username, device_response: '{}')
-
+          token = setup_u2f(@controller)
+          create_u2f_device(user, token[:key_handle], token[:public_key], token[:certificate])
+          device_response = token[:device].sign_response(@controller.session[:user_u2f_challenge])
+          authenticate_2fa_u2f(remember_me: '1', login: user.username, device_response: device_response)
           expect(response.cookies['remember_user_token']).to be_nil
+          expect(subject.current_user).to eq user
         end
 
         it 'does nothing when disabled' do
-          allow(User).to receive(:u2f_authenticate).and_return(true)
           allow(controller).to receive(:find_user).and_return(user)
           expect(controller).not_to receive(:remember_me)
+          token = setup_u2f(@controller)
+          create_u2f_device(user, token[:key_handle], token[:public_key], token[:certificate])
+          device_response = token[:device].sign_response(@controller.session[:user_u2f_challenge])
 
-          authenticate_2fa_u2f(remember_me: '0', login: user.username, device_response: '{}')
+          authenticate_2fa_u2f(remember_me: '0', login: user.username, device_response: device_response)
 
           expect(response.cookies['remember_user_token']).to be_nil
+          expect(subject.current_user).to eq user
         end
       end
 
@@ -234,8 +299,12 @@ RSpec.describe SessionsController do
         allow(User).to receive(:u2f_authenticate).and_return(true)
         allow(controller).to receive(:find_user).and_return(user)
         Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
+        token = setup_u2f(@controller)
+        create_u2f_device(user, token[:key_handle], token[:public_key], token[:certificate])
+        device_response = token[:device].sign_response(@controller.session[:user_u2f_challenge])
         post(:create,
-             params: { user: { login: user.username, device_response: '{}' }, redirect_to: 'https://example.com' },
+             params: { user: { login: user.username, device_response: device_response },
+                redirect_to: 'https://example.com' },
              session: { otp_user_id: user.id })
         expect(subject.current_user).to eq user
         expect(response.status).to eq(302)

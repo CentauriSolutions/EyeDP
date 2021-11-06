@@ -7,7 +7,7 @@ RSpec.describe UserMailer, type: :mailer do
     let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
     let(:group) { Group.create!(name: 'administrators', admin: true) }
 
-    let(:mail) { UserMailer.group_welcome_email(user, group) }
+    let(:mail) { UserMailer.group_welcome_email(user, group, 'user@localhost') }
     it 'renders the headers' do
       expect(mail.subject).to eq('Welcome to administrators')
       expect(mail.to).to eq(['user@localhost'])
@@ -23,7 +23,7 @@ RSpec.describe UserMailer, type: :mailer do
 
   context 'force_reset_password_email' do
     let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
-    let(:mail) { UserMailer.force_reset_password_email(user, 'test token') }
+    let(:mail) { UserMailer.force_reset_password_email(user, 'test token', 'user@localhost') }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('Password Changed')
@@ -43,7 +43,7 @@ RSpec.describe UserMailer, type: :mailer do
 
   context 'admin_welcome_email' do
     let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
-    let(:mail) { UserMailer.admin_welcome_email(user, 'test token') }
+    let(:mail) { UserMailer.admin_welcome_email(user, 'test token', 'user@localhost') }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('Your account has been created')

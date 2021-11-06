@@ -4,11 +4,9 @@ require 'rails_helper'
 
 RSpec.describe Profile::AdditionalPropertiesController, type: :controller do
   let(:user) do
-    User.create!(
-      username: 'example',
-      email: 'test@localhost',
-      password: 'test1234'
-    )
+    user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+    user.confirm!
+    user
   end
   let(:custom_bool) { CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean') }
 

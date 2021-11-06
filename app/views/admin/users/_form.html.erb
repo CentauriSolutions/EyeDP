@@ -13,6 +13,10 @@
 <%- end %>
 <%= form_with(model: [:admin, model], local: true, class: 'form') do |form| %>
   <% if model.errors.any? %>
+      <%- if model.errors[:emails] %>
+        <%- model.errors.merge!(model.primary_email_record.errors) %>
+        <%- model.errors.delete(:emails) %>
+      <%- end %>
     <div id="error_explanation">
       <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
 

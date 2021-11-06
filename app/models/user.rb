@@ -30,6 +30,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   audited
 
+  has_many :emails, dependent: :destroy
+
   alias_attribute :real_name, :name
 
   devise :two_factor_authenticatable,
@@ -40,8 +42,11 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   # :rememberable
-  devise :registerable, :recoverable, :validatable,
+  devise :registerable, # :recoverable,
          :fido_usf_registerable, :timeoutable
+
+  devise :multi_email_authenticatable,
+         :multi_email_recoverable, :multi_email_confirmable
 
   devise :expirable
 
@@ -88,7 +93,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   attr_writer :login
 
   def validate_username
-    errors.add(:username, :invalid) if User.exists?(email: username)
+    errors.add(:username, :invalid) if User.joins(:emails).exists?(emails: { address: username })
   end
 
   def force_password_reset!
@@ -96,29 +101,46 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     update({ password: new_pass, password_confirmation: new_pass })
 
     token = set_reset_password_token
-    return false unless UserMailer.force_reset_password_email(self, token).deliver_later
-
-    true
+    passed = true
+    emails.each do |email|
+      passed = false unless UserMailer.force_reset_password_email(self, token, email.address).deliver_later
+    end
+    passed
   end
 
   def send_admin_welcome_email
     token = set_reset_password_token
-    UserMailer.admin_welcome_email(self, token).deliver_later
+    emails.each do |email|
+      UserMailer.admin_welcome_email(self, token, email.address).deliver_later
+    end
   end
 
-  def self.u2f_authenticate(user, app_id, json_response, challenges) # rubocop:disable Metrics/MethodLength
-    # binding.pry
+  def primary_email
+    primary_email_record.try(:address)
+  end
+
+  def confirmed?(address = nil)
+    if address.nil?
+      !!primary_email_record.confirmed_at
+    else
+      !!address.confirmed_at
+    end
+  end
+
+  def confirm!
+    primary_email_record.update!({ confirmed_at: Time.zone.now })
+  end
+
+  def self.u2f_authenticate(user, app_id, json_response, challenges)
     response = U2F::SignResponse.load_from_json(json_response)
     registration = user.fido_usf_devices
                        .find_by(key_handle: response.key_handle)
-    # registration = user.fido_usf_devices.find_by_key_handle(response.key_handle)
     u2f = U2F::U2F.new(app_id)
-    # binding.pry
-    if registration
-      u2f.authenticate!(challenges, response, registration.public_key, registration.counter)
-      registration.update(counter: response.counter)
-      true
-    end
+    return false unless registration
+
+    u2f.authenticate!(challenges, response, registration.public_key, registration.counter)
+    registration.update(counter: response.counter)
+    true
   rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
     false
   end
@@ -202,10 +224,29 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def self.database_authentication_rel(conditions)
     if (login = conditions.delete(:login))
-      where(conditions.to_h).where(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }])
-    elsif conditions.key?(:username) || conditions.key?(:email)
+      database_auth_rel_with_login(login, conditions)
+    elsif conditions.key?(:email)
+      database_auth_rel_with_email(conditions)
+    elsif conditions.key?(:username)
       where(conditions.to_h)
+    else
+      super
     end
+  end
+
+  def self.database_auth_rel_with_login(login, conditions)
+    joins(:emails)
+      .where(conditions.to_h)
+      .where(['lower(username) = :value OR lower("emails"."address") = :value', { value: login.downcase }])
+      .where.not(emails: { confirmed_at: nil })
+  end
+
+  def self.database_auth_rel_with_email(conditions)
+    email = conditions.delete(:email)
+    joins(:emails)
+      .where(conditions.to_h)
+      .where(['lower("emails"."address") = :value', { value: email.downcase }])
+      .where.not(emails: { confirmed_at: nil })
   end
 
   def self.find_for_database_authentication(warden_conditions)

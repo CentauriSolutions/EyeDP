@@ -1,5 +1,61 @@
 
 <div class="col-md-9 col-lg-10">
+  <h2>
+    Email Addresses
+  </h2>
+  <p class="small">To update the primary address, edit the user to set their email</p>
+  <table class="table table-striped">
+    <tbody>
+      <%- @model.emails.each do |email| %>
+        <tr>
+          <td><%= email.address %></td>
+          <td>
+            <%- if email.confirmed? %>
+              <span class="btn btn-success">Verified</span>
+            <%- else %>
+            <span class="btn btn-warning">Unverified</span>
+            <%- end %>
+          </td>
+          <td class="text-right">
+            <%- if email.primary? %>
+              <span class="btn btn-success">Primary</span>
+            <%- else %>
+              <%- unless email.confirmed? %>
+                  <%= link_to 'Resend confirmation email', profile_email_resend_confirmation_path(email), method: :post, class: "btn btn-warning"  %>
+              <%- end %>
+              <%= link_to fa_icon('trash-o', title: "Delete"), admin_user_delete_email_path(@model, id: email.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+            <%- end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-12">
+      <h3>Add email address</h3>
+
+      <%= bootstrap_form_for @email, url: admin_user_emails_path(@model) do |f| %>
+        <% if @email.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@email.errors.count, "error") %> prohibited this email from being saved:</h2>
+
+            <ul>
+            <% @email.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="input-group">
+          <%= f.email_field :address %>
+        </div>
+        <%= f.submit _('Save Changes'), class: 'btn btn-success', style: "float: left" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-9 col-lg-10">
   <h2>Custom Properties</h2>
   <%- custom_userdata = @model.custom_userdata.includes([:custom_userdata_type]).group_by(&:custom_userdata_type_id) %>
   <%- CustomUserdataType.all.each do |data_type| %>

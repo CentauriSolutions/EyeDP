@@ -2,6 +2,7 @@
 
 class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLength
   def show
+    @email = Email.new(user: @model)
     @reset_token = session[:reset_token]
     session[:reset_token] = nil
     super
@@ -12,6 +13,8 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     super
     return unless @model.persisted?
 
+    @model.primary_email_record.confirmed_at = Time.zone.now
+    @model.primary_email_record.save
     if params[:send_welcome_email]
       @model.send_admin_welcome_email
     else
@@ -19,7 +22,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     end
   end
 
-  def update
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     if (@model.admin? || @model.operator?) && !current_user.admin?
       redirect_to \
         [:admin, @model], \
@@ -28,8 +31,40 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     end
 
     update_custom_attributes if params[:custom_data]
-
+    old_email = @model.email
     super
+    address = model_params.delete(:email)
+    return unless address && address != old_email
+
+    email = @model.emails.find_by(address: address)
+    email.primary = true
+    email.save
+    email = @model.emails.find_by(address: old_email)
+    email.primary = false
+    email.save
+  end
+
+  def emails # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    @model = User.find(params[:user_id])
+    show
+    @email = Email.new(email_params)
+    respond_to do |format|
+      if @email.save
+        @email.send_confirmation_instructions
+        format.html { redirect_to admin_user_path(@model), notice: 'Email was successfully created.' }
+        format.json { render :index, status: :created, location: [:admin, @email] }
+      else
+        format.html { render :show }
+        format.json { render json: @email.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy_email
+    model = User.find(params[:user_id])
+    email = model.emails.find_by(id: params[:id])
+    email.destroy
+    redirect_to admin_user_path(model), notice: 'Email was successfully destroyed.'
   end
 
   def disable_two_factor # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -90,11 +125,11 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   private
 
   def includes
-    [:groups]
+    %i[groups emails]
   end
 
   def show_whitelist_attributes
-    %w[email name username two_factor_enabled? groups roles expires_at last_activity_at]
+    %w[primary_email name username two_factor_enabled? groups roles expires_at last_activity_at]
   end
 
   def whitelist_attributes
@@ -146,6 +181,12 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
 
   def custom_userdata_params
     params.require(:custom_data).permit!
+  end
+
+  def email_params
+    p = params.require(:email).permit('address')
+    p[:user_id] = @model.id
+    p
   end
 
   def ensure_user_is_authorized!
