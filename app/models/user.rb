@@ -230,11 +230,13 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
       joins(:emails)
         .where(conditions.to_h)
         .where(['lower(username) = :value OR lower("emails"."address") = :value', { value: login.downcase }])
+        .where.not(emails: { confirmed_at: nil})
     elsif conditions.key?(:email)
       email = conditions.delete(:email)
       joins(:emails)
         .where(conditions.to_h)
         .where(['lower("emails"."address") = :value', { value: email.downcase }])
+        .where.not(emails: { confirmed_at: nil})
     elsif conditions.key?(:username)
       where(conditions.to_h)
     else

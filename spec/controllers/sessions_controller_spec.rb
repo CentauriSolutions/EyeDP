@@ -81,6 +81,36 @@ RSpec.describe SessionsController do
           expect(response.status).to eq(302)
           expect(response.headers['Location']).to eq('http://test.host/')
         end
+
+        context 'with multiple emails' do
+          let(:user) do
+            user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+            user.confirm!
+            Email.create!(address: 'test2@localhost', user: user).confirm
+            user
+          end
+
+          it 'allows login with the primary email' do
+            post(:create, params: { user: { login: user.email, password: 'test1234' } })
+
+            expect(subject.current_user).to eq user
+          end
+
+          it 'allows login with additional emails' do
+            user
+            post(:create, params: { user: { login: 'test2@localhost', password: 'test1234' } })
+            expect(subject.current_user).to eq user
+          end
+
+          it 'requires additional emails to be confirmed for login' do
+            Email.create!(address: 'test3@localhost', user: user)
+            post(:create, params: { user: { login: 'test3@localhost', password: 'test1234' } })
+            expect(subject.current_user).to be_nil
+            expect(controller)
+              .to set_flash.now[:alert].to(/Invalid Login or password/)
+          end
+        end
+
       end
     end
 
