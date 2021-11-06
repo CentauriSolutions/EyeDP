@@ -72,6 +72,26 @@
       "note": "This iuses additional checks elsewhere to restrict the assignment."
     },
     {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "8fde9b1708ce1502025931e72ad1275b0dda114a39048b1927a2a0395f44468a",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/sudo_rails/application_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(params[:target_path])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SudoRails::ApplicationController",
+        "method": "confirm"
+      },
+      "user_input": "params[:target_path]",
+      "confidence": "High",
+      "note": "This is restricted to be only a same-host redirect or to a non fully-qualified path"
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "a3a01e05b8cd146c65165655f46883113d7dbb4dca33096f53796438aa46d889",
@@ -160,7 +180,7 @@
       "check_name": "MassAssignment",
       "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
       "file": "app/controllers/admin/users_controller.rb",
-      "line": 115,
+      "line": 183,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:custom_data).permit!",
       "render_path": null,
@@ -180,7 +200,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/admin_controller.rb",
-      "line": 101,
+      "line": 103,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "rel.where(params[:filter_by] => params[:filter])",
       "render_path": null,
@@ -194,6 +214,6 @@
       "note": "This is an admin only controller, and is restricted by a whitelist of acceptable options"
     }
   ],
-  "updated": "2021-07-07 21:42:25 +0200",
-  "brakeman_version": "5.0.1"
+  "updated": "2021-11-06 15:00:11 +0100",
+  "brakeman_version": "5.1.1"
 }
