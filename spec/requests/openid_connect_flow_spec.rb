@@ -90,40 +90,4 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
       end
     end
   end
-
-  # it "provides a user's information" do
-  #   # post '/oauth/authorize', params: params
-  #   # uri = URI.parse(response.headers['Location'])
-  #   # query = Rack::Utils.parse_query uri.query
-  #   # code = query['code']
-  #   # post '/oauth/token',
-  #   #   params: {
-  #   #     grant_type: 'authorization_code',
-  #   #     code: code,
-  #   #     redirect_uri: application.redirect_uri,
-  #   #     client_id: application.uid,
-  #   #     client_secret: application.secret
-  #   #   }, headers: {'HTTP_ACCEPT' => "application/json"}
-
-  #   # headers = {'HTTP_ACCEPT' => "application/json", "Authorization" => "Bearer #{code}"}
-  #   post '/oauth/userinfo', params: { 'bearer_token': access_token.token }
-  #   binding.pry
-  # end
-  # it "creates a Widget and redirects to the Widget's page" do
-  #   get "/widgets/new"
-  #   expect(response).to render_template(:new)
-
-  #   post "/widgets", :params => { :widget => {:name => "My Widget"} }
-
-  #   expect(response).to redirect_to(assigns(:widget))
-  #   follow_redirect!
-
-  #   expect(response).to render_template(:show)
-  #   expect(response.body).to include("Widget was successfully created.")
-  # end
-
-  # it "does not render a different template" do
-  #   get "/widgets/new"
-  #   expect(response).to_not render_template(:show)
-  # end
 end
