@@ -19,10 +19,6 @@ RSpec.describe Admin::SettingsController, type: :controller do
     user
   end
 
-  before do
-    @controller.extend_sudo_session!
-  end
-
   describe 'User' do
     context 'signed in manager' do
       let(:manager_group) { Group.create!(name: 'managers', manager: true) }
@@ -67,7 +63,7 @@ RSpec.describe Admin::SettingsController, type: :controller do
           @controller.reset_sudo_session!
         end
         after do
-          Setting.sudo_enabled = true
+          Setting.sudo_enabled = false
         end
         it 'Asks for password confirmation' do
           get :index
