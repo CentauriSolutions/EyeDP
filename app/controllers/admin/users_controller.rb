@@ -67,6 +67,13 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     redirect_to admin_user_path(model), notice: 'Email was successfully destroyed.'
   end
 
+  def resend_confirmation
+    model = User.find(params[:user_id])
+    email = Email.find_by(id: params[:email_id], user_id: model.id)
+    email.send_confirmation_instructions
+    redirect_to admin_user_path(model), notice: 'Confirmation email was sent.'
+  end
+
   def disable_two_factor # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @model = User.find(params[:user_id])
     if (@model.admin? || @model.operator?) && !current_user.admin?

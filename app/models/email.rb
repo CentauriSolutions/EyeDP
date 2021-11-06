@@ -16,4 +16,8 @@ class Email < ApplicationRecord
   def will_save_change_to_email?
     will_save_change_to_address?
   end
+
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
+  end
 end

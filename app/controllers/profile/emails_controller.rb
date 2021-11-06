@@ -23,7 +23,7 @@ class Profile::EmailsController < ApplicationController
   end
 
   def resend_confirmation
-    email = Email.where(id: params[:email_id], user_id: current_user.id)
+    email = Email.find_by(id: params[:email_id], user_id: current_user.id)
     email.send_confirmation_instructions
     redirect_to profile_emails_path, notice: 'Confirmation email was sent.'
   end
