@@ -110,7 +110,6 @@ RSpec.describe SessionsController do
               .to set_flash.now[:alert].to(/Invalid Login or password/)
           end
         end
-
       end
     end
 

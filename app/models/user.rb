@@ -225,23 +225,31 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     where(id: id).database_authentication_rel({ login: login })
   end
 
-  def self.database_authentication_rel(conditions) # rubocop:disable Metrics/MethodLength
+  def self.database_authentication_rel(conditions)
     if (login = conditions.delete(:login))
-      joins(:emails)
-        .where(conditions.to_h)
-        .where(['lower(username) = :value OR lower("emails"."address") = :value', { value: login.downcase }])
-        .where.not(emails: { confirmed_at: nil})
+      database_auth_rel_with_login(login, conditions)
     elsif conditions.key?(:email)
-      email = conditions.delete(:email)
-      joins(:emails)
-        .where(conditions.to_h)
-        .where(['lower("emails"."address") = :value', { value: email.downcase }])
-        .where.not(emails: { confirmed_at: nil})
+      database_auth_rel_with_email(conditions)
     elsif conditions.key?(:username)
       where(conditions.to_h)
     else
       super
     end
+  end
+
+  def self.database_auth_rel_with_login(login, conditions)
+    joins(:emails)
+      .where(conditions.to_h)
+      .where(['lower(username) = :value OR lower("emails"."address") = :value', { value: login.downcase }])
+      .where.not(emails: { confirmed_at: nil })
+  end
+
+  def self.database_auth_rel_with_email(conditions)
+    email = conditions.delete(:email)
+    joins(:emails)
+      .where(conditions.to_h)
+      .where(['lower("emails"."address") = :value', { value: email.downcase }])
+      .where.not(emails: { confirmed_at: nil })
   end
 
   def self.find_for_database_authentication(warden_conditions)
