@@ -131,19 +131,16 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     primary_email_record.update!({ confirmed_at: Time.zone.now })
   end
 
-  def self.u2f_authenticate(user, app_id, json_response, challenges) # rubocop:disable Metrics/MethodLength
-    # binding.pry
+  def self.u2f_authenticate(user, app_id, json_response, challenges)
     response = U2F::SignResponse.load_from_json(json_response)
     registration = user.fido_usf_devices
                        .find_by(key_handle: response.key_handle)
-    # registration = user.fido_usf_devices.find_by_key_handle(response.key_handle)
     u2f = U2F::U2F.new(app_id)
-    # binding.pry
-    if registration
-      u2f.authenticate!(challenges, response, registration.public_key, registration.counter)
-      registration.update(counter: response.counter)
-      true
-    end
+    return false unless registration
+
+    u2f.authenticate!(challenges, response, registration.public_key, registration.counter)
+    registration.update(counter: response.counter)
+    true
   rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
     false
   end
