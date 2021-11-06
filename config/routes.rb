@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
       post :disable_two_factor, to: 'users#disable_two_factor'
       post :emails, to: 'users#emails'
+      post 'resend_confirmation', to: 'users#resend_confirmation', as: :resend_confirmation
       delete :emails, to: 'users#destroy_email', as: 'delete_email'
     end
     resources :custom_userdata_types
