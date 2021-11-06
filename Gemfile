@@ -132,6 +132,7 @@ end
 group :test do
   gem 'database_cleaner-active_record'
   gem 'faker'
+  gem 'ruby-saml', '>= 1.7.2'
   gem 'shoulda'
   gem 'simplecov',      require: false
   gem 'simplecov-lcov', require: false

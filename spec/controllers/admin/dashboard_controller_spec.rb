@@ -111,7 +111,7 @@ RSpec.describe Admin::DashboardController, type: :controller do
             @controller.reset_sudo_session!
           end
           after do
-            Setting.sudo_enabled = true
+            Setting.sudo_enabled = false
           end
           it 'Asks for password confirmation' do
             get :index
