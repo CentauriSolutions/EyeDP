@@ -232,6 +232,12 @@ RSpec.describe Admin::SettingsController, type: :controller do
           expect(Setting.session_timeout_in).to be nil
           expect(Devise.timeout_in).to be nil
         end
+
+        it 'can set the SAML timeout' do
+          expect(Setting.saml_timeout).to be 0
+          post(:update, params: { setting: { saml_timeout: '86400' } })
+          expect(Setting.saml_timeout).to eq 86_400
+        end
       end
     end
 

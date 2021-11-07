@@ -51,7 +51,7 @@ class Admin::SettingsController < AdminController
       :devise_reset_password_within,
       :session_timeout_in,
       :sudo_session_duration, :sudo_enabled, :sudo_for_sso,
-      :saml_certificate, :saml_key,
+      :saml_certificate, :saml_key, :saml_timeout,
       :oidc_signing_key,
       :registration_enabled, :permanent_email,
       :logo, :logo_height, :logo_width,

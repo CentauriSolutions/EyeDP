@@ -3,6 +3,13 @@
   <table class="table table-striped">
     <tbody>
       <tr>
+        <td>Session Timeout</td>
+        <td>
+          <input type="text" name="setting[saml_timeout]" class="form-control" value="<%= Setting.saml_timeout %>" />
+          <p class="small">This configuration option is used to configure SAML's <code>SessionNotOnOrAfter</code> option and is a number of seconds. A timeout of zero means the SAML session won't time out.</p>
+        </td>
+      </tr>
+      <tr>
         <td>Certificate</td>
         <td>
           <textarea name="setting[saml_certificate]" class="form-control"><%= Setting.saml_certificate %></textarea>
