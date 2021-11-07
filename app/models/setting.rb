@@ -150,6 +150,7 @@ class Setting < ApplicationRecord
   field :idp_base
   field :saml_certificate
   field :saml_key
+  field :saml_timeout, type: :integer, default: 0
   field :registration_enabled, type: :boolean, default: false
   field :oidc_signing_key
   field :logo

@@ -48,7 +48,9 @@ SamlIdp.configure do |config|
     "#{Setting.idp_base}/saml/auth"
   end
 
-  # config.session_expiry = 86400                                 # Default: 0 which means never
+  def config.session_expiry
+    Setting.saml_timeout
+  end
 
   # Principal (e.g. User) is passed in when you `encode_response`
   #
