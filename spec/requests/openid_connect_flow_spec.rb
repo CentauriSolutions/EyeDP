@@ -3,6 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'OpenID Connect Flow', type: :request do
+  before(:all) do
+    Setting.oidc_signing_key = File.read(Rails.root.join('key.pem'))
+  end
+  after(:all) do
+    Setting.oidc_signing_key = nil
+  end
   let(:user) do
     user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
     user.confirm!
@@ -10,7 +16,7 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
   end
   let(:users_group) { Group.create!(name: 'users') }
   let(:application) do
-    Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
+    Application.create!(uid: 'test', internal: false, redirect_uri: 'https://example.com', name: 'test')
   end
   let(:params) do
     {
@@ -26,7 +32,8 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
       scopes: application.scopes,
       token: Doorkeeper::OAuth::Helpers::UniqueToken.generate,
       expires_in: 2.hours,
-      application: application
+      application: application,
+      redirect_uri: application.redirect_uri
     )
   end
 
@@ -77,6 +84,12 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
                           scopes: 'openid')
     end
 
+    it 'token response includes an ID token' do
+      request_access_token!
+      json_response = JSON.parse(response.body)
+      expect(json_response).to include 'id_token'
+    end
+
     context 'UserInfo payload' do
       before do
         user.groups << users_group
@@ -87,6 +100,22 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
         json_response = JSON.parse(response.body)
         expect(json_response).to match(id_token_claims.merge(user_info_claims))
         expect(json_response['groups']).to match([users_group.name])
+      end
+
+      context 'with a group restricted SP' do
+        let(:other_group) { Group.create!(name: 'users2') }
+        let(:application) do
+          app = Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test',
+                                    scopes: 'openid')
+          app.groups << other_group
+          app
+        end
+
+        it "doesn't allow other group access" do
+          json_response = JSON.parse(response.body)
+          expect(json_response).to match(id_token_claims.merge(user_info_claims))
+          expect(json_response['groups']).to match([users_group.name])
+        end
       end
     end
   end
