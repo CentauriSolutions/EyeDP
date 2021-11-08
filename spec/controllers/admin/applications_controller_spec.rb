@@ -123,6 +123,20 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
           expect(app.display_url).to eq('test.com')
         end
 
+        it 'can update the required groups' do
+          expect(app.groups).to be_empty
+          post(:update, params:
+            { id: app.id, application:
+              { group_ids: [group.id] } })
+          app.reload
+          expect(app.groups).to include group
+          post(:update, params:
+            { id: app.id, application: { display_url: app.display_url, group_ids: [] } })
+          app.reload
+          expect(app.groups).not_to include group
+        end
+
+        # Updating the secret can only be done via the renew_secret functionality
         it 'cannot edit the secret' do
           secret = app.secret
           post(:update, params: { id: app.id, application: { secret: 'fake secret' } })
@@ -130,11 +144,10 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
           expect(app.secret).to eq(secret)
         end
 
-        it 'cannot edit the UID' do
-          uid = app.uid
-          post(:update, params: { id: app.id, application: { uid: 'fake uid' } })
+        it 'can edit the UID' do
+          post(:update, params: { id: app.id, application: { uid: 'new uid' } })
           app.reload
-          expect(app.uid).to eq(uid)
+          expect(app.uid).to eq('new uid')
         end
       end
 
