@@ -7,14 +7,20 @@ class SamlIdpController < SamlIdp::IdpController
   sudo except: :show, if: -> { Setting.sudo_for_sso }
 
   # override create and make sure to set both "GET" and "POST" requests to /saml/auth to #create
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def create
     if user_signed_in?
+      app = SamlServiceProvider.find_by(issuer_or_entity_id: @saml_request.issuer)
+      if app&.groups&.any? && (current_user.groups & app.groups).empty?
+        redirect_to main_app.root_url,
+                    notice: 'You are not authorized to access this application.' and return
+      end
+
       @saml_response = idp_make_saml_response(current_user)
       render template: 'saml_idp/idp/saml_post', layout: false
       Login.create(
         user: current_user,
-        service_provider: SamlServiceProvider.find_by(issuer_or_entity_id: @saml_request.issuer)
+        service_provider: app
       )
       nil
     else
@@ -22,7 +28,7 @@ class SamlIdpController < SamlIdp::IdpController
       render status: :forbidden
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # NOT USED -- def idp_authenticate(email, password) -- NOT USED
 
