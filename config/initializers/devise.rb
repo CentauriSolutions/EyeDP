@@ -24,7 +24,9 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = ENV['REGISTRATION_FROM_EMAIL']
+  def config.mailer_sender
+    ENV['REGISTRATION_FROM_EMAIL'] || Setting.welcome_from_email
+  end
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'

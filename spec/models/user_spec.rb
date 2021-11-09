@@ -30,7 +30,13 @@ require 'devise_two_factor/spec_helpers'
 RSpec.describe User, type: :model do
   include ActiveJob::TestHelper
 
-  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
+  let(:user) do
+    u = User.new(username: 'example', email: 'test@localhost', password: 'test1234')
+    u.emails[0].confirmed_at = Time.now.utc
+    u.save!
+    u
+  end
+
   let(:group) { Group.create!(name: 'administrators', admin: true) }
   let(:operator_group) { Group.create!(name: 'operators', operator: true) }
   let(:manager_group) { Group.create!(name: 'managers', manager: true) }

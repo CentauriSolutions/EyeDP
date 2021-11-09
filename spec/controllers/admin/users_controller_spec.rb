@@ -5,8 +5,9 @@ require 'rails_helper'
 RSpec.describe Admin::UsersController, type: :controller do
   include ActiveJob::TestHelper
   let(:user) do
-    user = User.create!(username: 'user', email: 'user@localhost', password: 'test1234')
-    user.confirm!
+    user = User.new(username: 'user', email: 'user@localhost', password: 'test1234')
+    user.emails[0].confirmed_at = Time.now.utc
+    user.save!
     user
   end
   let(:admin_group) { Group.create!(name: 'administrators', admin: true) }
@@ -158,6 +159,17 @@ RSpec.describe Admin::UsersController, type: :controller do
           end
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
         expect(flash[:notice]).to match('Welcome email will be sent.')
+      end
+
+      it 'can resend the confirmation email' do
+        email = Email.create(user: user, address: 'user2@localhost')
+        expect do
+          perform_enqueued_jobs do
+            post(:resend_confirmation, params: { user_id: user.id, email_id: email.id })
+            expect(response.status).to eq(302)
+          end
+          expect(flash[:notice]).to match('Confirmation email was sent.')
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
       it 'can delete a user' do
@@ -329,7 +341,7 @@ RSpec.describe Admin::UsersController, type: :controller do
         it 'can reset a password with multiple emails' do
           expect do
             perform_enqueued_jobs do
-              Email.create(user: user, address: 'user2@localhost')
+              Email.create(user: user, address: 'user2@localhost', confirmed_at: Time.now.utc)
               post(:reset_password, params: { user_id: user.id })
               expect(response.status).to eq(302)
             end
@@ -345,6 +357,17 @@ RSpec.describe Admin::UsersController, type: :controller do
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
           expect(flash[:notice]).to match('Welcome email will be sent.')
+        end
+
+        it 'can resend the confirmation email' do
+          email = Email.create(user: user, address: 'user2@localhost')
+          expect do
+            perform_enqueued_jobs do
+              post(:resend_confirmation, params: { user_id: user.id, email_id: email.id })
+              expect(response.status).to eq(302)
+            end
+          end.to change { Devise.mailer.deliveries.count }.by(1)
+          expect(flash[:notice]).to match('Confirmation email was sent.')
         end
 
         it 'Can see if a user has two factor enabled' do
