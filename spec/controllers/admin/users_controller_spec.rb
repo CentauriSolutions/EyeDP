@@ -119,6 +119,19 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
       end
 
+      it 'can create a user with additional emails' do
+        expect do
+          perform_enqueued_jobs do
+            post(:create, params: {
+                   send_welcome_email: true,
+              user: { email: 'test@example.com', emails: ['test2@example.com'], username: 'test' }
+                 })
+            expect(response.status).to eq(302)
+            expect(User.find_by(username: 'test').emails.count).to eq 2
+          end
+        end.to change { ActionMailer::Base.deliveries.count }.by(2)
+      end
+
       context 'duplicate' do
         render_views
 
@@ -307,6 +320,19 @@ RSpec.describe Admin::UsersController, type: :controller do
               expect(response.status).to eq(302)
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        it 'can create a user with additional emails' do
+          expect do
+            perform_enqueued_jobs do
+              post(:create, params: {
+                     send_welcome_email: true,
+                user: { email: 'test@example.com', emails: ['test2@example.com'], username: 'test' }
+                   })
+              expect(response.status).to eq(302)
+              expect(User.find_by(username: 'test').emails.count).to eq 2
+            end
+          end.to change { ActionMailer::Base.deliveries.count }.by(2)
         end
 
         context 'duplicate' do

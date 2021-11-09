@@ -10,8 +10,13 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   end
 
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    @model = model.new(model_params)
-    @model.emails[0].confirmed_at = Time.now.utc
+    options = model_params
+    emails = options.delete(:emails) || []
+    @model = model.new(options)
+    @model.primary_email_record.confirmed_at = Time.now.utc
+    emails.each do |email|
+      @model.emails << Email.new(address: email, confirmed_at: Time.now.utc)
+    end
     respond_to do |format|
       if @model.save
         format.html { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully created." }
@@ -170,10 +175,14 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    p = params.require(:user).permit(
+  def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+    allowlist_attrs = [
       :email, :username, :name, :expires_at,
-      :password, :last_activity_at, group_ids: []
+      :password, :last_activity_at, { group_ids: [] }
+    ]
+    allowlist_attrs.push(emails: []) if params[:action] == 'create'
+    p = params.require(:user).permit(
+      allowlist_attrs
     )
     p[:group_ids] ||= []
     if current_user.manager? && !current_user.admin?
