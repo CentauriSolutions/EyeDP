@@ -74,6 +74,20 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     redirect_to admin_user_path(model), notice: 'Confirmation email was sent.'
   end
 
+  def resend_welcome_email
+    @model = User.find(params[:user_id])
+    respond_to do |format|
+      if @model.send_admin_welcome_email
+        format.html { redirect_to [:edit, :admin, @model], notice: 'Welcome email will be sent.' }
+        format.json { render :show, status: :ok, location: [:admin, @model] }
+      else
+        format.html { redirect_to [:admin, @model, :edit], notice: 'There was a problem processing the request' }
+
+        format.json { render json: @model.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def disable_two_factor # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @model = User.find(params[:user_id])
     if (@model.admin? || @model.operator?) && !current_user.admin?

@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     end
     resources :users do
       post :reset_password, to: 'users#reset_password'
-
+      post :resend_welcome_email, to: 'users#resend_welcome_email'
       post :disable_two_factor, to: 'users#disable_two_factor'
       post :emails, to: 'users#emails'
       post 'resend_confirmation', to: 'users#resend_confirmation', as: :resend_confirmation
