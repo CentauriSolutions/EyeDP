@@ -47,12 +47,11 @@ RSpec.describe 'SAML Flow', type: :request do
   context 'Logged in user' do
     before do
       Setting.idp_base = 'http://localhost:3000'
-      Setting.saml_certificate = File.read(Rails.root.join('myCert.crt'))
-      Setting.saml_key = File.read(Rails.root.join('myKey.key'))
+      Setting.saml_certificate = File.read(Rails.root.join('spec/myCert.crt'))
+      Setting.saml_key = File.read(Rails.root.join('spec/myKey.key'))
       user.groups << users_group
       sign_in user
       application
-      saml_request!
     end
 
     after do
@@ -63,12 +62,43 @@ RSpec.describe 'SAML Flow', type: :request do
     end
 
     it 'gets user attributes' do
+      saml_request!
       expect(response.body).to match(/id="SAMLResponse" value="(.*)"/)
       match = response.body.match(/id="SAMLResponse" value="(.*)"/)
       saml_response = OneLogin::RubySaml::Response.new Base64.decode64(match[1])
       saml_attrs = saml_response.attributes.to_h
       expect(saml_attrs).to match(user_attributes)
       expect(saml_attrs['groups']).to match([users_group.name])
+    end
+
+    context 'A SAML app with groups' do
+      let(:group) { Group.create!(name: 'users2') }
+      let(:application) do
+        app = SamlServiceProvider.create!(
+          metadata_url: 'https://example.com/saml_metadata',
+          issuer_or_entity_id: 'https://example.com',
+          response_hosts: ['example.com'],
+          display_url: 'example.com', name: 'test'
+        )
+        app.groups << group
+        app
+      end
+
+      it 'does not grant access without group membership' do
+        saml_request!
+        expect(flash[:notice]).to match('You are not authorized to access this application.')
+      end
+
+      it 'does grant access with group membership' do
+        user.groups << group
+        saml_request!
+        expect(response.body).to match(/id="SAMLResponse" value="(.*)"/)
+        match = response.body.match(/id="SAMLResponse" value="(.*)"/)
+        saml_response = OneLogin::RubySaml::Response.new Base64.decode64(match[1])
+        saml_attrs = saml_response.attributes.to_h
+        expect(saml_attrs).to match(user_attributes)
+        expect(saml_attrs['groups']).to match([users_group.name, group.name])
+      end
     end
   end
 end

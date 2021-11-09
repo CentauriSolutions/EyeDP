@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_30_065802) do
+ActiveRecord::Schema.define(version: 2021_11_07_071320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -145,6 +145,16 @@ ActiveRecord::Schema.define(version: 2021_10_30_065802) do
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_group_permissions_on_group_id"
     t.index ["permission_id"], name: "index_group_permissions_on_permission_id"
+  end
+
+  create_table "group_service_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "group_id"
+    t.string "service_provider_type"
+    t.uuid "service_provider_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["group_id"], name: "index_group_service_providers_on_group_id"
+    t.index ["service_provider_type", "service_provider_id"], name: "index_group_service_providers_on_service_provider"
   end
 
   create_table "groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -325,6 +335,7 @@ ActiveRecord::Schema.define(version: 2021_10_30_065802) do
   add_foreign_key "custom_userdata", "users"
   add_foreign_key "group_permissions", "groups"
   add_foreign_key "group_permissions", "permissions"
+  add_foreign_key "group_service_providers", "groups"
   add_foreign_key "logins", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"

@@ -37,12 +37,12 @@ class Admin::ApplicationsController < AdminController
   private
 
   def application_attributes
-    %w[name display_url uid secret internal redirect_uri scopes confidential]
+    %w[name display_url uid secret internal redirect_uri scopes confidential groups]
   end
   helper_method :application_attributes
 
   def model_attributes
-    %w[name display_url uid internal redirect_uri scopes confidential]
+    %w[name display_url uid internal redirect_uri scopes confidential groups]
   end
 
   def new_fields
@@ -54,10 +54,13 @@ class Admin::ApplicationsController < AdminController
   end
 
   def model_params
-    params.require('application').permit(
-      :name, :display_url, :internal, :scopes,
-      :redirect_uri, :confidential
+    p = params.require('application').permit(
+      :name, :display_url, :internal, :scopes, :uid,
+      :redirect_uri, :confidential, group_ids: []
     )
+    p[:group_ids]&.reject!(&:empty?)
+    p[:group_ids] ||= []
+    p
   end
 
   def ensure_user_is_authorized!

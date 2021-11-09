@@ -30,8 +30,8 @@ RSpec.describe OauthApplicationsController, type: :controller do
         Setting.sudo_enabled = true
       end
       after do
-        Setting.sudo_for_sso = true
-        Setting.sudo_enabled = true
+        Setting.sudo_for_sso = false
+        Setting.sudo_enabled = false
       end
       describe 'New login' do
         it 'updates user activity' do
@@ -84,6 +84,22 @@ RSpec.describe OauthApplicationsController, type: :controller do
           get :create, params: params
           expect(response.status).to eq(302)
           expect(Login.count).to eq 1
+        end
+      end
+
+      describe 'with a group restriction' do
+        let(:other_group) { Group.create!(name: 'users2') }
+        let(:app) do
+          app = Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test',
+                                    scopes: 'openid')
+          app.groups << other_group
+          app
+        end
+
+        it 'does not grant access' do
+          get :create, params: params
+          expect(flash[:notice]).to match('You are not authorized to access this application.')
+          user.reload
         end
       end
     end

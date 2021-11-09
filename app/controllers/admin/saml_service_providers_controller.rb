@@ -9,7 +9,7 @@ class Admin::SamlServiceProvidersController < AdminController
   private
 
   def model_attributes
-    %w[name display_url issuer_or_entity_id metadata_url fingerprint response_hosts]
+    %w[name display_url issuer_or_entity_id metadata_url fingerprint response_hosts groups]
   end
 
   def new_fields
@@ -20,14 +20,16 @@ class Admin::SamlServiceProvidersController < AdminController
     SamlServiceProvider
   end
 
-  def model_params
+  def model_params # rubocop:disable Metrics/MethodLength
     p = params
         .require(:saml_service_provider)
         .permit(
           :name, :display_url,
           :issuer_or_entity_id, :metadata_url,
-          :fingerprint, :response_hosts
+          :fingerprint, :response_hosts, group_ids: []
         )
+    p[:group_ids]&.reject!(&:empty?)
+    p[:group_ids] ||= []
     p[:response_hosts] = p[:response_hosts].split(/ +/) if p[:response_hosts]
     p
   end

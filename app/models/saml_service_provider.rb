@@ -21,6 +21,8 @@ class SamlServiceProvider < ApplicationRecord
   audited
 
   has_many :logins, as: :service_provider, dependent: :destroy
+  has_many :group_service_providers, as: :service_provider, dependent: :destroy
+  has_many :groups, through: :group_service_providers
 
   def to_s
     issuer_or_entity_id
