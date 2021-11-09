@@ -285,7 +285,7 @@ RSpec.describe Api::GroupsController, type: :controller do
         user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test1234')
         post(:add_user, params: { api_key: api_key.key, group_id: group.id, user_id: user2.id })
         group.reload
-        expect(group.users).to eq [user, user2]
+        expect(group.users).to match [user, user2]
       end
     end
   end

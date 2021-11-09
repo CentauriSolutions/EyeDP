@@ -9,12 +9,20 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     @logins = @model.logins.includes(:service_provider).order(created_at: :desc).limit(50)
   end
 
-  def create
-    super
+  def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    @model = model.new(model_params)
+    @model.emails[0].confirmed_at = Time.now.utc
+    respond_to do |format|
+      if @model.save
+        format.html { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully created." }
+        format.json { render :show, status: :created, location: [:admin, @model] }
+      else
+        format.html { render :new }
+        format.json { render json: @model.errors, status: :unprocessable_entity }
+      end
+    end
     return unless @model.persisted?
 
-    @model.primary_email_record.confirmed_at = Time.zone.now
-    @model.primary_email_record.save
     if params[:send_welcome_email]
       @model.send_admin_welcome_email
     else
