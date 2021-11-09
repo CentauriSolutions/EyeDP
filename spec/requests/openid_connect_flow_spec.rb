@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'OpenID Connect Flow', type: :request do
   before(:all) do
-    Setting.oidc_signing_key = File.read(Rails.root.join('key.pem'))
+    Setting.oidc_signing_key = File.read(Rails.root.join('spec/key.pem'))
   end
   after(:all) do
     Setting.oidc_signing_key = nil
@@ -16,7 +16,7 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
   end
   let(:users_group) { Group.create!(name: 'users') }
   let(:application) do
-    Application.create!(uid: 'test', internal: false, redirect_uri: 'https://example.com', name: 'test')
+    Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
   end
   let(:params) do
     {

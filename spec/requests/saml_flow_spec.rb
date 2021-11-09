@@ -47,8 +47,8 @@ RSpec.describe 'SAML Flow', type: :request do
   context 'Logged in user' do
     before do
       Setting.idp_base = 'http://localhost:3000'
-      Setting.saml_certificate = File.read(Rails.root.join('myCert.crt'))
-      Setting.saml_key = File.read(Rails.root.join('myKey.key'))
+      Setting.saml_certificate = File.read(Rails.root.join('spec/myCert.crt'))
+      Setting.saml_key = File.read(Rails.root.join('spec/myKey.key'))
       user.groups << users_group
       sign_in user
       application
