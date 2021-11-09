@@ -70,7 +70,27 @@
       </div>
     </div>
   </div>
-
+  <%- if new_model %>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-2">
+          <%= form.label :additional_emails %>
+        </div>
+        <div class="col-sm-10" id="emails">
+          <%- @model.emails.each do |email| %>
+            <div class="input-group" id="input-group-user-emails-<%= email.id %>">
+              <%= text_field_tag "user[emails][#{email.id}]", email.address, class: 'form-control' %>
+              <div class="input-group-append">
+                <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-user-emails-<%= email.id %>">Remove</button>
+              </div>
+            </div>
+            <%- end %>
+          <%= text_field_tag "user[emails][]", nil, class: 'form-control', placeholder: 'Email' %>
+        </div>
+        <button  type="button" onclick="add_field(this)" data-name="user[emails]" data-target="emails" class="btn btn-info"><%= fa_icon 'plus' %> Add Email</button>
+      </div>
+    </div>
+  <%- end %>
   <div class="form-group">
     <div class="row">
       <div class="col-sm-2">
