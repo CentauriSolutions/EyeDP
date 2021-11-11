@@ -110,7 +110,7 @@ using hobby or larger for any kind of production deployment.
 
 The easiest way to get started hosting EyeDP on your own infrastructure
 is to use Docker Compose. The following can be customized to your needs and
-should be places behind a load-balancer, such as Traefik or Nginx.
+should be placed behind a load-balancer, such as Traefik or Nginx.
 
 ```yaml
 version: '3'
