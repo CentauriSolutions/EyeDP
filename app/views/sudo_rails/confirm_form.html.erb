@@ -63,7 +63,7 @@
   <%= form_tag '/sudo_rails/confirm', method: 'post' do %>
     <%= hidden_field_tag :locale, I18n.locale %>
     <%= hidden_field_tag :target_path, params[:target_path] || request.url %>
-    <%= hidden_field_tag 'user[device_response]' %> %>
+    <%= hidden_field_tag 'user[device_response]' %>
   <% end %>
   <%= javascript_tag nonce: true do -%>
     var appId = <%= @app_id.to_json.html_safe %>;

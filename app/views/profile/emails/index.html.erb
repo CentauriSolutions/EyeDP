@@ -1,10 +1,12 @@
+<h1 class="flex justify-center">Welcome, <%= current_user.username || current_user.email %></h1>
+<hr />
 <div class="row">
   <%= render partial: 'profile/profile_nav' %>
-  <div class="col 12">
+  <div class="col-md-9 col-lg-10">
     <h2>Emails</h2>
     <div class="row">
       <div class="col-12">
-        <h3>Add email address</h3>
+        <h4>Add email address</h4>
 
         <%= bootstrap_form_for @email, url: profile_emails_path do |f| %>
           <% if @email.errors.any? %>
@@ -28,7 +30,7 @@
     <hr />
     <div class="row">
       <div class="col-12">
-        <h3>Linked Emails</h3>
+        <h4>Linked Emails</h4>
 
         <table class="table table-striped">
           <tbody>
