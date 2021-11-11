@@ -102,7 +102,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     token = set_reset_password_token
     passed = true
-    emails.each do |email|
+    emails.confirmed.each do |email|
       passed = false unless UserMailer.force_reset_password_email(self, token, email.address).deliver_later
     end
     passed
@@ -110,7 +110,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def send_admin_welcome_email
     token = set_reset_password_token
-    emails.each do |email|
+    emails.confirmed.each do |email|
       UserMailer.admin_welcome_email(self, token, email.address).deliver_later
     end
   end

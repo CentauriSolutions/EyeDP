@@ -5,6 +5,10 @@ class Email < ApplicationRecord
 
   validates :address, presence: true, uniqueness: { case_sensitive: false }
 
+  def self.confirmed
+    where.not(confirmed_at: nil)
+  end
+
   def email
     address
   end
