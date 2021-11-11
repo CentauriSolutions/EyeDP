@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Profile::AdditionalPropertiesController, type: :controller do
+RSpec.describe Profile::ProfileController, type: :controller do
   let(:user) do
     user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
     user.confirm!

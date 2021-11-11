@@ -90,6 +90,8 @@ Rails.application.routes.draw do
   get 'auth/basic/:permission_name', to: 'basic_auth#create'
 
   namespace :profile do
+    get '/', to: 'profile#index', as: :profile_path
+    post '/', to: 'profile#update'
     get 'authentication_devices', to: 'authentication_devices#index'
     get 'account_activity', to: 'account_activity#index'
     get 'additional_properties', to: 'additional_properties#index'

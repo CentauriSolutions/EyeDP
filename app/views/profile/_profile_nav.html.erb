@@ -1,10 +1,10 @@
 <div class="col-md-3 col-lg-2 profile-nav">
   <ul class="nav flex-column">
-    <%= nav_link _("Personal Details"), root_path %>
-    <%= nav_link _("Emails"), profile_emails_path %>
+    <%= nav_link _("Account"), root_path %>
     <%- if CustomUserdataType.any? %>
-    <%= nav_link _("Additional Properties"), profile_additional_properties_path %>
+    <%= nav_link _("Profile"), profile_path %>
     <%- end %>
+    <%= nav_link _("Emails"), profile_emails_path %>
     <%= nav_link _("Authentication devices"), profile_authentication_devices_path %>
     <%= nav_link _("Account activity"), profile_account_activity_path %>
   </ul>
