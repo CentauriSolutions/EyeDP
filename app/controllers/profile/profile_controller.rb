@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Profile::AdditionalPropertiesController < ApplicationController
+class Profile::ProfileController < ApplicationController
   before_action :authenticate_user!
 
   def index; end
