@@ -97,7 +97,7 @@ RSpec.describe 'SAML Flow', type: :request do
         saml_response = OneLogin::RubySaml::Response.new Base64.decode64(match[1])
         saml_attrs = saml_response.attributes.to_h
         expect(saml_attrs).to match(user_attributes)
-        expect(saml_attrs['groups']).to match([users_group.name, group.name])
+        expect(saml_attrs['groups']).to match_array([users_group.name, group.name])
       end
     end
   end

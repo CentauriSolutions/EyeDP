@@ -1,0 +1,73 @@
+<h1 class="flex justify-center">Welcome, <%= current_user.username || current_user.email %></h1>
+<hr />
+<div class="row">
+  <%= render partial: 'profile/profile_nav' %>
+  <div class="col-md-9 col-lg-10">
+    <h2>Personal Access Tokens</h2>
+    <%- if @new_token %>
+    <div class="row">
+
+      <div class="col-12">
+        <h4>Your new personal access token</h4>
+        <%= text_field_tag '', @new_token.token, disabled: true, class: 'form-control' %>
+        <p class="small">Make sure you save it - you won't be able to access it again.</p>
+      </div>
+    </div>
+    <%- end %>
+    <div class="row">
+      <div class="col-12">
+        <h4>Add a personal access token </h4>
+
+        <%= bootstrap_form_for @token, url: profile_access_tokens_path do |f| %>
+          <% if @token.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@token.errors.count, "error") %> prohibited this access token from being saved:</h2>
+
+              <ul>
+              <% @token.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div class="input-group">
+            <%= f.text_field :name %>
+          </div>
+          <div class="input-group">
+            <%= f.date_field :expires_at %>
+          </div>
+          <%= f.submit _('Save Changes'), class: 'btn btn-success', style: "float: left" %>
+        <% end %>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-12">
+        <h4> Active personal access tokens (<%= @tokens.count %>) </h4>
+
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Last Used</th>
+                <th>Expires At</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <%- @tokens.each do |token| %>
+                <tr>
+                  <td><%= token.name %></td>
+                  <td><%= token.created_at %></td>
+                  <td><%= token.last_used_at %></td>
+                  <td><%= token.expires_at %></td>
+                  <td><%= link_to 'Revoke', [:profile, token], method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure you want to revoke this personal access token? This action cannot be undone.' } %></td>
+                </tr>
+              <%- end %>
+            </tbody>
+            </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -31,6 +31,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   audited
 
   has_many :emails, dependent: :destroy
+  has_many :access_tokens, dependent: :destroy
 
   alias_attribute :real_name, :name
 
@@ -55,12 +56,12 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :group_permissions, through: :groups
   has_many :permissions, through: :group_permissions
 
-  has_many :access_grants,
+  has_many :oatch_access_grants,
            class_name: 'Doorkeeper::AccessGrant',
            foreign_key: :resource_owner_id,
            dependent: :delete_all # or :destroy if you need callbacks
 
-  has_many :access_tokens,
+  has_many :oauth_access_tokens,
            class_name: 'Doorkeeper::AccessToken',
            foreign_key: :resource_owner_id,
            dependent: :delete_all # or :destroy if you need callbacks

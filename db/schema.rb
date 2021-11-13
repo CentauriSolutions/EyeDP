@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_07_071320) do
+ActiveRecord::Schema.define(version: 2021_11_13_065909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "access_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "token", null: false
+    t.uuid "user_id", null: false
+    t.text "name"
+    t.date "expires_at"
+    t.datetime "last_used_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_access_tokens_on_user_id"
+  end
 
   create_table "api_keys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "key", null: false
@@ -168,6 +179,7 @@ ActiveRecord::Schema.define(version: 2021_11_07_071320) do
     t.boolean "admin", default: false
     t.boolean "manager", default: false
     t.boolean "operator", default: false
+    t.boolean "permit_token", default: false
     t.index ["parent_id"], name: "index_groups_on_parent_id"
   end
 
@@ -329,6 +341,7 @@ ActiveRecord::Schema.define(version: 2021_11_07_071320) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "access_tokens", "users"
   add_foreign_key "custom_groupdata", "custom_group_data_types"
   add_foreign_key "custom_groupdata", "groups"
   add_foreign_key "custom_userdata", "custom_userdata_types"

@@ -9,6 +9,9 @@ RSpec.describe BasicAuthController, type: :controller do
     user
   end
 
+  let(:permission) { Permission.create!(name: 'use.test_app') }
+  let(:group) { Group.create!(name: 'my_group', permissions: [permission]) }
+
   describe 'unauthenticated_user' do
     it 'forbids non-authenticated user' do
       get :create, params: { permission_name: 'use.test_app' }
@@ -17,9 +20,6 @@ RSpec.describe BasicAuthController, type: :controller do
   end
 
   describe 'authenticated_user' do
-    let(:permission) { Permission.create!(name: 'use.test_app') }
-    let(:group) { Group.create!(name: 'my_group', permissions: [permission]) }
-
     context 'with session timeouts disabled (default)' do
       before do
         Setting.session_timeout_in = nil
@@ -122,6 +122,41 @@ RSpec.describe BasicAuthController, type: :controller do
       sign_in user
       get :create, params: { permission_name: 'use.test_app' }
       expect(response.status).to eq(403)
+    end
+  end
+
+  describe 'with access tokens' do
+    it 'allows access' do
+      token = AccessToken.create!(user: user)
+
+      user.groups << Group.create!(name: 'my_group', permissions: [permission], permit_token: true)
+      request.headers['EyeDP-Authorize'] = token.token
+      get :create, params: { permission_name: 'use.test_app' }
+      expect(response.status).to eq(200)
+      token.reload
+      expect(token.last_used_at).not_to be_nil
+    end
+
+    it 'denies expired access' do
+      token = AccessToken.create!(user: user, expires_at: 2.days.ago)
+
+      user.groups << Group.create!(name: 'my_group', permissions: [permission], permit_token: true)
+      request.headers['EyeDP-Authorize'] = token.token
+      get :create, params: { permission_name: 'use.test_app' }
+      expect(response.status).to eq(401)
+      token.reload
+      expect(token.last_used_at).to be_nil
+    end
+
+    it 'denies access without group access' do
+      token = AccessToken.create!(user: user)
+
+      user.groups << Group.create!(name: 'my_group', permissions: [permission], permit_token: false)
+      request.headers['EyeDP-Authorize'] = token.token
+      get :create, params: { permission_name: 'use.test_app' }
+      expect(response.status).to eq(401)
+      token.reload
+      expect(token.last_used_at).to be_nil
     end
   end
 end

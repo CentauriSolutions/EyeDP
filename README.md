@@ -368,6 +368,12 @@ response headers: `EyeDP-Email` and `EyeDP-Username`. As a result, Nginx is
 capable of interpreting these headers and send them to other appication
 backends!
 
+In addition to supporting general user sessions, it is possible to grant a user
+access to personal access tokens via the permit_token attribute on a group that
+they are a member of. When they have this permission, setting the header
+`EyeDP-Authorize` to their access_token will allow passing through the basic
+auth controller without a user session.
+
 ## Management
 
 Managing an identity provider can be a complex task requiring many different
