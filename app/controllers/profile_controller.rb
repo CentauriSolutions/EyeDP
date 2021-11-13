@@ -6,7 +6,7 @@ class ProfileController < ApplicationController
   before_action :set_flash_on_restrictions
 
   def show # rubocop:disable Metrics/MethodLength
-    @template = Liquid::Template.parse(Setting.registered_home_template)
+    @template = Liquid::Template.parse(Setting.registered_home_template) if Setting.registered_home_template.present?
     @logins = current_user
               .logins
               .includes([:service_provider])
