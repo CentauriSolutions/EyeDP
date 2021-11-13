@@ -8,31 +8,38 @@ class BasicAuthController < ApplicationController
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def create
-    # We need to compare against the last request time here ourselves because
-    # warden handles user timeout in a subtly different way to not logged in,
-    # namely, not logged in causes the `user_signed_in` method to return
-    # fakse, but timed out causes ut ti redirect to the login page.
-    if Setting.session_timeout_in.present?
+    key = request.headers['EyeDP-Authorize']
+    token = AccessToken.where(token: key).where('expires_at > ? or expires_at IS NULL', Time.now.utc).first
+    if token && token.user.groups.where(permit_token: true).any?
+      @user = token.user
+      token.update(last_used_at: Time.now.utc)
+    end
+    if @user.nil? && Setting.session_timeout_in.present?
+      # We need to compare against the last request time here ourselves because
+      # warden handles user timeout in a subtly different way to not logged in,
+      # namely, not logged in causes the `user_signed_in` method to return
+      # fakse, but timed out causes it to redirect to the login page.
       last_session_activity = session.try(:[], 'warden.user.user.session').try(:[], 'last_request_at')
       head :unauthorized and return if \
         last_session_activity.present? && \
         Time.at(last_session_activity).utc < Time.current - User.timeout_in.seconds
     end
-    if user_signed_in?
+    @user = current_user if user_signed_in? && @user.nil?
+    if @user
       # we have to manually update the last_activity_at because we're
       # not letting warden do much
       session['warden.user.user.session']['last_request_at'] = Time.now.to_i \
-        if Setting.session_timeout_in.present?
+        if current_user && Setting.session_timeout_in.present?
       permission_checks = [params[:permission_name], "#{params[:permission_name]}.#{params[:format]}"]
-      groups = current_user.asserted_groups
+      groups = @user.asserted_groups
       effective_permissions = groups
                               .map(&:effective_permissions)
                               .flatten
                               .uniq
                               .detect { |f| permission_checks.include? f.name }
       if effective_permissions
-        response.set_header('EyeDP-Username', current_user.username)
-        response.set_header('EyeDP-Email', current_user.email)
+        response.set_header('EyeDP-Username', @user.username)
+        response.set_header('EyeDP-Email', @user.email)
         head :ok
       else
         head :forbidden

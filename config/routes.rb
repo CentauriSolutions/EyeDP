@@ -99,5 +99,6 @@ Rails.application.routes.draw do
     resources :emails do
       post 'resend_confirmation', to: 'emails#resend_confirmation', as: :resend_confirmation
     end
+    resources :access_tokens
   end
 end

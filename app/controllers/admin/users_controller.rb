@@ -159,7 +159,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   private
 
   def includes
-    %i[groups emails]
+    %i[groups emails access_tokens]
   end
 
   def show_whitelist_attributes

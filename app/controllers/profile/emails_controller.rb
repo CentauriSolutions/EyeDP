@@ -14,7 +14,7 @@ class Profile::EmailsController < ApplicationController
       if @email.save
         @email.send_confirmation_instructions
         format.html { redirect_to profile_emails_path, notice: 'Email was successfully created.' }
-        format.json { render :index, status: :created, location: [:admin, @email] }
+        format.json { render :index, status: :created, location: @email }
       else
         format.html { render :index }
         format.json { render json: @email.errors, status: :unprocessable_entity }
