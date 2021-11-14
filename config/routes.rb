@@ -73,7 +73,7 @@ Rails.application.routes.draw do
   }
 
   authenticated do
-    root to: 'profile#show', as: :authenticated_root
+    root to: 'dashboard#home', as: :authenticated_root
   end
 
   scope '(:locale)', locale: /en/ do
@@ -92,6 +92,7 @@ Rails.application.routes.draw do
 
   get 'auth/basic/:permission_name', to: 'basic_auth#create'
 
+  get 'profile/account', to: 'profile#show'
   namespace :profile do
     get '/', to: 'profile#index', as: :profile_path
     post '/', to: 'profile#update'
