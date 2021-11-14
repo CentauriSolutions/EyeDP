@@ -19,13 +19,11 @@
   <body>
     <header>
       <%= render 'layouts/navigation' %>
+      <%= render partial: 'layouts/admin_nav' %>
     </header>
     <main role="main">
       <div class="row">
-        <div class="col-12 col-md-3">
-          <%= render partial: 'layouts/admin_nav' %>
-        </div>
-        <div class="col-12 col-md-9" %>
+        <div class="col-12" %>
           <%= render 'layouts/messages' %>
           <%= yield %>
           <div class="mb-5"></div>
