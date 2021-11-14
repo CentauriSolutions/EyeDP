@@ -15,6 +15,7 @@
     <%= action_cable_meta_tag %>
     <link rel="icon" type="image/ico" href="/favicon.ico">
     <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= stylesheet_link_tag 'admin', media: 'all' %>
   </head>
   <body>
     <header>
@@ -41,7 +42,35 @@
         <!-- END Git Hash -->
       </footer>
     <%- end %>
+
+    <a href="#" data-hotkey="Shift+?" data-toggle="modal" data-target="#hotkey-modal"></a>
+    <div class="modal" tabindex="-1" role="dialog" id="hotkey-modal">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Keyboard Shortcuts</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <%= render partial: 'hotkey_section', locals: { name: 'Objects', hotkeys: [{name: 'Go to New', hotkey: 'n' }]} %>
+              <%= render partial: 'hotkey_section', locals: { name: 'Admin wide shortcuts', hotkeys: [{ name: 'Bring up this help dialog', hotkey: '?' }, { name: 'Go to Users', hotkey: 'u' }, { name: 'Go to Groups', hotkey: 'g' }]} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <%= javascript_include_tag 'application' %>
+    <script type="module">
+      import {install} from '<%= javascript_path 'admin' %>';
+
+      for (const el of document.querySelectorAll('[data-hotkey]')) {
+        install(el)
+      }
+    </script>
+    <%= javascript_include_tag 'admin', type: 'module' %>
     <%= yield :charts_js %>
   </body>
 </html>

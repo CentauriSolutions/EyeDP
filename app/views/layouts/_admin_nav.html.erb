@@ -12,8 +12,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <%- if current_user.admin? || current_user.manager? %>
-            <%= dropdown_nav_link "Users", admin_users_path %>
-            <%= dropdown_nav_link "Groups", admin_groups_path %>
+            <%= dropdown_nav_link "Users", admin_users_path, data: { hotkey: "u" } %>
+            <%= dropdown_nav_link "Groups", admin_groups_path, data: { hotkey: "g" } %>
           <% end %>
           <%- if current_user.admin? || current_user.operator? %>
             <%= dropdown_nav_link "Permissions", admin_permissions_path %>

@@ -14,29 +14,24 @@ module ApplicationHelper
     request.params.slice('sort_dir', 'sort_by', 'filter_by', 'filter')
   end
 
-  def nav_link(link_text, link_path, base_class = '')
-    # if link_path == admin_groups_path
-    # binding.pry
-    # end
+  def nav_link(link_text, link_path, opts = {})
     current_page = current_page?(link_path)
     class_name = 'nav-item'
-    class_name = [base_class, class_name].join(' ')
+    class_name = [opts[:class], class_name].join(' ')
+    opts[:class] = current_page ? 'nav-link active' : 'nav-link'
     tag.li(class: class_name) do
-      link_to link_text, link_path, class: current_page ? 'nav-link active' : 'nav-link'
+      link_to link_text, link_path, opts
     end
   end
 
-  def dropdown_nav_link(link_text, link_path, base_class = '')
-    # if link_path == admin_groups_path
-    # binding.pry
-    # end
+  def dropdown_nav_link(link_text, link_path, opts = {})
     current_page = current_page?(link_path)
     class_name = 'dropdown-item'
-    class_name_parts = [base_class, class_name]
+    class_name_parts = [opts[:class], class_name]
     class_name_parts << 'active' if current_page
     class_name = class_name_parts.join(' ')
-    # tag.li(class: class_name) do
-    link_to link_text, link_path, class: class_name
+    opts[:class] = class_name
+    link_to link_text, link_path, opts
   end
 
   # rubocop:disable Metrics/AbcSize

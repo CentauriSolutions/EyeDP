@@ -1,5 +1,4 @@
-<h1><%= @models.klass.name.pluralize %> <%= link_to "New #{@models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: 'btn btn-small btn-success' %></h1>
-
+<h1><%= @models.klass.name.pluralize %> <%= link_to "New #{@models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: 'btn btn-small btn-success', data: { hotkey: 'n' } %></h1>
 
 <table class="table table-striped">
   <thead>
