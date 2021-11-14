@@ -26,6 +26,19 @@ module ApplicationHelper
     end
   end
 
+  def dropdown_nav_link(link_text, link_path, base_class = '')
+    # if link_path == admin_groups_path
+    # binding.pry
+    # end
+    current_page = current_page?(link_path)
+    class_name = 'dropdown-item'
+    class_name_parts = [base_class, class_name]
+    class_name_parts << 'active' if current_page
+    class_name = class_name_parts.join(' ')
+    # tag.li(class: class_name) do
+    link_to link_text, link_path, class: class_name
+  end
+
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   def settings_row(head, subline, options = {}, &block)
