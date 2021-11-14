@@ -5,6 +5,9 @@
     "repository": "https://github.com/centaurisolutions/eyedp",
     "buildpacks": [
       {
+        "url": "heroku/nodejs",
+      },
+      {
         "url": "heroku/ruby"
       }
     ],
