@@ -55,7 +55,7 @@ class Admin::SettingsController < AdminController
       :oidc_signing_key,
       :registration_enabled, :permanent_email,
       :logo, :logo_height, :logo_width,
-      :home_template, :registered_home_template,
+      :home_template, :dashboard_template, :registered_home_template,
       :expire_after, :welcome_from_email,
       :admin_reset_email_template, :admin_welcome_email_template,
       :admin_reset_email_template_plaintext, :admin_welcome_email_template_plaintext
