@@ -9,12 +9,14 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     @logins = @model.logins.includes(:service_provider).order(created_at: :desc).limit(50)
   end
 
-  def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/PerceivedComplexity
     options = model_params
     emails = options.delete(:emails) || []
     @model = model.new(options)
     @model.primary_email_record.confirmed_at = Time.now.utc
     emails.each do |email|
+      next if email.blank?
+
       @model.emails << Email.new(address: email, confirmed_at: Time.now.utc)
     end
     respond_to do |format|
