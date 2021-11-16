@@ -1,0 +1,26 @@
+<div class="row">
+  {% for application in applications %}
+  <div class="col-xs-12 col-sm-6 col-lg-4">
+    <div class="card" style="height: 100%">
+      <div class="card-body container">
+        <div class="row">
+          <h5 class="card-title mx-auto">{{ application['name'] }}</h5>
+        </div>
+        <div class="row">
+          <a href="{{ application["url"] }}" class="small btn btn-sm btn-outline-primary mx-auto">Visit</a>
+        </div>
+        {% if application["image_url"] %}
+        <div class="row">
+          <img class="card-img-top img-fluid mx-auto" src="{{ application["image_url"] }}" alt="{{application['name'] }} logo" style="max-width: 100px">
+        </div>
+        {% endif %}
+        {% if application["description"] %}
+        <div class="row">
+          <p class="mx-auto">{{ application["description"] }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>

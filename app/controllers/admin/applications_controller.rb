@@ -37,16 +37,16 @@ class Admin::ApplicationsController < AdminController
   private
 
   def application_attributes
-    %w[name display_url uid secret internal redirect_uri scopes confidential groups]
+    %w[name display_url uid secret internal redirect_uri scopes order image_url confidential groups]
   end
   helper_method :application_attributes
 
   def model_attributes
-    %w[name display_url uid internal redirect_uri scopes confidential groups]
+    %w[name display_url internal scopes confidential groups]
   end
 
   def new_fields
-    %w[name display_url internal redirect_uri scopes confidential]
+    %w[name display_url internal redirect_uri scopes order image_url description confidential]
   end
 
   def model
@@ -55,13 +55,20 @@ class Admin::ApplicationsController < AdminController
 
   def model_params
     p = params.require('application').permit(
-      :name, :display_url, :internal, :scopes, :uid,
-      :redirect_uri, :confidential, group_ids: []
+      :name, :display_url, :internal, :scopes, :uid, :order,
+      :redirect_uri, :confidential, :image_url, :description, group_ids: []
     )
     p[:group_ids]&.reject!(&:empty?)
     p[:group_ids] ||= []
     p
   end
+
+  def help_text(field_name)
+    {
+      'order' => 'What order should this application appear in on the user dashboard'
+    }[field_name]
+  end
+  helper_method :help_text
 
   def ensure_user_is_authorized!
     raise(ActionController::RoutingError, 'Not Found') \

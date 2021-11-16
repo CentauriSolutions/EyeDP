@@ -9,11 +9,11 @@ class Admin::SamlServiceProvidersController < AdminController
   private
 
   def model_attributes
-    %w[name display_url issuer_or_entity_id metadata_url fingerprint response_hosts groups]
+    %w[name display_url image_url order description issuer_or_entity_id metadata_url fingerprint response_hosts groups]
   end
 
   def new_fields
-    %w[name display_url issuer_or_entity_id metadata_url fingerprint response_hosts]
+    %w[name display_url image_url order description issuer_or_entity_id metadata_url fingerprint response_hosts]
   end
 
   def model
@@ -25,6 +25,7 @@ class Admin::SamlServiceProvidersController < AdminController
         .require(:saml_service_provider)
         .permit(
           :name, :display_url,
+          :image_url, :description, :order,
           :issuer_or_entity_id, :metadata_url,
           :fingerprint, :response_hosts, group_ids: []
         )
@@ -33,6 +34,13 @@ class Admin::SamlServiceProvidersController < AdminController
     p[:response_hosts] = p[:response_hosts].split(/ +/) if p[:response_hosts]
     p
   end
+
+  def help_text(field_name)
+    {
+      'order' => 'What order should this application appear in on the user dashboard'
+    }[field_name]
+  end
+  helper_method :help_text
 
   def ensure_user_is_authorized!
     raise(ActionController::RoutingError, 'Not Found') \

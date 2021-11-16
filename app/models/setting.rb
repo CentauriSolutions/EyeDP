@@ -165,6 +165,7 @@ class Setting < ApplicationRecord
 
   field :home_template, default: '', type: :string
   field :registered_home_template, default: '', type: :string
+  field :dashboard_template, default: File.read(Rails.root.join('templates/dashboard.liquid'))
 
   field :welcome_from_email, type: :string, default: "noreply@#{idp_base_uri ? idp_base_uri.hostname : "example.com"}"
   field :expire_after, type: :time
