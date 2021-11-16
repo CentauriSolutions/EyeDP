@@ -335,6 +335,19 @@ RSpec.describe Admin::UsersController, type: :controller do
           end.to change { ActionMailer::Base.deliveries.count }.by(2)
         end
 
+        it 'can create a user with additional emails and empty entries' do
+          expect do
+            perform_enqueued_jobs do
+              post(:create, params: {
+                     send_welcome_email: true,
+                user: { email: 'test@example.com', emails: ['', 'test2@example.com'], username: 'test' }
+                   })
+              expect(response.status).to eq(302)
+              expect(User.find_by(username: 'test').emails.count).to eq 2
+            end
+          end.to change { ActionMailer::Base.deliveries.count }.by(2)
+        end
+
         context 'duplicate' do
           render_views
 
