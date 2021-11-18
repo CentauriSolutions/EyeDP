@@ -40,7 +40,7 @@ gem 'devise-i18n'
 gem 'devise-multi_email', github: 'centaurisolutions/devise-multi_email'
 gem 'friendly_id'
 # Do TOTP 2FA
-gem 'devise-two-factor', github: 'centaurisolutions/devise-two-factor'
+gem 'devise-two-factor', github: 'tinfoil/devise-two-factor', branch: 'main'
 gem 'rqrcode'
 
 # Translations
