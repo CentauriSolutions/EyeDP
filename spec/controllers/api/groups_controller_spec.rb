@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Api::GroupsController, type: :controller do
   let(:group) { Group.create!(name: 'group') }
   let(:user) do
-    u = User.create!(username: 'user', email: 'user@localhost', password: 'test1234')
+    u = User.create!(username: 'user', email: 'user@localhost', password: 'test123456')
     u.groups << group
     u
   end
@@ -68,7 +68,7 @@ RSpec.describe Api::GroupsController, type: :controller do
 
       it 'can not add a user to the group' do
         expect(group.users).to eq [user]
-        user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test1234')
+        user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test123456')
         post(:add_user, params: { group_id: group.id, user_id: user2.id })
         expect(response.status).to eq(400)
         group.reload
@@ -133,7 +133,7 @@ RSpec.describe Api::GroupsController, type: :controller do
 
       it 'can not add a user to the group' do
         expect(group.users).to eq [user]
-        user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test1234')
+        user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test123456')
         post(:add_user, params: { api_key: 'nope', group_id: group.id, user_id: user2.id })
         expect(response.status).to eq(403)
         group.reload
@@ -198,7 +198,7 @@ RSpec.describe Api::GroupsController, type: :controller do
 
       it 'can not add a user to the group' do
         expect(group.users).to eq [user]
-        user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test1234')
+        user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test123456')
         post(:add_user, params: { api_key: api_key.key, group_id: group.id, user_id: user2.id })
         expect(response.status).to eq(403)
         group.reload
@@ -282,7 +282,7 @@ RSpec.describe Api::GroupsController, type: :controller do
 
       it 'can add a user to the group' do
         expect(group.users).to eq [user]
-        user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test1234')
+        user2 = User.create!(username: 'user2', email: 'user2@localhost', password: 'test123456')
         post(:add_user, params: { api_key: api_key.key, group_id: group.id, user_id: user2.id })
         group.reload
         expect(group.users).to match [user, user2]

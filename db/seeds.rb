@@ -27,8 +27,8 @@ if user.persisted?
 end
 
 user.username = ENV['SEED_USERNAME'].presence || 'admin'
-user.password = ENV['SEED_PASSWORD'].presence || 'password'
+user.password = ENV['SEED_PASSWORD'].presence || 'password123'
 puts "Creating user '#{user.username}' with password: '#{user.password}'"
-user.password_confirmation = ENV['SEED_PASSWORD'].presence || 'password'
+user.password_confirmation = ENV['SEED_PASSWORD'].presence || 'password123'
 user.groups << groups[:administrators]
 user.save!

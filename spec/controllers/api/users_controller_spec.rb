@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::UsersController, type: :controller do
-  let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
+  let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test123456') }
 
   let(:empty_key) { ApiKey.create }
 

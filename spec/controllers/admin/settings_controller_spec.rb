@@ -6,14 +6,14 @@ RSpec.describe Admin::SettingsController, type: :controller do
   let(:user) do
     user = User.create!(
       username: 'user', email: 'user@localhost',
-      password: 'test1234', last_activity_at: 1.year.ago
+      password: 'test123456', last_activity_at: 1.year.ago
     )
     user.confirm!
     user
   end
   let(:group) { Group.create!(name: 'administrators', admin: true) }
   let(:admin) do
-    user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
+    user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test123456')
     user.groups << group
     user.confirm!
     user
@@ -23,7 +23,7 @@ RSpec.describe Admin::SettingsController, type: :controller do
     context 'signed in manager' do
       let(:manager_group) { Group.create!(name: 'managers', manager: true) }
       let(:manager) do
-        user = User.create!(username: 'manager', email: 'manager@localhost', password: 'test1234')
+        user = User.create!(username: 'manager', email: 'manager@localhost', password: 'test123456')
         user.groups << manager_group
         user.confirm!
         user
@@ -41,7 +41,7 @@ RSpec.describe Admin::SettingsController, type: :controller do
     context 'signed in operator' do
       let(:operator_group) { Group.create!(name: 'operators', operator: true) }
       let(:operator) do
-        user = User.create!(username: 'operator', email: 'operator@localhost', password: 'test1234')
+        user = User.create!(username: 'operator', email: 'operator@localhost', password: 'test123456')
         user.groups << operator_group
         user.confirm!
         user

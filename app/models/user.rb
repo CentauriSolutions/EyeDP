@@ -46,7 +46,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   devise :registerable, # :recoverable,
          :fido_usf_registerable, :timeoutable
 
-  devise :multi_email_authenticatable,
+  devise :multi_email_authenticatable, :multi_email_validatable,
          :multi_email_recoverable, :multi_email_confirmable
 
   devise :expirable

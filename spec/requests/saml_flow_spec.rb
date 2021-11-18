@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'SAML Flow', type: :request do
   let(:user) do
-    user = User.create!(name: 'example name', username: 'example', email: 'test@localhost', password: 'test1234')
+    user = User.create!(name: 'example name', username: 'example', email: 'test@localhost', password: 'test123456')
     user.confirm!
     user
   end

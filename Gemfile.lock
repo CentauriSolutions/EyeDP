@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/centaurisolutions/devise-multi_email.git
+  revision: 5e29a72fc777327981b6fc2b7534a6148e456b8c
+  specs:
+    devise-multi_email (3.0.0)
+      devise
+
+GIT
   remote: https://github.com/centaurisolutions/devise-two-factor.git
   revision: cf43ea1367fb30c738de416be59616a76098c226
   specs:
@@ -8,13 +15,6 @@ GIT
       devise (~> 4.0)
       railties (< 6.2)
       rotp (~> 6.0)
-
-GIT
-  remote: https://github.com/indietools/devise-multi_email.git
-  revision: b73f118e77ca70119410eb447a7cd8451298c4d0
-  specs:
-    devise-multi_email (3.0.0)
-      devise
 
 GEM
   remote: https://rubygems.org/
