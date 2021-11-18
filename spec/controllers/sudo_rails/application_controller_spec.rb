@@ -37,7 +37,7 @@ RSpec.describe SudoRails::ApplicationController, type: :controller do
       sign_in(user)
     end
     let(:user) do
-      user = User.new(username: 'example', email: 'test@localhost', password: 'test1234')
+      user = User.new(username: 'example', email: 'test@localhost', password: 'test123456')
       user.otp_required_for_login = true
       user.otp_secret = User.generate_otp_secret(32)
       user.generate_otp_backup_codes!

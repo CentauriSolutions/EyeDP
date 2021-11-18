@@ -37,7 +37,7 @@ gem 'rails-i18n'
 gem 'devise'
 gem 'devise_fido_usf'
 gem 'devise-i18n'
-gem 'devise-multi_email', github: 'indietools/devise-multi_email'
+gem 'devise-multi_email', github: 'centaurisolutions/devise-multi_email'
 gem 'friendly_id'
 # Do TOTP 2FA
 gem 'devise-two-factor', github: 'centaurisolutions/devise-two-factor'

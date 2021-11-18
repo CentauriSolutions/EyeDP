@@ -10,7 +10,7 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
     Setting.oidc_signing_key = nil
   end
   let(:user) do
-    user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+    user = User.create!(username: 'example', email: 'test@localhost', password: 'test123456')
     user.confirm!
     user
   end

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe CustomUserdatum, type: :model do
   let(:custom_bool) { CustomUserdataType.create(name: 'has_pets', custom_type: 'boolean') }
-  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test1234') }
+  let(:user) { User.create!(username: 'example', email: 'test@localhost', password: 'test123456') }
 
   it { should be_audited }
 

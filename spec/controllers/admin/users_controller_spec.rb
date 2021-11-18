@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Admin::UsersController, type: :controller do
   include ActiveJob::TestHelper
   let(:user) do
-    user = User.new(username: 'user', email: 'user@localhost', password: 'test1234')
+    user = User.new(username: 'user', email: 'user@localhost', password: 'test123456')
     user.emails[0].confirmed_at = Time.now.utc
     user.save!
     user
@@ -13,7 +13,7 @@ RSpec.describe Admin::UsersController, type: :controller do
   let(:admin_group) { Group.create!(name: 'administrators', admin: true) }
   let(:user_group) { Group.create!(name: 'users') }
   let(:admin) do
-    user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test1234')
+    user = User.create!(username: 'admin', email: 'admin@localhost', password: 'test123456')
     user.groups << admin_group
     user.confirm!
     user
@@ -21,7 +21,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
   let(:operator_group) { Group.create!(name: 'operators', operator: true) }
   let(:operator) do
-    user = User.create!(username: 'operator', email: 'operator@localhost', password: 'test1234')
+    user = User.create!(username: 'operator', email: 'operator@localhost', password: 'test123456')
     user.groups << operator_group
     user.confirm!
     user
@@ -29,7 +29,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
   let(:manager_group) { Group.create!(name: 'managers', manager: true) }
   let(:manager) do
-    user = User.create!(username: 'manager', email: 'manager@localhost', password: 'test1234')
+    user = User.create!(username: 'manager', email: 'manager@localhost', password: 'test123456')
     user.groups << manager_group
     user.confirm!
     user
@@ -510,19 +510,19 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         it 'can reset a user passowrd' do
-          expect(user.valid_password?('test1234')).to be true
+          expect(user.valid_password?('test123456')).to be true
           post(:reset_password, params: { user_id: user.id })
           expect(response.status).to eq(302)
           user.reload
-          expect(user.valid_password?('test1234')).to be false
+          expect(user.valid_password?('test123456')).to be false
         end
 
         it 'can set a user password' do
-          expect(user.valid_password?('test1234')).to be true
+          expect(user.valid_password?('test123456')).to be true
           post(:update, params: { id: user.id, user: { password: 'testing-it' } })
           expect(response.status).to eq(302)
           user.reload
-          expect(user.valid_password?('test1234')).to be false
+          expect(user.valid_password?('test123456')).to be false
           expect(user.valid_password?('testing-it')).to be true
         end
 

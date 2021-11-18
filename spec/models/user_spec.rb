@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
   include ActiveJob::TestHelper
 
   let(:user) do
-    u = User.new(username: 'example', email: 'test@localhost', password: 'test1234')
+    u = User.new(username: 'example', email: 'test@localhost', password: 'test123456')
     u.emails[0].confirmed_at = Time.now.utc
     u.save!
     u
@@ -109,9 +109,9 @@ RSpec.describe User, type: :model do
 
   it 'only changes password when encrypted_password is nil' do
     user.password = nil
-    expect(user.valid_password?('test1234')).to be true
+    expect(user.valid_password?('test123456')).to be true
     user.save
-    expect(user.valid_password?('test1234')).to be true
+    expect(user.valid_password?('test123456')).to be true
     old_encrypted = user.encrypted_password
     user.encrypted_password = nil
     user.save
@@ -207,7 +207,7 @@ RSpec.describe User, type: :model do
     it 'queues a webhook on create' do
       create_webhook
       expect do
-        User.create!(email: 'test@example.com', username: 'test_user', password: 'test1234')
+        User.create!(email: 'test@example.com', username: 'test_user', password: 'test123456')
       end.to change(NotificationSetupWorker.jobs, :size).by(1)
     end
 

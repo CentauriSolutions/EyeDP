@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe UserMailer, type: :mailer do
   context 'group_welcome_email' do
-    let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
+    let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test123456') }
     let(:group) { Group.create!(name: 'administrators', admin: true) }
 
     let(:mail) { UserMailer.group_welcome_email(user, group, 'user@localhost') }
@@ -22,7 +22,7 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   context 'force_reset_password_email' do
-    let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
+    let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test123456') }
     let(:mail) { UserMailer.force_reset_password_email(user, 'test token', 'user@localhost') }
 
     it 'renders the headers' do
@@ -42,7 +42,7 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   context 'admin_welcome_email' do
-    let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test1234') }
+    let(:user) { User.create!(username: 'user', email: 'user@localhost', password: 'test123456') }
     let(:mail) { UserMailer.admin_welcome_email(user, 'test token', 'user@localhost') }
 
     it 'renders the headers' do

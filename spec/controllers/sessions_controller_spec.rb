@@ -22,7 +22,7 @@ RSpec.describe SessionsController do
 
       context 'when using valid password' do
         let(:user) do
-          user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+          user = User.create!(username: 'example', email: 'test@localhost', password: 'test123456')
           user.confirm!
           user
         end
@@ -84,27 +84,27 @@ RSpec.describe SessionsController do
 
         context 'with multiple emails' do
           let(:user) do
-            user = User.create!(username: 'example', email: 'test@localhost', password: 'test1234')
+            user = User.create!(username: 'example', email: 'test@localhost', password: 'test123456')
             user.confirm!
             Email.create!(address: 'test2@localhost', user: user).confirm
             user
           end
 
           it 'allows login with the primary email' do
-            post(:create, params: { user: { login: user.email, password: 'test1234' } })
+            post(:create, params: { user: { login: user.email, password: 'test123456' } })
 
             expect(subject.current_user).to eq user
           end
 
           it 'allows login with additional emails' do
             user
-            post(:create, params: { user: { login: 'test2@localhost', password: 'test1234' } })
+            post(:create, params: { user: { login: 'test2@localhost', password: 'test123456' } })
             expect(subject.current_user).to eq user
           end
 
           it 'requires additional emails to be confirmed for login' do
             Email.create!(address: 'test3@localhost', user: user)
-            post(:create, params: { user: { login: 'test3@localhost', password: 'test1234' } })
+            post(:create, params: { user: { login: 'test3@localhost', password: 'test123456' } })
             expect(subject.current_user).to be_nil
             expect(controller)
               .to set_flash.now[:alert].to(/Invalid Login or password/)
@@ -115,7 +115,7 @@ RSpec.describe SessionsController do
 
     context 'when using two-factor authentication via OTP' do
       let(:user) do
-        user = User.new(username: 'example', email: 'test@localhost', password: 'test1234')
+        user = User.new(username: 'example', email: 'test@localhost', password: 'test123456')
         user.otp_required_for_login = true
         user.otp_secret = User.generate_otp_secret(32)
         user.generate_otp_backup_codes!
@@ -175,7 +175,7 @@ RSpec.describe SessionsController do
       context 'when authenticating with login and OTP of another user' do
         context 'when another user has 2FA enabled' do
           let(:another_user) do
-            user = User.new(username: 'example2', email: 'test2@localhost', password: 'test1234')
+            user = User.new(username: 'example2', email: 'test2@localhost', password: 'test123456')
             user.otp_required_for_login = true
             user.otp_secret = User.generate_otp_secret(32)
             user.generate_otp_backup_codes!
@@ -232,7 +232,7 @@ RSpec.describe SessionsController do
 
     context 'when using two-factor authentication via U2F device' do
       let(:user) do
-        user = User.new(username: 'example', email: 'test@localhost', password: 'test1234')
+        user = User.new(username: 'example', email: 'test@localhost', password: 'test123456')
         user.otp_required_for_login = true
         user.otp_secret = User.generate_otp_secret(32)
         user.generate_otp_backup_codes!
