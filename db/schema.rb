@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_13_065909) do
+ActiveRecord::Schema.define(version: 2021_11_18_164952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -235,6 +235,9 @@ ActiveRecord::Schema.define(version: 2021_11_13_065909) do
     t.datetime "updated_at", null: false
     t.boolean "internal", default: false
     t.text "display_url"
+    t.integer "order", default: 0, null: false
+    t.text "image_url"
+    t.text "description"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -259,6 +262,9 @@ ActiveRecord::Schema.define(version: 2021_11_13_065909) do
     t.datetime "updated_at", null: false
     t.text "display_url"
     t.text "name"
+    t.integer "order", default: 0, null: false
+    t.text "image_url"
+    t.text "description"
     t.index ["issuer_or_entity_id"], name: "index_saml_service_providers_on_issuer_or_entity_id", unique: true
   end
 
@@ -301,7 +307,11 @@ ActiveRecord::Schema.define(version: 2021_11_13_065909) do
     t.string "otp_backup_codes", array: true
     t.datetime "expires_at"
     t.datetime "last_activity_at"
+    t.integer "failed_attempts", default: 0, null: false
+    t.datetime "locked_at"
+    t.string "unlock_token"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "web_hook_logs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

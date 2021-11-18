@@ -43,7 +43,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   # :rememberable
-  devise :registerable, # :recoverable,
+  devise :registerable, :lockable, # :recoverable,
          :fido_usf_registerable, :timeoutable
 
   devise :multi_email_authenticatable, :multi_email_validatable,
@@ -95,6 +95,10 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def validate_username
     errors.add(:username, :invalid) if User.joins(:emails).exists?(emails: { address: username })
+  end
+
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
   end
 
   def force_password_reset!
