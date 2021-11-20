@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   # before the location can be stored.
 
   def set_locale
-    I18n.locale = params.fetch(:locale, session[:locale], I18n.default_locale).to_sym
+    I18n.locale = (params.fetch(:locale, session[:locale]) || I18n.default_locale).to_sym
     session[:locale] = I18n.locale
   end
 

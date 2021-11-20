@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2020 eyedp
+# Copyright (C) 2021 eyedp
 # This file is distributed under the same license as the eyedp package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: eyedp 1.0\n"
 "Report-Msgid-Bugs-To: contact@translation.io\n"
-"POT-Creation-Date: 2020-09-15 19:55+0200\n"
-"PO-Revision-Date: 2020-09-15 19:55+0200\n"
+"POT-Creation-Date: 2021-11-20 15:52+0100\n"
+"PO-Revision-Date: 2021-11-20 15:52+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -18,32 +18,160 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:55
+#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:54
 msgid "Invalid two-factor code."
 msgstr ""
 
-#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:88
+#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:85
 msgid "Authentication via %{method} device failed."
 msgstr ""
 
-#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:109
+#: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:106
 msgid "An error occurred. Please sign in again."
 msgstr ""
 
-#: ../../../app/controllers/users_controller.rb:21
+#: ../../../app/controllers/users_controller.rb:23
 msgid "Invalid pin code"
 msgstr ""
 
-#: ../../../app/controllers/users_controller.rb:37
+#: ../../../app/controllers/users_controller.rb:41
 msgid "Two-factor authentication has been disabled successfully!"
 msgstr ""
 
-#: ../../../app/views/devise/registrations/edit.html.erb:21
+#: ../../../app/views/admin/groups/_form.html.erb:108
+msgid "Create Group"
+msgstr ""
+
+#: ../../../app/views/admin/groups/_form.html.erb:110
+msgid "Update Group"
+msgstr ""
+
+#: ../../../app/views/admin/users/_form.html.erb:178
+msgid "Create User"
+msgstr ""
+
+#: ../../../app/views/admin/users/_form.html.erb:180
+msgid "Update User"
+msgstr ""
+
+#: ../../../app/views/admin/users/_show.html.erb:53
+#: ../../../app/views/profile/access_tokens/index.html.erb:39
+#: ../../../app/views/profile/emails/index.html.erb:26
+#: ../../../app/views/profile/profile/index.html.erb:14
+#: ../../../app/views/profile/show.html.erb:30
+msgid "Save Changes"
+msgstr ""
+
+#: ../../../app/views/admin/users/_toggle_user.html.erb:3
+msgid "Enable User"
+msgstr ""
+
+#: ../../../app/views/admin/users/_toggle_user.html.erb:6
+msgid "Disable User"
+msgstr ""
+
+#: ../../../app/views/devise/fido_usf_registrations/_success.html.erb:5
+msgid "Confirm Name"
+msgstr ""
+
+#: ../../../app/views/devise/registrations/edit.html.erb:25
 msgid "Manage 2FA"
 msgstr ""
 
-#: ../../../app/views/devise/registrations/edit.html.erb:23
+#: ../../../app/views/devise/registrations/edit.html.erb:27
 msgid "Enable 2FA"
+msgstr ""
+
+#: ../../../app/views/layouts/_navigation.html.erb:13
+msgid "Home"
+msgstr ""
+
+#: ../../../app/views/layouts/_navigation.html.erb:20
+msgid "Sign Up"
+msgstr ""
+
+#: ../../../app/views/layouts/_navigation.html.erb:22
+msgid "Sign In"
+msgstr ""
+
+#: ../../../app/views/layouts/_profile_links.html.erb:2
+msgid "Admin Dashboard"
+msgstr ""
+
+#: ../../../app/views/layouts/_profile_links.html.erb:16
+msgid "Edit Profile"
+msgstr ""
+
+#: ../../../app/views/layouts/_profile_links.html.erb:18
+msgid "Preferences"
+msgstr ""
+
+#: ../../../app/views/layouts/_profile_links.html.erb:19
+msgid "Sign out"
+msgstr ""
+
+#: ../../../app/views/profile/_profile_nav.html.erb:3
+msgid "Account"
+msgstr ""
+
+#: ../../../app/views/profile/_profile_nav.html.erb:5
+msgid "Profile"
+msgstr ""
+
+#: ../../../app/views/profile/_profile_nav.html.erb:7
+msgid "Emails"
+msgstr ""
+
+#: ../../../app/views/profile/_profile_nav.html.erb:9
+msgid "Access tokens"
+msgstr ""
+
+#: ../../../app/views/profile/_profile_nav.html.erb:11
+msgid "Authentication devices"
+msgstr ""
+
+#: ../../../app/views/profile/_profile_nav.html.erb:12
+msgid "Account activity"
+msgstr ""
+
+#: ../../../app/views/profile/authentication_devices/index.html.erb:23
+#: ../../../app/views/profile/authentication_devices/index.html.erb:33
+msgid "Delete"
+msgstr ""
+
+#: ../../../app/views/profile/authentication_devices/index.html.erb:40
+msgid "Manage TOTP 2FA"
+msgstr ""
+
+#: ../../../app/views/profile/authentication_devices/index.html.erb:42
+msgid "Enable TOTP 2FA"
+msgstr ""
+
+#: ../../../app/views/profile/authentication_devices/index.html.erb:46
+#: ../../../app/views/users/new_2fa.html.erb:25
+msgid "Regenerate recovery codes"
+msgstr ""
+
+#: ../../../app/views/profile/show.html.erb:26
+msgid "To edit any details on this page, you must confirm your current password."
+msgstr ""
+
+#: ../../../app/views/profile/show.html.erb:27
+msgid "Leave blank if you don't want to change your password"
+msgstr ""
+
+#: ../../../app/views/profile/show.html.erb:29
+msgid ""
+"We need your current password to confirm your changes to update your account d"
+"etails"
+msgstr ""
+
+#: ../../../app/views/profile/show.html.erb:34
+msgid "Permanently delete account"
+msgstr ""
+
+#: ../../../app/views/profile/show.html.erb:38
+msgid "Sites to which you've recently authenticated"
 msgstr ""
 
 #: ../../../app/views/users/_codes.html.erb:2
@@ -95,10 +223,6 @@ msgstr ""
 
 #: ../../../app/views/users/new_2fa.html.erb:19
 msgid "Disable two-factor authentication"
-msgstr ""
-
-#: ../../../app/views/users/new_2fa.html.erb:25
-msgid "Regenerate recovery codes"
 msgstr ""
 
 #: ../../../app/views/users/new_2fa.html.erb:36
