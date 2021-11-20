@@ -10,16 +10,16 @@
 
   <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <%= nav_link "Home", root_path %>
+      <%= nav_link _("Home"), root_path %>
     </ul>
     <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
       <%- if current_user %>
         <%= render partial: 'layouts/profile_links' %>
       <%- else %>
         <%- if Setting.registration_enabled %>
-          <%= nav_link "Sign Up", new_user_registration_path %>
+          <%= nav_link _("Sign Up"), new_user_registration_path %>
         <%- end %>
-        <%= nav_link "Sign In", new_user_session_path %>
+        <%= nav_link _("Sign In"), new_user_session_path %>
       <%- end %>
     </ul>
   </div>
