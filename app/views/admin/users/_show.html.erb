@@ -1,12 +1,12 @@
 
-<div class="col-md-9 col-lg-10">
+<div class="col-md-9 col-lg-10" id="emails">
   <h2>
     Email Addresses
   </h2>
   <p class="small">To update the primary address, edit the user to set their email</p>
   <table class="table table-striped">
     <tbody>
-      <%- @model.emails.each do |email| %>
+      <%- @model.emails.order(primary: :desc, created_at: :asc).each do |email| %>
         <tr>
           <td><%= email.address %></td>
           <td>
@@ -21,7 +21,8 @@
               <span class="btn btn-success">Primary</span>
             <%- else %>
               <%- unless email.confirmed? %>
-                  <%= link_to 'Resend confirmation email', admin_user_resend_confirmation_path(email_id: email.id, user_id: @model.id), method: :post, class: "btn btn-warning"  %>
+                <%= link_to 'Confirm email', admin_user_email_confirm_path(email_id: email.id, user_id: @model.id), method: :post, class: "btn btn-primary" , data: { confirm: 'Are you sure? Confirmed emails receive all account notifications.' } %>
+                <%= link_to 'Resend confirmation email', admin_user_resend_confirmation_path(email_id: email.id, user_id: @model.id), method: :post, class: "btn btn-warning"  %>
               <%- end %>
               <%= link_to fa_icon('trash-o', title: "Delete"), admin_user_delete_email_path(@model, id: email.id), method: :delete, data: { confirm: 'Are you sure?' } %>
             <%- end %>
