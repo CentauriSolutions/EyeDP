@@ -22,9 +22,9 @@
             <%- else %>
               <%- unless email.confirmed? %>
                 <%= link_to 'Confirm email', admin_user_email_confirm_path(email_id: email.id, user_id: @model.id), method: :post, class: "btn btn-primary" , data: { confirm: 'Are you sure? Confirmed emails receive all account notifications.' } %>
-                <%= link_to 'Resend confirmation email', admin_user_resend_confirmation_path(email_id: email.id, user_id: @model.id), method: :post, class: "btn btn-warning"  %>
+                <%= link_to 'Resend confirmation email', admin_user_email_resend_confirmation_path(email_id: email.id, user_id: @model.id), method: :post, class: "btn btn-warning"  %>
               <%- end %>
-              <%= link_to fa_icon('trash-o', title: "Delete"), admin_user_delete_email_path(@model, id: email.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+              <%= link_to fa_icon('trash-o', title: "Delete"), admin_user_email_path(user_id: @model.id, email_id: email.id), method: :delete, data: { confirm: 'Are you sure?' } %>
             <%- end %>
           </td>
         </tr>

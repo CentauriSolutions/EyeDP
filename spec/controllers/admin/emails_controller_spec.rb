@@ -36,18 +36,43 @@ RSpec.describe Admin::EmailsController, type: :controller do
   end
 
   describe 'User' do
-    context 'signed in manager' do
-      before do
-        sign_in(manager)
-      end
+    %i[manager admin].each do |type|
+      context "signed in #{type}" do
+        before do
+          sign_in(send(type))
+        end
 
-      it "can confirm a user's email" do
-        email = Email.create(user: user, address: 'user2@localhost')
-        post(:confirm, params: { user_id: user.id, email_id: email.id })
-        expect(response.status).to eq(302)
-        expect(flash[:notice]).to match('Email was successfully confirmed.')
-        email.reload
-        expect(email.confirmed?).to be true
+        it 'can add a new email' do
+          expect(user.emails.count).to eq 1
+          expect do
+            perform_enqueued_jobs do
+              post(:create, params: { user_id: user.id, email: { address: 'user2@localhost' } })
+              expect(response.status).to eq(302)
+            end
+          end.to change { Devise.mailer.deliveries.count }.by(1)
+          expect(user.emails.count).to eq 2
+          expect(flash[:notice]).to match('Email was successfully created.')
+        end
+
+        it 'can resend the confirmation email' do
+          email = Email.create(user: user, address: 'user2@localhost')
+          expect do
+            perform_enqueued_jobs do
+              post(:resend_confirmation, params: { user_id: user.id, email_id: email.id })
+              expect(response.status).to eq(302)
+            end
+          end.to change { Devise.mailer.deliveries.count }.by(1)
+          expect(flash[:notice]).to match('Confirmation email was sent.')
+        end
+
+        it "can confirm a user's email" do
+          email = Email.create(user: user, address: 'user2@localhost')
+          post(:confirm, params: { user_id: user.id, email_id: email.id })
+          expect(response.status).to eq(302)
+          expect(flash[:notice]).to match('Email was successfully confirmed.')
+          email.reload
+          expect(email.confirmed?).to be true
+        end
       end
     end
 
@@ -58,21 +83,6 @@ RSpec.describe Admin::EmailsController, type: :controller do
 
       it 'returns a 404 code' do
         expect { post(:confirm, params: { user_id: 1, email_id: 1 }) }.to raise_error(ActionController::RoutingError)
-      end
-    end
-
-    context 'signed in admin' do
-      before do
-        sign_in(admin)
-      end
-
-      it "can confirm a user's email" do
-        email = Email.create(user: user, address: 'user2@localhost')
-        post(:confirm, params: { user_id: user.id, email_id: email.id })
-        expect(response.status).to eq(302)
-        expect(flash[:notice]).to match('Email was successfully confirmed.')
-        email.reload
-        expect(email.confirmed?).to be true
       end
     end
 

@@ -174,17 +174,6 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(flash[:notice]).to match('Welcome email will be sent.')
       end
 
-      it 'can resend the confirmation email' do
-        email = Email.create(user: user, address: 'user2@localhost')
-        expect do
-          perform_enqueued_jobs do
-            post(:resend_confirmation, params: { user_id: user.id, email_id: email.id })
-            expect(response.status).to eq(302)
-          end
-          expect(flash[:notice]).to match('Confirmation email was sent.')
-        end.to change { ActionMailer::Base.deliveries.count }.by(1)
-      end
-
       it 'can delete a user' do
         delete(:destroy, params: { id: user.id })
         expect(response.status).to eq(302)
@@ -431,17 +420,6 @@ RSpec.describe Admin::UsersController, type: :controller do
             end
           end.to change { ActionMailer::Base.deliveries.count }.by(2)
           expect(flash[:notice]).to match('Welcome email will be sent.')
-        end
-
-        it 'can resend the confirmation email' do
-          email = Email.create(user: user, address: 'user2@localhost')
-          expect do
-            perform_enqueued_jobs do
-              post(:resend_confirmation, params: { user_id: user.id, email_id: email.id })
-              expect(response.status).to eq(302)
-            end
-          end.to change { Devise.mailer.deliveries.count }.by(1)
-          expect(flash[:notice]).to match('Confirmation email was sent.')
         end
 
         it 'Can see if a user has two factor enabled' do
