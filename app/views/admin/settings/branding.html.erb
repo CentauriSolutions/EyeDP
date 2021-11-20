@@ -29,6 +29,13 @@
         <input type="text" name="setting[logo_width]" class="form-control" value="<%= Setting.logo_width %>" />
       </td>
     </tr>
+    <tr>
+      <td>Favicon</td>
+      <td>
+        <input type="text" name="setting[favicon]" class="form-control" value="<%= Setting.favicon %>" />
+        <p class="small">Path to a favicon file, either as a fully qualified URL or a path inside the local installation's <code>public</code> directory. If the path is inside the public directory, it should be just the filename inside of that directory (favicon.png, rather than public/favicon.png)</p>
+      </td>
+    </tr>
     <!-- End logo settings -->
   <button class="btn btn-primary">Save</button>
 <%- end %>

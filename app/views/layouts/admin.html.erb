@@ -13,7 +13,7 @@
     </title>
     <%= csrf_meta_tags %>
     <%= action_cable_meta_tag %>
-    <link rel="icon" type="image/ico" href="/favicon.ico">
+    <link rel="icon" type="image/ico" href="<%= image_path(Setting.favicon) %>">
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= stylesheet_link_tag 'admin', media: 'all' %>
   </head>
