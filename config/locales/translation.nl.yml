@@ -8,22 +8,22 @@
 nl:
   fido_usf:
     pages:
-      devices:
+      devices: 2FA-apparaten
     flashs:
       device:
-        removed:
-        registered:
+        removed: Apparaat verwijderd.
+        registered: Nieuw 2FA-apparaat succesvol geregistreerd.
   common:
-    actions:
+    actions: Acties
   forms:
     device:
-      add:
-      delete:
-      delete_confirm:
+      add: 2FA-apparaat toevoegen
+      delete: Delete
+      delete_confirm: Wilt u echt het 2FA-apparaat "%{device_name}" verwijderen?
   activerecord:
     attributes:
       fido_usf/fido_usf_device:
-        last_authenticated_at:
+        last_authenticated_at: Laatst gebruikt
       doorkeeper/application:
         name: Naam
         redirect_uri: Redirect URI
@@ -53,13 +53,13 @@ nl:
       form:
         error: Oops! Controleer het formulier op fouten
       help:
-        confidential: Application will be used where the client secret can be kept
-          confidential. Native mobile apps and Single Page Apps are considered non-confidential.
+        confidential: Toepassing wordt gebruikt wanneer het klantgeheim vertrouwelijk
+          kan worden behandeld. Native mobiele apps en apps voor één pagina worden
+          als niet-vertrouwelijk beschouwd.
         redirect_uri: 'Gebruik één regel per URI. '
-        blank_redirect_uri: Leave it blank if you configured your provider to use
-          Client Credentials, Resource Owner Password Credentials or any other grant
-          type that doesn't require redirect URI.
-        native_redirect_uri: Gebruik %{native_redirect_uri} voor lokale tests
+        blank_redirect_uri: Laat dit veld leeg als u uw provider hebt geconfigureerd
+          voor het gebruik van klantreferenties, de wachtwoordreferenties van de eigenaar
+          van de bron of een ander type subsidie waarvoor geen omleidings-URI is vereist.
         scopes: Scheid scopes met spaties. Laat leeg om de standaard scopes te gebruiken.
       edit:
         title: Bewerk applicatie
@@ -78,13 +78,13 @@ nl:
       show:
         title: 'Applicatie: %{name}'
         application_id: Applicatie UID
-        secret: Secret
+        secret: Geheim
         scopes: Scopes
         confidential: Confidential
         callback_urls: Callback urls
         actions: Acties
-        secret_hashed:
-        not_defined:
+        secret_hashed: Geheim gehasht
+        not_defined: Niet gedefinieerd
     authorizations:
       buttons:
         authorize: Authoriseren
@@ -112,10 +112,13 @@ nl:
     errors:
       messages:
         invalid_request:
-          unknown:
-          missing_param:
-          not_support_pkce:
-          request_not_authorized:
+          unknown: Het verzoek ontbreekt een vereiste parameter, bevat een niet-ondersteunde
+            parameter waarde of anderszins onjuist.
+          missing_param: 'Ontbrekende vereiste parameter: %{value}.'
+          not_support_pkce: Ongeldige code_verifier-parameter. Server ondersteunt
+            pkce niet.
+          request_not_authorized: Verzoek moet worden geautoriseerd. Vereiste parameter
+            voor autorisatie van verzoek ontbreekt of is ongeldig.
         invalid_redirect_uri: De opgegeven redirect uri is niet geldig.
         unauthorized_client: De client is niet bevoegd om dit verzoek met deze methode
           uit te voeren.
@@ -148,11 +151,12 @@ nl:
           expired: Het toegangstoken is verlopen
           unknown: Het toegangstoken is ongeldig
         revoke:
-          unauthorized:
-        login_required:
-        consent_required:
-        interaction_required:
-        account_selection_required:
+          unauthorized: U bent niet bevoegd om dit token in te trekken
+        login_required: De autorisatieserver vereist authenticatie van de eindgebruiker
+        consent_required: De autorisatieserver vereist toestemming van de eindgebruiker
+        interaction_required: De autorisatieserver vereist interactie met de eindgebruiker
+        account_selection_required: De autorisatieserver vereist selectie van een
+          eindgebruikersaccount
     flash:
       applications:
         create:
@@ -174,19 +178,24 @@ nl:
       application:
         title: OAuth authorisatie vereist
     scopes:
-      openid:
-      profile:
-      email:
-      address:
-      phone:
+      openid: Authenticeer uw account
+      profile: Bekijk je profielinformatie
+      email: Bekijk je e-mailadres
+      address: Bekijk uw fysieke adres
+      phone: Bekijk je telefoonnummer
     openid_connect:
       errors:
         messages:
-          resource_owner_from_access_token_not_configured:
-          auth_time_from_resource_owner_not_configured:
-          reauthenticate_resource_owner_not_configured:
-          select_account_for_resource_owner_not_configured:
-          subject_not_configured:
+          resource_owner_from_access_token_not_configured: Mislukt vanwege Doorkeeper::OpenidConnect.configure.resource_owner_from_access_token
+            ontbrekende configuratie.
+          auth_time_from_resource_owner_not_configured: Mislukt vanwege Doorkeeper::OpenidConnect.configure.auth_time_from_resource_owner
+            ontbrekende configuratie.
+          reauthenticate_resource_owner_not_configured: Mislukt vanwege Doorkeeper::OpenidConnect.configure.reauthenticate_resource_owner
+            ontbrekende configuratie.
+          select_account_for_resource_owner_not_configured: Mislukt vanwege Doorkeeper::OpenidConnect.configure.select_account_for_resource_owner
+            ontbrekende configuratie.
+          subject_not_configured: Het genereren van ID-tokens is mislukt omdat de
+            configuratie van Doorkeeper::OpenidConnect.configure.subject ontbreekt.
   devise:
     confirmations:
       confirmed: Je account is bevestigd.
@@ -205,6 +214,8 @@ nl:
       timeout: Je sessie is verlopen, meld je opnieuw aan om door te gaan.
       unauthenticated: Je dient je aan te melden of in te schrijven om door te gaan.
       unconfirmed: Je dient eerst je account te bevestigen.
+      user:
+        user_expired: Uw account is verlopen.
     mailer:
       confirmation_instructions:
         subject: Bevestiging
@@ -243,7 +254,10 @@ nl:
         nog valideren. Een e-mail met een confirmatielink is naar je e-mailadres gestuurd.
         Open de link in je browser om je e-mailadres te confirmeren.
       updated: Je accountgegevens zijn opgeslagen.
-      updated_but_not_signed_in:
+      updated_but_not_signed_in: Uw account is succesvol bijgewerkt, maar aangezien
+        uw wachtwoord is gewijzigd, moet u opnieuw inloggen.
+      update: Bijwerken
+      remove_account: Annuleer mijn account
     sessions:
       signed_in: Je bent succesvol ingelogd.
       signed_out: Je bent succesvol uitgelogd.
@@ -255,6 +269,9 @@ nl:
         zal je binnen enkele ogenblikken een e-mail ontvangen met instructies hoe
         je je account kan ontgrendelen.
       unlocked: Je account is ontgrendeld. Je kan nu weer inloggen.
+    fido_usf_authentications:
+      user:
+        signed_in: Ondertekend in succes.
   errors:
     messages:
       already_confirmed: is reeds bevestigd
@@ -266,6 +283,31 @@ nl:
       not_saved:
         one: 'Een fout verhinderde het opslaan van deze %{resource}:'
         other: "%{count} fouten verhinderde het opslaan van deze %{resource}:"
-    unavailable_session:
-    unacceptable_request:
-    connection_refused:
+    unavailable_session: |
+      Sessie %{id} is niet langer beschikbaar in het geheugen.
+
+      Als je toevallig op een multi-processerver (zoals Unicorn of Puma) werkt, het proces
+      deze aanvrage slaat %{id} niet op in het geheugen. Overweeg om het aantal keren te wijzigen
+      processen / werknemers naar een (1) of met behulp van een andere server in ontwikkeling.
+    unacceptable_request: 'Een ondersteunde versie wordt verwacht in de Accept header.
+
+      '
+    connection_refused: |
+      Oeps! Kan geen verbinding maken met de Web Console middleware.
+      Zorg ervoor dat een rails ontwikkeling server draait.
+  sudo_rails:
+    tip: U gaat naar de <b>sudo-modus</b> .<br> We zullen niet opnieuw om uw wachtwoord
+      vragen voor <i>%{session_duration}</i> .
+    page_header: Bevestig wachtwoord om door te gaan
+    button: Bevestig wachtwoord
+    password: Wachtwoord
+    forgot_pass: Wachtwoord vergeten?
+    invalid_pass: Ongeldig wachtwoord
+  sudo:
+    page_header: Bevestig wachtwoord om door te gaan
+    button: Bevestig wachtwoord
+    password: Wachtwoord
+    forgot_pass: Wachtwoord vergeten?
+    invalid_pass: Ongeldige bevestiging
+    tip: We zullen niet opnieuw om uw wachtwoord vragen voor <i>%{session_duration}</i>
+      .
