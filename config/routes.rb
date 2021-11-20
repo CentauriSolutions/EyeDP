@@ -94,7 +94,7 @@ Rails.application.routes.draw do
 
   get 'profile/account', to: 'profile#show'
   namespace :profile do
-    get '/', to: 'profile#index', as: :profile_path
+    get '/', to: 'profile#index', as: :profile
     post '/', to: 'profile#update'
     get 'authentication_devices', to: 'authentication_devices#index'
     get 'account_activity', to: 'account_activity#index'

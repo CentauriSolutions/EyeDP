@@ -1,8 +1,21 @@
 <%- if [:admin, :manager, :operator].intersection(current_user.roles).any? %>
-  <%= nav_link 'Admin Dashboard', admin_dashboard_path %>
+  <%= nav_link _('Admin Dashboard'), admin_dashboard_path %>
 <%- end %>
-<%= nav_link current_user.name || current_user.username, root_path %>
-<li class="nav-item">
-  <%= link_to 'Sign out', destroy_user_session_path, :method=>'delete', class: 'nav-link' %>
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= fa_icon('user') %>
+  </a>
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+    <h6 class="dropdown-header">
+      <%- if current_user.name %>
+        <%= current_user.name %><br />
+      <%- end %>
+      <span class="small">@<%= current_user.username %></span>
+    </h6>
+    <%- if CustomUserdataType.any? %>
+      <%= dropdown_nav_link _("Edit Profile"), profile_path %>
+    <%- end %>
+    <%= dropdown_nav_link _("Preferences"), profile_account_path %>
+    <%= dropdown_nav_link _('Sign out'), destroy_user_session_path, :method=>'delete' %>
+  </div>
 </li>
-
