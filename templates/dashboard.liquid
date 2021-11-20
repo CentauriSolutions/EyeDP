@@ -1,26 +1,47 @@
-<div class="row">
-  {% for application in applications %}
-  <div class="col-xs-12 col-sm-6 col-lg-4">
-    <div class="card" style="height: 100%">
-      <div class="card-body container">
-        <div class="row">
-          <h5 class="card-title mx-auto">{{ application['name'] }}</h5>
+
+<div class="d-none d-sm-block">
+  <div class="row">
+    {% for application in applications %}
+    <div class="col-xs-12 col-sm-6 col-lg-4">
+      <div class="card" style="height: 100%">
+        <div class="card-body container">
+          <div class="row">
+            <a href="{{ application["url"] }}" class="mx-auto">
+              {% if application["image_url"] %}
+                <img class="card-img-top img-fluid" src="{{ application["image_url"] }}" alt="{{application['name'] }} logo" style="max-height:  75px; width: 75px">
+              {% else %}
+                <img class="card-img-top img-fluid" src="/images/login.png" alt="{{application['name'] }} logo" style="max-height:  75px; width: 75px">
+              {% endif %}
+            </a>
+          </div>
+          <div class="row">
+            <h5 class="card-title mx-auto"><a href="{{ application["url"] }}">{{ application['name'] }}</a></h5>
+          </div>
+          {% if application["description"] %}
+          <div class="row">
+            <p class="mx-auto">{{ application["description"] }}</p>
+          </div>
+          {% endif %}
         </div>
-        <div class="row">
-          <a href="{{ application["url"] }}" class="small btn btn-sm btn-outline-primary mx-auto">Visit</a>
-        </div>
-        {% if application["image_url"] %}
-        <div class="row">
-          <img class="card-img-top img-fluid mx-auto" src="{{ application["image_url"] }}" alt="{{application['name'] }} logo" style="max-width: 100px">
-        </div>
-        {% endif %}
-        {% if application["description"] %}
-        <div class="row">
-          <p class="mx-auto">{{ application["description"] }}</p>
-        </div>
-        {% endif %}
       </div>
     </div>
+    {% endfor %}
   </div>
-  {% endfor %}
+</div>
+
+<div class="row">
+  <div class="d-block d-sm-none col-sm-12">
+    <div class="list-group">
+      {% for application in applications %}
+        <a href="{{ application['url'] }}" class="list-group-item list-group-item-action">
+            {% if application["image_url"] %}
+              <img class="img-fluid" src="{{ application["image_url"] }}" alt="{{application['name'] }} logo" style="max-width: 15px" />
+            {% else %}
+              <img class="img-fluid" src="/images/login.png" alt="{{application['name'] }} logo" style="max-width: 15px" />
+            {% endif %}
+            {{ application['name'] }}
+        </a>
+        {% endfor %}
+    </div>
+  </div>
 </div>
