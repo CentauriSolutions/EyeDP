@@ -1,9 +1,8 @@
-# SOME DESCRIPTIVE TITLE.
+# Spanish translations for eyedp package.
 # Copyright (C) 2021 eyedp
 # This file is distributed under the same license as the eyedp package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: eyedp 1.0\n"
@@ -11,48 +10,49 @@ msgstr ""
 "POT-Creation-Date: 2021-11-20 15:55+0100\n"
 "PO-Revision-Date: 2021-11-20 15:55+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Spanish\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+"\n"
 
 #: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:54
 msgid "Invalid two-factor code."
-msgstr ""
+msgstr "Código de dos factores no válido."
 
 #: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:85
 msgid "Authentication via %{method} device failed."
-msgstr ""
+msgstr "Falló la autenticación a través del dispositivo %{method}."
 
 #: ../../../app/controllers/concerns/authenticates_with_two_factor.rb:106
 msgid "An error occurred. Please sign in again."
-msgstr ""
+msgstr "Ocurrió un error. Vuelve a iniciar sesión."
 
 #: ../../../app/controllers/users_controller.rb:23
 msgid "Invalid pin code"
-msgstr ""
+msgstr "Código PIN no válido"
 
 #: ../../../app/controllers/users_controller.rb:41
 msgid "Two-factor authentication has been disabled successfully!"
-msgstr ""
+msgstr "La autenticación de dos factores se ha desactivado correctamente."
 
 #: ../../../app/views/admin/groups/_form.html.erb:108
 msgid "Create Group"
-msgstr ""
+msgstr "Crea un grupo"
 
 #: ../../../app/views/admin/groups/_form.html.erb:110
 msgid "Update Group"
-msgstr ""
+msgstr "Grupo de actualización"
 
 #: ../../../app/views/admin/users/_form.html.erb:178
 msgid "Create User"
-msgstr ""
+msgstr "Crear usuario"
 
 #: ../../../app/views/admin/users/_form.html.erb:180
 msgid "Update User"
-msgstr ""
+msgstr "Actualizar usuario"
 
 #: ../../../app/views/admin/users/_show.html.erb:53
 #: ../../../app/views/profile/access_tokens/index.html.erb:39
@@ -60,119 +60,123 @@ msgstr ""
 #: ../../../app/views/profile/profile/index.html.erb:14
 #: ../../../app/views/profile/show.html.erb:30
 msgid "Save Changes"
-msgstr ""
+msgstr "Guardar cambios"
 
 #: ../../../app/views/admin/users/_toggle_user.html.erb:3
 msgid "Enable User"
-msgstr ""
+msgstr "Habilitar usuario"
 
 #: ../../../app/views/admin/users/_toggle_user.html.erb:6
 msgid "Disable User"
-msgstr ""
+msgstr "Deshabilitar usuario"
 
 #: ../../../app/views/devise/fido_usf_registrations/_success.html.erb:5
 msgid "Confirm Name"
-msgstr ""
+msgstr "Confirmar nombre"
 
 #: ../../../app/views/devise/registrations/edit.html.erb:25
 msgid "Manage 2FA"
-msgstr ""
+msgstr "Administrar 2FA"
 
 #: ../../../app/views/devise/registrations/edit.html.erb:27
 msgid "Enable 2FA"
-msgstr ""
+msgstr "Habilitar 2FA"
 
 #: ../../../app/views/layouts/_navigation.html.erb:13
 msgid "Home"
-msgstr ""
+msgstr "Casa"
 
 #: ../../../app/views/layouts/_navigation.html.erb:20
 msgid "Sign Up"
-msgstr ""
+msgstr "Inscribirse"
 
 #: ../../../app/views/layouts/_navigation.html.erb:22
 msgid "Sign In"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #: ../../../app/views/layouts/_profile_links.html.erb:2
 msgid "Admin Dashboard"
-msgstr ""
+msgstr "Panel de administración"
 
 #: ../../../app/views/layouts/_profile_links.html.erb:16
 msgid "Edit Profile"
-msgstr ""
+msgstr "Editar perfil"
 
 #: ../../../app/views/layouts/_profile_links.html.erb:18
 msgid "Preferences"
-msgstr ""
+msgstr "Preferencias"
 
 #: ../../../app/views/layouts/_profile_links.html.erb:19
 msgid "Sign out"
-msgstr ""
+msgstr "Desconectar"
 
 #: ../../../app/views/profile/_profile_nav.html.erb:3
 msgid "Account"
-msgstr ""
+msgstr "Cuenta"
 
 #: ../../../app/views/profile/_profile_nav.html.erb:5
 msgid "Profile"
-msgstr ""
+msgstr "Perfil"
 
 #: ../../../app/views/profile/_profile_nav.html.erb:7
 msgid "Emails"
-msgstr ""
+msgstr "Los correos electrónicos"
 
 #: ../../../app/views/profile/_profile_nav.html.erb:9
 msgid "Access tokens"
-msgstr ""
+msgstr "Fichas de acceso"
 
 #: ../../../app/views/profile/_profile_nav.html.erb:11
 msgid "Authentication devices"
-msgstr ""
+msgstr "Dispositivos de autenticación"
 
 #: ../../../app/views/profile/_profile_nav.html.erb:12
 msgid "Account activity"
-msgstr ""
+msgstr "Actividad de la cuenta"
 
 #: ../../../app/views/profile/authentication_devices/index.html.erb:23
 #: ../../../app/views/profile/authentication_devices/index.html.erb:33
 msgid "Delete"
-msgstr ""
+msgstr "Borrar"
 
 #: ../../../app/views/profile/authentication_devices/index.html.erb:40
 msgid "Manage TOTP 2FA"
-msgstr ""
+msgstr "Administrar TOTP 2FA"
 
 #: ../../../app/views/profile/authentication_devices/index.html.erb:42
 msgid "Enable TOTP 2FA"
-msgstr ""
+msgstr "Habilitar TOTP 2FA"
 
 #: ../../../app/views/profile/authentication_devices/index.html.erb:46
 #: ../../../app/views/users/new_2fa.html.erb:25
 msgid "Regenerate recovery codes"
-msgstr ""
+msgstr "Regenerar códigos de recuperación"
 
 #: ../../../app/views/profile/show.html.erb:26
 msgid "To edit any details on this page, you must confirm your current password."
 msgstr ""
+"Para editar cualquier detalle en esta página, debe confirmar su contraseña act"
+"ual."
 
 #: ../../../app/views/profile/show.html.erb:27
 msgid "Leave blank if you don't want to change your password"
-msgstr ""
+msgstr "Déjelo en blanco si no desea cambiar su contraseña"
 
 #: ../../../app/views/profile/show.html.erb:29
 msgid ""
 "We need your current password to confirm your changes to update your account d"
 "etails"
 msgstr ""
+"Necesitamos su contraseña actual para confirmar sus cambios y actualizar los d"
+"etalles de su cuenta"
 
 #: ../../../app/views/profile/show.html.erb:34
 msgid "Permanently delete account"
-msgstr ""
+msgstr "Eliminar cuenta de forma permanente"
 
 #: ../../../app/views/profile/show.html.erb:38
 msgid "Sites to which you've recently authenticated"
-msgstr ""
+msgstr "Sitios en los que se ha autenticado recientemente"
 
 #: ../../../app/views/users/_codes.html.erb:2
 msgid ""
@@ -181,32 +185,38 @@ msgid ""
 "account. Please save them in a safe place, or you will lose access to your acc"
 "ount."
 msgstr ""
+"Si alguna vez pierde su teléfono o el acceso a su contraseña secreta de un sol"
+"o uso, cada uno de estos códigos de recuperación se puede usar una vez para re"
+"cuperar el acceso a su cuenta. Guárdelos en un lugar seguro o perderá el acces"
+"o a su cuenta."
 
 #: ../../../app/views/users/_codes.html.erb:16
 msgid "Proceed"
-msgstr ""
+msgstr "Proceder"
 
 #: ../../../app/views/users/_codes.html.erb:17
 msgid "Download codes"
-msgstr ""
+msgstr "Descargar códigos"
 
 #: ../../../app/views/users/codes.html.erb:3
 msgid "Two-factor Authentication Recovery codes"
-msgstr ""
+msgstr "Códigos de recuperación de autenticación de dos factores"
 
 #: ../../../app/views/users/create_2fa.html.erb:2
 msgid "Congratulations! You have enabled Two-factor Authentication!"
-msgstr ""
+msgstr "¡Felicidades! ¡Ha habilitado la autenticación de dos factores!"
 
 #: ../../../app/views/users/new_2fa.html.erb:4
 msgid "Register Two-Factor Authenticator"
-msgstr ""
+msgstr "Registrar autenticador de dos factores"
 
 #: ../../../app/views/users/new_2fa.html.erb:7
 msgid ""
 "Use an one time password authenticator on your mobile device or computer to en"
 "able two-factor authentication (2FA)."
 msgstr ""
+"Utilice un autenticador de contraseña de un solo uso en su dispositivo móvil o"
+" computadora para habilitar la autenticación de dos factores (2FA)."
 
 #: ../../../app/views/users/new_2fa.html.erb:13
 msgid ""
@@ -214,43 +224,50 @@ msgid ""
 "nticators. In order to register a different device, you must first disable two"
 "-factor authentication."
 msgstr ""
+"Ya habilitó la autenticación de dos factores utilizando autenticadores de cont"
+"raseña de un solo uso. Para registrar un dispositivo diferente, primero debe d"
+"eshabilitar la autenticación de dos factores."
 
 #: ../../../app/views/users/new_2fa.html.erb:16
 msgid ""
 "If you lose your recovery codes you can generate new ones, invalidating all pr"
 "evious codes."
 msgstr ""
+"Si pierde sus códigos de recuperación, puede generar otros nuevos, invalidando"
+" todos los códigos anteriores."
 
 #: ../../../app/views/users/new_2fa.html.erb:19
 msgid "Disable two-factor authentication"
-msgstr ""
+msgstr "Autenticación de dos factores Desactivar"
 
 #: ../../../app/views/users/new_2fa.html.erb:36
 msgid "Can't scan the code?"
-msgstr ""
+msgstr "¿No puedes escanear el código?"
 
 #: ../../../app/views/users/new_2fa.html.erb:39
 msgid ""
 "To add the entry manually, provide the following details to the application on"
 " your phone."
 msgstr ""
+"Para agregar la entrada manualmente, proporcione los siguientes detalles a la "
+"aplicación en su teléfono."
 
 #: ../../../app/views/users/new_2fa.html.erb:42
 msgid "Account: %{account}"
-msgstr ""
+msgstr "Cuenta: %{account}"
 
 #: ../../../app/views/users/new_2fa.html.erb:43
 msgid "Key: %{key}"
-msgstr ""
+msgstr "Clave: %{key}"
 
 #: ../../../app/views/users/new_2fa.html.erb:46
 msgid "Time based: Yes"
-msgstr ""
+msgstr "Basado en tiempo: sí"
 
 #: ../../../app/views/users/new_2fa.html.erb:58
 msgid "Pin code"
-msgstr ""
+msgstr "Código PIN"
 
 #: ../../../app/views/users/new_2fa.html.erb:62
 msgid "Register with two-factor app"
-msgstr ""
+msgstr "Regístrese con la aplicación de dos factores"
