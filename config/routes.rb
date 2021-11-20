@@ -22,6 +22,9 @@ Rails.application.routes.draw do
       post :emails, to: 'users#emails'
       post 'resend_confirmation', to: 'users#resend_confirmation', as: :resend_confirmation
       delete :emails, to: 'users#destroy_email', as: 'delete_email'
+      resources :emails do
+        post :confirm, to: 'emails#confirm'
+      end
     end
     resources :custom_userdata_types
     resources :custom_group_data_types

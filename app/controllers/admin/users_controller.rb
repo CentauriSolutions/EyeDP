@@ -79,21 +79,21 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     model = User.find(params[:user_id])
     email = model.emails.find_by(id: params[:id])
     email.destroy
-    redirect_to admin_user_path(model), notice: 'Email was successfully destroyed.'
+    redirect_to admin_user_path(model, anchor: 'emails'), notice: 'Email was successfully destroyed.'
   end
 
   def resend_confirmation
     model = User.find(params[:user_id])
     email = Email.find_by(id: params[:email_id], user_id: model.id)
     email.send_confirmation_instructions
-    redirect_to admin_user_path(model), notice: 'Confirmation email was sent.'
+    redirect_to admin_user_path(model, anchor: 'emails'), notice: 'Confirmation email was sent.'
   end
 
   def resend_welcome_email
     @model = User.find(params[:user_id])
     respond_to do |format|
       if @model.send_admin_welcome_email
-        format.html { redirect_to [:edit, :admin, @model], notice: 'Welcome email will be sent.' }
+        format.html { redirect_to admin_user_path(@model, anchor: 'emails'), notice: 'Welcome email will be sent.' }
         format.json { render :show, status: :ok, location: [:admin, @model] }
       else
         format.html { redirect_to [:admin, @model, :edit], notice: 'There was a problem processing the request' }
