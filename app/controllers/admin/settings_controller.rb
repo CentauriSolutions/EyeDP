@@ -30,6 +30,7 @@ class Admin::SettingsController < AdminController
         nil
     end
     opts[:logo] = nil if opts[:logo] && opts[:logo].empty?
+    opts[:favicon] = nil if opts[:favicon] && opts[:favicon].empty?
     opts.each do |setting, value|
       Setting.send("#{setting}=", value)
     end
@@ -54,7 +55,7 @@ class Admin::SettingsController < AdminController
       :saml_certificate, :saml_key, :saml_timeout,
       :oidc_signing_key,
       :registration_enabled, :permanent_email,
-      :logo, :logo_height, :logo_width,
+      :logo, :logo_height, :logo_width, :favicon,
       :home_template, :dashboard_template, :registered_home_template,
       :expire_after, :welcome_from_email,
       :admin_reset_email_template, :admin_welcome_email_template,
