@@ -1,10 +1,68 @@
 <h1>Dashboard</h1>
 
 <div class="row">
+  <div class="col-3">
+    <div class="card" style="height: 100%;">
+      <div class="card-body">
+        <h5 class="card-title">
+        <%= User.count %> Total Users</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-xs-4">
+    <div class="card" style="height: 100%;">
+      <div class="card-body">
+        <% current = Login.where('created_at > ?', 30.days.ago).distinct.pluck(:user_id).count %>
+        <% previous = Login.where('created_at > ? AND created_at <= ?', 60.days.ago, 30.days.ago).distinct.pluck(:user_id).count %>
+        <h5 class="card-title"><%= current %> Active Users</h5>
+        <%- if current > previous %>
+          <%= fa_icon 'chevron-up' %>
+        <%- elsif current < previous %>
+          <%= fa_icon 'chevron-down' %>
+        <%- end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-xs-4">
+    <div class="card" style="height: 100%;">
+      <div class="card-body">
+        <% current = Login.where('created_at > ?', 30.days.ago).count %>
+        <% previous = Login.where('created_at > ? AND created_at <= ?', 60.days.ago, 30.days.ago).count %>
+        <h5 class="card-title"><%= current %> SSO Logins</h5>
+        <%- if current > previous %>
+          <%= fa_icon 'chevron-up' %>
+        <%- elsif current < previous %>
+          <%= fa_icon 'chevron-down' %>
+        <%- end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-xs-4">
+    <div class="card" style="height: 100%;">
+      <div class="card-body">
+        <% current = User.where('created_at > ?', 30.days.ago).count %>
+        <% previous = User.where('created_at > ? AND created_at <= ?', 60.days.ago, 30.days.ago).count %>
+        <h5 class="card-title"><%= current %> New Users</h5>
+        <%- if current > previous %>
+          <%= fa_icon 'chevron-up' %>
+        <%- elsif current < previous %>
+          <%= fa_icon 'chevron-down' %>
+        <%- end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
   <div class="col-12">
-    <div class="card card-body">
-      <h5 class="card-title">Login rate</h5>
-      <%= line_chart Login.group_by_day(:created_at).count %>
+    <div class="card">
+      <div class=" card-body"?>
+        <h5 class="card-title">Logins over the last year</h5>
+        <div id="cal-heatmap" style="top: 0; right: 0; overflow-x: scroll; width: 100%;"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -73,3 +131,24 @@
   </div>
 
 </div>
+<%- content_for :local_js do %>
+<script type="text/javascript">
+  <% logins = Login.where('created_at > ?', 12.months.ago).group_by_day(:created_at).count %>
+  <% max = logins.values.max || 0 %>
+  var cal = new CalHeatMap();
+  cal.init({
+    domain: "month",
+    subDomain: "day",
+    range: 12,
+    data: <%= raw logins.map{ |date, count| [date.to_time.to_i, count] }.to_h.to_json %>,
+    start: new Date(<%= 12.months.ago.to_time.to_i * 1000 %>),
+    // domainMargin: 2,
+    cellPadding: 3,
+    legendColors: ["#efefef", "steelblue"],
+    itemName: ["login", "logins"],
+    considerMissingDataAsZero: true,
+    tooltip: true,
+    legend: [0, <%= max * 0.25 %>, <%= max * 0.5 %>, <%= max * 0.75 %>, <%= max %>, <%= max * 1.25 %>]
+  });
+</script>
+<%- end %>

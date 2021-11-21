@@ -26,7 +26,9 @@
       <div class="row">
         <div class="col-12" %>
           <%= render 'layouts/messages' %>
-          <%= yield %>
+          <div class="container-fluid">
+            <%= yield %>
+          </div>
           <div class="mb-5"></div>
         </div>
       </div>
@@ -71,6 +73,7 @@
       }
     </script>
     <%= javascript_include_tag 'admin', type: 'module' %>
-    <%= yield :charts_js %>
+    <%= javascript_include_tag 'graphs' %>
+    <%= yield :local_js %>
   </body>
 </html>

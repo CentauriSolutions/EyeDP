@@ -77,7 +77,6 @@ gem 'tipsy-rails'
 # SAML the things!
 gem 'saml_idp'
 
-gem 'chartkick'
 gem 'groupdate'
 
 gem 'liquid'
