@@ -15,8 +15,6 @@
 //= require rails-ujs
 //= require activestorage
 //= require bootstrap-sprockets
-//= require chartkick
-//= require Chart.bundle
 //= require u2f-api
 //= require tipsy
 //= require profile

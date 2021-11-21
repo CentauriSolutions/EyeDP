@@ -139,7 +139,6 @@ GEM
       capistrano (~> 3.7)
       capistrano-bundler
       puma (>= 4.0, < 6.0)
-    chartkick (4.0.5)
     childprocess (4.1.0)
     choice (0.2.0)
     chunky_png (1.4.0)
@@ -491,7 +490,6 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   capistrano3-puma
-  chartkick
   database_cleaner-active_record
   devise
   devise-i18n
