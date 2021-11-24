@@ -78,6 +78,17 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   notify_for %i[create update destroy], check: :notify_if
 
+  def self.send_reset_password_instructions(attributes = {}) # rubocop:disable Metrics/CyclomaticComplexity
+    recoverables = find_or_initialize_with_errors([:address], {
+                                                    address: attributes.delete(:email)
+                                                  }, :not_found)
+    token ||= recoverables[0].send(:set_reset_password_token) if recoverables[0]&.persisted?
+    recoverables[0].emails.each do |recoverable|
+      recoverable.send_reset_password_instructions(token) if recoverable&.persisted? && recoverable&.confirmed?
+    end
+    recoverables[0]
+  end
+
   def notify_if
     saved_changes.keys.reject do |k|
       %w[updated_at last_activity_at].include?(k)
