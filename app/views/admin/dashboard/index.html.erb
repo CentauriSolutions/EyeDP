@@ -79,7 +79,11 @@
       <table class="table">
       <%- logins_by_app.each do |app, count| %>
         <tr>
-          <td><%= link_to app.name, [:admin, app] %></td>
+          <%- if app.is_a? Doorkeeper::Application %>
+            <td><%= link_to app.name, admin_application_path(app) %></td>
+          <%- else %>
+            <td><%= link_to app.name, [:admin, app] %></td>
+          <%- end %>
           <td><%= count %></td>
         </tr>
       <%- end %>
@@ -115,12 +119,12 @@
         <%- @logins.each do |login| %>
         <tr>
           <%- sp = login.service_provider %>
-          <% if sp.kind_of? Doorkeeper::Application %>
-            <%- sp = Application.find(sp.id) %>
-          <%- end %>
           <% name = sp.try(:name) || sp.to_s %>
-          <% url = sp.display_url || sp.to_s %>
-          <td><%= link_to name, url %></td>
+          <%- if sp.is_a? Doorkeeper::Application %>
+            <td><%= link_to sp.name, admin_application_path(sp) %></td>
+          <%- else %>
+            <td><%= link_to sp.name, [:admin, sp] %></td>
+          <%- end %>
           <td><%= link_to login.user.username, [:admin, login.user] %></td>
           <td><%= login.auth_type %></td>
           <td><%= login.created_at.to_formatted_s(:long) %></td>
