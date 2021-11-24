@@ -95,11 +95,9 @@ Rails.application.routes.draw do
   get 'profile/account', to: 'profile#show'
   namespace :profile do
     get '/', to: 'profile#index', as: :profile
-    post '/', to: 'profile#update'
+    match '/', to: 'profile#update', via: %i[patch post]
     get 'authentication_devices', to: 'authentication_devices#index'
     get 'account_activity', to: 'account_activity#index'
-    get 'additional_properties', to: 'additional_properties#index'
-    post 'additional_properties', to: 'additional_properties#update'
     resources :emails do
       post 'resend_confirmation', to: 'emails#resend_confirmation', as: :resend_confirmation
     end

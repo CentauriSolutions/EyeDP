@@ -21,12 +21,12 @@ class Profile::ProfileController < ApplicationController
         flash[:error] = 'Failed to update userdata, invalid value'
       end
     end
-    redirect_to profile_additional_properties_path
+    redirect_to profile_path
   end
 
   protected
 
   def custom_userdata_params
-    params.require(:custom_data).permit!
+    params.require(:custom_data).permit(CustomUserdataType.permit!)
   end
 end

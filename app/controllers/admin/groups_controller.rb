@@ -84,7 +84,7 @@ class Admin::GroupsController < AdminController
   end
 
   def custom_groupdata_params
-    params.require(:custom_data).permit!
+    params.require(:custom_data).permit(CustomGroupDataType.permit!)
   end
 
   def ensure_user_is_authorized!
