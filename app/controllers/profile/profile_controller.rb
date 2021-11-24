@@ -14,6 +14,7 @@ class Profile::ProfileController < ApplicationController
       ).first_or_initialize
       next if custom_datum.read_only
 
+      value.reject!(&:empty?) if value.is_a? Array
       begin
         if value.present?
           custom_datum.value = value

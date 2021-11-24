@@ -4,16 +4,22 @@ module Deserializable
   SEPARATOR_REGEXP = /[\n,;]+/.freeze
 
   # takes a string and returns a typed thing
-  def deserialize(value, custom_type) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def deserialize(value, custom_type) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     case custom_type
     when 'boolean'
+      return nil unless ['t', 'true', '1', 1, true, :true, 'f', 'false', '0', 0, false, :false].include? value #  rubocop:disable Lint/BooleanSymbol
+
       ['t', 'true', '1', 1, true, :true].include?(value) #  rubocop:disable Lint/BooleanSymbol
     when 'array'
       return value if value.is_a?(Array)
 
-      (value || '').split(SEPARATOR_REGEXP).map(&:strip).reject(&:empty?)
+      (value || '').split(SEPARATOR_REGEXP).map(&:strip).reject(&:empty?) || nil
     when 'integer'
-      value.to_i
+      begin
+        value.to_i
+      rescue NomethodError
+        nil
+      end
     else
       value
     end
