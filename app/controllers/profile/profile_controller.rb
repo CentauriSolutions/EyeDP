@@ -5,7 +5,7 @@ class Profile::ProfileController < ApplicationController
 
   def index; end
 
-  def update # rubocop:disable Metrics/MethodLength
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     custom_userdata_params.each do |name, value|
       custom_type = CustomUserdataType.where(name: name).first
       custom_datum = CustomUserdatum.where(
@@ -15,8 +15,12 @@ class Profile::ProfileController < ApplicationController
       next if custom_datum.read_only
 
       begin
-        custom_datum.value = value
-        custom_datum.save
+        if value.present?
+          custom_datum.value = value
+          custom_datum.save
+        else
+          custom_datum.destroy
+        end
       rescue RuntimeError
         flash[:error] = 'Failed to update userdata, invalid value'
       end

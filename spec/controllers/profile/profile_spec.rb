@@ -10,6 +10,7 @@ RSpec.describe Profile::ProfileController, type: :controller do
   end
   let(:custom_bool) { CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean') }
   let(:custom_string) { CustomUserdataType.create(name: 'Nickname', custom_type: 'string') }
+  let(:custom_password) { CustomUserdataType.create(name: 'Demo password', custom_type: 'password') }
 
   before do
     sign_in(user)
@@ -87,6 +88,40 @@ RSpec.describe Profile::ProfileController, type: :controller do
         data = user.custom_userdata.first
         expect(data.name).to eq('Nickname')
         expect(data.value).to eq('new nick')
+      end
+    end
+
+    context 'password type' do
+      before do
+        custom_password
+      end
+
+      it 'updates custom attributes' do
+        post :update, params: { custom_data: { 'Demo password': 'new password' } }
+        data = user.custom_userdata.first
+        expect(data.name).to eq('Demo password')
+
+        expect(User.new(encrypted_password: data.value).valid_password?('new password')).to be true
+      end
+
+      it 'cannot update read-only attributes' do
+        custom_password.update(user_read_only: true)
+        custom_datum = CustomUserdatum.where(
+          user_id: user.id,
+          custom_userdata_type: custom_password
+        ).first_or_initialize
+        custom_datum.value = 'locked password'
+        custom_datum.save
+        post :update, params: { custom_data: { 'Demo password': 'new password' } }
+        data = user.custom_userdata.first
+        expect(data.name).to eq('Demo password')
+        expect(User.new(encrypted_password: data.value).valid_password?('locked password')).to be true
+        expect(User.new(encrypted_password: data.value).valid_password?('new password')).to be false
+        custom_password.update(user_read_only: false)
+        post :update, params: { custom_data: { 'Demo password': 'new password' } }
+        data = user.custom_userdata.first
+        expect(data.name).to eq('Demo password')
+        expect(User.new(encrypted_password: data.value).valid_password?('new password')).to be true
       end
     end
   end

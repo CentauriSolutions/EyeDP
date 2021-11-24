@@ -28,6 +28,8 @@
     <%- end %>
   <%- when 'integer' %>
     <%= number_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
+  <%- when 'password' %>
+    <%= password_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
   <%- else %>
     <%= text_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
   <%- end %>

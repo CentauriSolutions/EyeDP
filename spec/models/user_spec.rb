@@ -46,33 +46,39 @@ RSpec.describe User, type: :model do
   it 'makes a user Admin is it has membership' do
     expect(user.admin?).to be false
     user.groups << group
-    expect(user.admin?).to be true
+    this_user = User.find(user.id)
+    expect(this_user.admin?).to be true
   end
 
   it 'makes a user Operator if it has membership' do
     expect(user.operator?).to be false
     user.groups << operator_group
-    expect(user.operator?).to be true
+    this_user = User.find(user.id)
+    expect(this_user.operator?).to be true
   end
 
   it 'makes the user Manager if it has membership' do
     expect(user.manager?).to be false
     user.groups << manager_group
-    expect(user.manager?).to be true
+    this_user = User.find(user.id)
+    expect(this_user.manager?).to be true
   end
 
   it 'does not grant admin just because of a group name' do
     group.admin = false
     user.groups << group
-    expect(user.admin?).to be false
+    this_user = User.find(user.id)
+    expect(this_user.admin?).to be false
   end
 
   it 'can require an admin to have 2fa before adding' do
     group.update({ requires_2fa: true })
     user.groups << group
-    expect(user.admin?).to be false
-    user.update({ otp_required_for_login: true })
-    expect(user.admin?).to be true
+    this_user = User.find(user.id)
+    expect(this_user.admin?).to be false
+    this_user = User.find(user.id)
+    this_user.update({ otp_required_for_login: true })
+    expect(this_user.admin?).to be true
   end
 
   it 'does not make a non-admin an admin' do

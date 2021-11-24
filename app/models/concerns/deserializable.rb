@@ -31,7 +31,7 @@ module Deserializable
                 is_array
               when 'integer'
                 new_value.is_a?(Integer)
-              when 'string'
+              when 'string', 'password'
                 raise "Invalid Data: #{new_value} isn't a string" unless new_value.is_a? String
 
                 true
@@ -40,6 +40,7 @@ module Deserializable
               end
       raise "Invalid #{type_s}: #{new_value} isn't an #{type}" unless valid
     end
+    new_value = User.new(password: new_value).encrypted_password if type == 'password' && new_value != value_raw
     self.value_raw = new_value
   end
 end
