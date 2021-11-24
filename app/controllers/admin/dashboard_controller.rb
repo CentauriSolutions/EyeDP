@@ -9,13 +9,12 @@ class Admin::DashboardController < AdminController
 
   private
 
-  def logins_by_app # rubocop:disable Metrics/AbcSize
+  def logins_by_app
     @logins_by_app ||= begin
       logins = Login.group(%i[service_provider_type service_provider_id])
                     .where('created_at > ?', 7.days.ago).count
       logins = logins.map do |deets, count|
         app = deets[0].constantize.find(deets[1])
-        app = Application.find(app.id) if app.is_a? Doorkeeper::Application
         [app, count]
       end
       logins.sort_by { |login| - login[1] }.take(10)

@@ -190,7 +190,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   end
 
   def custom_userdata_params
-    params.require(:custom_data).permit!
+    params.require(:custom_data).permit(CustomUserdataType.permit!)
   end
 
   def ensure_user_is_authorized!

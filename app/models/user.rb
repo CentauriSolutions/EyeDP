@@ -216,7 +216,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # end
 
   def roles
-    asserted_groups.map(&:roles).flatten.uniq
+    @roles ||= asserted_groups.map(&:roles).flatten.uniq
   end
 
   def login

@@ -17,7 +17,7 @@ RSpec.describe ProfileController, type: :controller do
     )
   end
 
-  context 'User dashboard' do
+  context 'User account' do
     render_views
     before do
       sign_in(user)

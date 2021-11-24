@@ -1,26 +1,6 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 70,
-      "fingerprint": "13849a8caacc51cec8cbf8f62daa69ad94413135de49ae500cb52d8eee91a963",
-      "check_name": "MassAssignment",
-      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
-      "file": "app/controllers/profile/profile_controller.rb",
-      "line": 30,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:custom_data).permit!",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Profile::ProfileController",
-        "method": "custom_userdata_params"
-      },
-      "user_input": null,
-      "confidence": "Medium",
-      "note": "This uses additional checks elsewhere to restrict the assignment."
-    },
-    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "1b5e4ee151da24cae32d3e2dbb5b9e47ea332d0e903546eb7b3a811c4a0af130",
@@ -154,46 +134,6 @@
       "note": "Setting.registered_home_template is only configurable by an admin."
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 70,
-      "fingerprint": "d620a3a379b4a94f3a8002091aef9f0527f2528a77da432685b22c17843a1430",
-      "check_name": "MassAssignment",
-      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
-      "file": "app/controllers/admin/groups_controller.rb",
-      "line": 87,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:custom_data).permit!",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::GroupsController",
-        "method": "custom_groupdata_params"
-      },
-      "user_input": null,
-      "confidence": "Medium",
-      "note": "This is an admin only controller, and is restricted by a whitelist of acceptable options"
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 70,
-      "fingerprint": "db893cc6b6b379ddeff2ffed97d2ad8c33afb1d9ba6f351c354efe668545b0b6",
-      "check_name": "MassAssignment",
-      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
-      "file": "app/controllers/admin/users_controller.rb",
-      "line": 221,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:custom_data).permit!",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::UsersController",
-        "method": "custom_userdata_params"
-      },
-      "user_input": null,
-      "confidence": "Medium",
-      "note": "This is an admin only controller, and is restricted by a whitelist of acceptable options"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "ded083a60327240307d2f69b0215746d34ab49f4580f611080a7f584647c1b6a",
@@ -214,6 +154,6 @@
       "note": "This is an admin only controller, and is restricted by a whitelist of acceptable options"
     }
   ],
-  "updated": "2021-11-12 08:26:01 +0100",
+  "updated": "2021-11-24 08:41:23 +0100",
   "brakeman_version": "5.1.1"
 }
