@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_164952) do
+ActiveRecord::Schema.define(version: 2021_11_27_064408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -67,6 +67,15 @@ ActiveRecord::Schema.define(version: 2021_11_18_164952) do
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["request_uuid"], name: "index_audits_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
+  end
+
+  create_table "custom_attribute_service_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "application_id", null: false
+    t.uuid "custom_userdata_type_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["application_id"], name: "index_custom_attribute_service_providers_on_application_id"
+    t.index ["custom_userdata_type_id"], name: "index_custom_attribute_sp_on_custom_userdata_type"
   end
 
   create_table "custom_group_data_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -352,6 +361,7 @@ ActiveRecord::Schema.define(version: 2021_11_18_164952) do
   end
 
   add_foreign_key "access_tokens", "users"
+  add_foreign_key "custom_attribute_service_providers", "custom_userdata_types"
   add_foreign_key "custom_groupdata", "custom_group_data_types"
   add_foreign_key "custom_groupdata", "groups"
   add_foreign_key "custom_userdata", "custom_userdata_types"

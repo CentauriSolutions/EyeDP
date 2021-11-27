@@ -78,7 +78,20 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.username
     end
 
-    claim :profile do |_resource_owner|
+    begin
+      CustomUserdataType.joins(:custom_attribute_service_providers).each do |attr_type|
+        claim attr_type.name, scope: :profile do |resource_owner, _scopes, access_token|
+          if CustomUserdataType
+             .joins(:custom_attribute_service_providers)
+             .where(id: attr_type.id, custom_attribute_service_providers: {
+                      application_id: access_token.application_id
+                    }).any?
+            # binding.pry
+            resource_owner.custom_userdata.where(custom_userdata_type_id: attr_type.id).try(:first).try(:value)
+          end
+        end
+      end
+    rescue ActiveRecord::StatementInvalid
       nil
     end
 

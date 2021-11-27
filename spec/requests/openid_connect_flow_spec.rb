@@ -118,5 +118,32 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
         end
       end
     end
+
+    context 'With custom userdata' do
+      let(:custom_bool) { CustomUserdataType.create(name: 'has_pets', custom_type: 'boolean') }
+
+      before do
+        CustomUserdatum.create!(user: user, custom_userdata_type: custom_bool, value: false)
+
+        user.groups << users_group
+      end
+
+      it 'includes custom userdata when a service provider has been added' do
+        custom_bool.applications << application
+        request_user_info!
+        json_response = JSON.parse(response.body)
+        expect(json_response['groups']).to match([users_group.name])
+        expect(json_response).to include 'has_pets'
+        expect(json_response['has_pets']).to be false
+      end
+
+      it 'does not include custom userdata when a service provider has not been added' do
+        request_user_info!
+        json_response = JSON.parse(response.body)
+        expect(json_response).to match(id_token_claims.merge(user_info_claims))
+        expect(json_response['groups']).to match([users_group.name])
+        expect(json_response).not_to include 'has_pets'
+      end
+    end
   end
 end
