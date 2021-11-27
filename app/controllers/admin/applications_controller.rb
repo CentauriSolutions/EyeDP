@@ -37,7 +37,8 @@ class Admin::ApplicationsController < AdminController
   private
 
   def application_attributes
-    %w[name display_url uid secret internal redirect_uri scopes order image_url confidential groups custom_userdata_types]
+    %w[name display_url uid secret internal redirect_uri scopes order image_url confidential groups
+       custom_userdata_types]
   end
   helper_method :application_attributes
 
@@ -59,7 +60,7 @@ class Admin::ApplicationsController < AdminController
       :redirect_uri, :confidential, :image_url, :description, group_ids: [],
       custom_userdata_type_ids: []
     )
-    [:group_ids, :custom_userdata_type_ids].each do |key|
+    %i[group_ids custom_userdata_type_ids].each do |key|
       p[key]&.reject!(&:empty?)
       p[key] ||= []
     end

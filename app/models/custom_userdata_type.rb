@@ -16,4 +16,8 @@ class CustomUserdataType < ApplicationRecord
       end
     end
   end
+
+  def to_s
+    name
+  end
 end
