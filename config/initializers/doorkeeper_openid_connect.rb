@@ -94,13 +94,5 @@ Doorkeeper::OpenidConnect.configure do
     rescue ActiveRecord::StatementInvalid
       nil
     end
-
-    claim :address do |_resource_owner|
-      nil
-    end
-
-    claim :phone do |_resource_owner|
-      nil
-    end
   end
 end
