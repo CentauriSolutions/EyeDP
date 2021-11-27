@@ -20,6 +20,7 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
       name: 'https://test.example.com', redirect_uri: 'https://test.example.com'
     )
   end
+  let(:custom_userdata_type) { CustomUserdataType.create(name: 'has_pets', custom_type: 'boolean') }
 
   describe 'Application' do
     context 'signed in manager' do
@@ -134,6 +135,19 @@ RSpec.describe Admin::ApplicationsController, type: :controller do
             { id: app.id, application: { display_url: app.display_url, group_ids: [] } })
           app.reload
           expect(app.groups).not_to include group
+        end
+
+        it 'can update custom attributes' do
+          expect(app.custom_userdata_types).to be_empty
+          post(:update, params:
+            { id: app.id, application:
+              { custom_userdata_type_ids: [custom_userdata_type.id] } })
+          app.reload
+          expect(app.custom_userdata_types).to include custom_userdata_type
+          post(:update, params:
+            { id: app.id, application: { display_url: app.display_url, custom_userdata_type_ids: [] } })
+          app.reload
+          expect(app.custom_userdata_types).not_to include custom_userdata_type
         end
 
         # Updating the secret can only be done via the renew_secret functionality
