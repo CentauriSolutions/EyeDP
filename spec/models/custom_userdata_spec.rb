@@ -13,4 +13,8 @@ RSpec.describe CustomUserdatum, type: :model do
     expect(data.name).to eq('has_pets')
     expect(data.value).to be false
   end
+
+  it 'knows the name of the type' do
+    expect(custom_bool.to_s).to eq 'has_pets'
+  end
 end

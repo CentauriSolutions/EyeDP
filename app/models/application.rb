@@ -26,6 +26,9 @@ class Application < Doorkeeper::Application
   has_many :group_service_providers, as: :service_provider, dependent: :destroy
   has_many :groups, through: :group_service_providers
 
+  has_many :custom_attribute_service_providers, dependent: :destroy
+  has_many :custom_userdata_types, through: :custom_attribute_service_providers
+
   def to_s
     name
   end

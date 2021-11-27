@@ -176,6 +176,22 @@ RSpec.describe Admin::GroupsController, type: :controller do
             expect(data.name).to eq('alias')
             expect(data.value).to eq('ahoy')
           end
+
+          context 'array type' do
+            let(:custom_array) { CustomGroupDataType.create(name: 'Nicknames', custom_type: 'array') }
+
+            before do
+              custom_array
+            end
+
+            it 'updates custom attributes' do
+              post :update,
+                   params: { id: group.id, group: { name: group.name }, custom_data: { 'Nicknames': %w[nick1 nick2] } }
+              data = group.custom_groupdata.first
+              expect(data.name).to eq('Nicknames')
+              expect(data.value).to eq(%w[nick1 nick2])
+            end
+          end
         end
       end
     end
