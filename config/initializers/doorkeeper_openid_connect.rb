@@ -91,7 +91,7 @@ Doorkeeper::OpenidConnect.configure do
           end
         end
       end
-    rescue ActiveRecord::StatementInvalid
+    rescue ActiveRecord::StatementInvalid, ActiveRecord::ConnectionNotEstablished
       nil
     end
   end
