@@ -60,7 +60,8 @@ gem 'will_paginate-bootstrap4'
 gem 'doorkeeper', '>= 5.2', '< 5.5'
 gem 'doorkeeper-openid_connect'
 
-gem 'scout_apm'
+gem 'sentry-rails'
+gem 'sentry-ruby'
 
 # gem 'ledermann-rails-settings'
 # gem 'rails-settings-cached'
