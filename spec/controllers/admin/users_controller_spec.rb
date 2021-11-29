@@ -92,7 +92,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
       it 'can remove a user from a group' do
         user.groups << user_group
-        post(:update, params: { id: user.id, user: { name: user.name, group_ids: [] } })
+        post(:update, params: { id: user.id, user: { name: user.name, group_ids: [''] } })
         user.reload
         expect(user.groups).to eq []
       end
@@ -106,7 +106,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       it 'cannot remove a user from an operator group' do
         user.groups << operator_group
         expect(user.groups.pluck(:name)).to eq %w[operators]
-        post(:update, params: { id: user.id, user: { username: user.username, group_ids: [] } })
+        post(:update, params: { id: user.id, user: { username: user.username, group_ids: [''] } })
         user.reload
         expect(user.groups.pluck(:name)).to eq %w[operators]
       end
@@ -120,7 +120,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
       it 'cannot remove a user from an admin group' do
         expect(admin.groups.pluck(:name)).to eq %w[administrators]
-        post(:update, params: { id: admin.id, user: { username: admin.username, group_ids: [] } })
+        post(:update, params: { id: admin.id, user: { username: admin.username, group_ids: [''] } })
         admin.reload
         expect(admin.groups.pluck(:name)).to eq %w[administrators]
       end
@@ -490,6 +490,16 @@ RSpec.describe Admin::UsersController, type: :controller do
           expect(response.status).to eq(302)
           user.reload
           expect(user.expired?).to be true
+        end
+
+        it 'expiring a user does not change their groups' do
+          expect(user.expired?).to be false
+          user.groups << user_group
+          post(:update, params: { id: user.id, user: { expires_at: 10.minutes.ago } })
+          expect(response.status).to eq(302)
+          user.reload
+          expect(user.expired?).to be true
+          expect(user.groups).to include(user_group)
         end
 
         it 'can re-enable a timed-out User' do

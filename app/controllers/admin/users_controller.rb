@@ -150,14 +150,13 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     allowlist_attrs = [
       :email, :username, :name, :expires_at,
-      :password, :last_activity_at, { group_ids: [] }
+      :password, :last_activity_at, :group_ids, { group_ids: [] }
     ]
     allowlist_attrs.push(emails: []) if params[:action] == 'create'
     p = params.require(:user).permit(
       allowlist_attrs
     )
-    p[:group_ids] ||= []
-    if current_user.manager? && !current_user.admin?
+    if p[:group_ids] && current_user.manager? && !current_user.admin?
       # A Manager cannot add a user to an operator or admin group
       p[:group_ids] -= Group.where(admin: true).or(Group.where(operator: true)).pluck(:id)
       # A manager cannot remove admin from an admin user nor operator from an operator user
