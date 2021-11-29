@@ -180,6 +180,25 @@ GEM
     execjs (2.8.1)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
+    faraday (1.8.0)
+      faraday-em_http (~> 1.0)
+      faraday-em_synchrony (~> 1.0)
+      faraday-excon (~> 1.1)
+      faraday-httpclient (~> 1.0.1)
+      faraday-net_http (~> 1.0)
+      faraday-net_http_persistent (~> 1.1)
+      faraday-patron (~> 1.0)
+      faraday-rack (~> 1.0)
+      multipart-post (>= 1.2, < 3)
+      ruby2_keywords (>= 0.0.4)
+    faraday-em_http (1.0.0)
+    faraday-em_synchrony (1.0.0)
+    faraday-excon (1.1.0)
+    faraday-httpclient (1.0.1)
+    faraday-net_http (1.0.1)
+    faraday-net_http_persistent (1.2.0)
+    faraday-patron (1.0.0)
+    faraday-rack (1.0.0)
     ffi (1.15.3)
     font-awesome-rails (4.7.0.7)
       railties (>= 3.2, < 7)
@@ -246,6 +265,7 @@ GEM
     minitest (5.14.4)
     msgpack (1.4.2)
     multi_xml (0.6.0)
+    multipart-post (2.1.1)
     nenv (0.3.0)
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
@@ -381,6 +401,7 @@ GEM
     ruby-saml (1.13.0)
       nokogiri (>= 1.10.5)
       rexml
+    ruby2_keywords (0.0.5)
     saml_idp (0.12.0)
       activesupport (>= 3.2)
       builder (>= 3.0)
@@ -395,8 +416,16 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scout_apm (4.1.2)
-      parser
+    sentry-rails (4.8.1)
+      railties (>= 5.0)
+      sentry-ruby-core (~> 4.8.1)
+    sentry-ruby (4.8.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      faraday (>= 1.0)
+      sentry-ruby-core (= 4.8.1)
+    sentry-ruby-core (4.8.1)
+      concurrent-ruby
+      faraday
     shellany (0.0.1)
     shoulda (4.0.0)
       shoulda-context (~> 2.0)
@@ -531,7 +560,8 @@ DEPENDENCIES
   ruby-saml (>= 1.7.2)
   saml_idp
   sass-rails (~> 6.0)
-  scout_apm
+  sentry-rails
+  sentry-ruby
   shoulda
   sidekiq
   simplecov
