@@ -176,10 +176,13 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     %w[username email group]
   end
 
-  def filter(rel) # rubocop:disable Metrics/AbcSize
+  def filter(rel) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     if filter_whitelist.include? params[:filter_by]
-      if params[:filter_by] == 'group'
+      case params[:filter_by]
+      when 'group'
         rel.joins(:user_groups).where(user_groups: { group_id: params[:filter] })
+      when 'email'
+        rel.joins(:emails).where(emails: { address: params[:filter] })
       else
         users = User.arel_table
         rel.where(users[params[:filter_by]].matches("%#{params[:filter]}%"))
