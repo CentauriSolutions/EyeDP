@@ -46,6 +46,20 @@ RSpec.describe Admin::UsersController, type: :controller do
         expect(response.status).to eq(200)
       end
 
+      it 'can search for users by email' do
+        user
+        get :index, params: { filter_by: 'email', filter: user.email }
+        expect(response.status).to eq(200)
+        expect(@controller.instance_variable_get(:@models)).to include user
+      end
+
+      it 'can search for users by username' do
+        user
+        get :index, params: { filter_by: 'username', filter: user.username }
+        expect(response.status).to eq(200)
+        expect(@controller.instance_variable_get(:@models)).to include user
+      end
+
       context 'with sudo enabled' do
         render_views
         before do
