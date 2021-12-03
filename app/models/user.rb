@@ -97,6 +97,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def notification_attributes
     {
+      name: name,
       username: username,
       email: email
     }

@@ -3,9 +3,10 @@
 class WebHookService
   attr_accessor :hook, :data, :request_options, :event
 
-  def initialize(hook, data, event)
+  def initialize(hook, data, headers, event)
     @hook = hook
     @data = data
+    @headers = headers
     @event = event
     @request_options = {
       timeout: Setting.webhook_timeout,
@@ -80,6 +81,9 @@ class WebHookService
       'User-Agent' => 'EyeDP/1.0'
     }.tap do |hash|
       hash['EyeDP-Token'] = hook.token if hook.token.present?
+      @headers.each do |header, value|
+        hash[header] = value
+      end
     end
   end
 
