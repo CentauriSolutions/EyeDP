@@ -37,9 +37,9 @@
       <footer class="bg-light text-center text-lg-start">
         <!-- Git Hash -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-          Deployed version of EyeDP: <%= link_to EyedP::Application::GIT_SHA[0..7], "https://github.com/CentauriSolutions/EyeDP/commit/#{EyedP::Application::GIT_SHA}" %>
+          Deployed version of EyeDP: <%= link_to EyedP::Application::GIT_SHA[0..7], "https://github.com/CentauriSolutions/EyeDP/commit/#{EyedP::Application::GIT_SHA[0..7]}" %>
           <br />
-          Compare to <%= link_to 'latest', "https://github.com/CentauriSolutions/EyeDP/compare/#{EyedP::Application::GIT_SHA}...master" %>
+          Compare to <%= link_to 'latest', "https://github.com/CentauriSolutions/EyeDP/compare/#{EyedP::Application::GIT_SHA[0..7]}...main" %>
         </div>
         <!-- END Git Hash -->
       </footer>
