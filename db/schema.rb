@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_27_064408) do
+ActiveRecord::Schema.define(version: 2021_12_04_090457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -212,6 +212,8 @@ ActiveRecord::Schema.define(version: 2021_11_27_064408) do
     t.datetime "created_at", null: false
     t.datetime "revoked_at"
     t.string "scopes"
+    t.string "code_challenge"
+    t.string "code_challenge_method"
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
     t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
