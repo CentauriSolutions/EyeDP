@@ -27,6 +27,14 @@ Doorkeeper.configure do # rubocop:disable Metrics/BlockLength
     end
   end
 
+  resource_owner_from_credentials do |_routes|
+    user = User.find_for_database_authentication(login: params[:username])
+    if user&.valid_for_authentication? { user.valid_password?(params[:password]) } && user&.active_for_authentication?
+      request.env['warden'].set_user(user, scope: :user, store: false)
+      user
+    end
+  end
+
   skip_authorization do |_resource_owner, client|
     client.application.internal?
   end
@@ -38,5 +46,5 @@ Doorkeeper.configure do # rubocop:disable Metrics/BlockLength
   default_scopes :openid
   optional_scopes :profile, :email, :address, :phone
 
-  grant_flows %w[authorization_code implicit_oidc]
+  grant_flows %w[authorization_code implicit_oidc password]
 end
