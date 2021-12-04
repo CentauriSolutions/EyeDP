@@ -51,7 +51,7 @@ Doorkeeper::OpenidConnect.configure do
   claims do
     # This is kept as a block instead of a callable proc in case it is desired, later, to
     # increase privacy via the confidential parameter
-    claim :email, scope: :openid do |resource_owner| # rubocop:disable Style/SymbolProc
+    claim :email, response: [:user_info, :id_token], scope: :openid do |resource_owner| # rubocop:disable Style/SymbolProc
       # Pass the resource_owner's email
       resource_owner.email
     end
@@ -73,7 +73,7 @@ Doorkeeper::OpenidConnect.configure do
 
     # This is kept as a block instead of a callable proc in case it is desired, later, to
     # increase privacy via the confidential parameter
-    claim :username, scope: :openid do |resource_owner| # rubocop:disable Style/SymbolProc
+    claim :username, response: [:user_info, :id_token], scope: :openid do |resource_owner| # rubocop:disable Style/SymbolProc
       # Pass the resource_owner's username
       resource_owner.username
     end
