@@ -7,7 +7,7 @@ Doorkeeper.configure do # rubocop:disable Metrics/BlockLength
   base_controller 'ApplicationController'
 
   # Allow redirects to localhost
-  force_ssl_in_redirect_uri  { |uri| uri.host != 'localhost' || uri.host != '127.0.0.1' }
+  force_ssl_in_redirect_uri { |uri| uri.host != 'localhost' || uri.host != '127.0.0.1' }
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
