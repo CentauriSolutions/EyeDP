@@ -4,8 +4,7 @@ class DashboardController < ApplicationController
   before_action :authenticate_user!
 
   def home
-    # @template = Liquid::Template.parse(Setting.dashboard_template)
-    @template = Liquid::Template.parse(File.read(Rails.root.join('templates/dashboard.liquid')))
+    @template = Liquid::Template.parse(Setting.dashboard_template)
     @applications = (saml_apps + openid_apps).sort_by(&:order)
   end
 
@@ -38,6 +37,7 @@ class DashboardController < ApplicationController
     @saml_apps ||= SamlServiceProvider
                    .includes(:group_service_providers)
                    .where(group_service_providers: { id: nil })
+                   .where(show_on_dashboard: true)
                    .or(
                      SamlServiceProvider
                      .where(group_service_providers: { group: current_user.groups })
@@ -48,6 +48,7 @@ class DashboardController < ApplicationController
     @openid_apps ||= Application
                      .includes(:group_service_providers)
                      .where(group_service_providers: { id: nil })
+                     .where(show_on_dashboard: true)
                      .or(
                        Application
                        .where(group_service_providers: { group: current_user.groups })

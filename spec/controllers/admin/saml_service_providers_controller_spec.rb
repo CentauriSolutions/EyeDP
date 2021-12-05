@@ -136,6 +136,13 @@ RSpec.describe Admin::SamlServiceProvidersController, type: :controller do
           app.reload
           expect(app.groups).not_to include group
         end
+
+        it 'can hide the app from the dashboard' do
+          expect(app.show_on_dashboard).to be true
+          post(:update, params: { id: app.id, saml_service_provider: { show_on_dashboard: '0' } })
+          app.reload
+          expect(app.show_on_dashboard).to be false
+        end
       end
     end
 

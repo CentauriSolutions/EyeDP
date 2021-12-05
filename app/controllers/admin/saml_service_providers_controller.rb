@@ -9,11 +9,13 @@ class Admin::SamlServiceProvidersController < AdminController
   private
 
   def model_attributes
-    %w[name display_url image_url order description issuer_or_entity_id metadata_url fingerprint response_hosts groups]
+    %w[name display_url show_on_dashboard image_url order description issuer_or_entity_id metadata_url fingerprint
+       response_hosts groups]
   end
 
   def new_fields
-    %w[name display_url image_url order description issuer_or_entity_id metadata_url fingerprint response_hosts]
+    %w[name display_url show_on_dashboard image_url order description issuer_or_entity_id metadata_url fingerprint
+       response_hosts]
   end
 
   def model
@@ -24,7 +26,7 @@ class Admin::SamlServiceProvidersController < AdminController
     p = params
         .require(:saml_service_provider)
         .permit(
-          :name, :display_url,
+          :name, :display_url, :show_on_dashboard,
           :image_url, :description, :order,
           :issuer_or_entity_id, :metadata_url,
           :fingerprint, :response_hosts, group_ids: []
