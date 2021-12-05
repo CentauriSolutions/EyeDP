@@ -43,7 +43,7 @@ class Admin::ApplicationsController < AdminController
   helper_method :application_attributes
 
   def model_attributes
-    %w[name display_url internal scopes confidential groups custom_userdata_types]
+    %w[name display_url image_url internal scopes confidential groups custom_userdata_types]
   end
 
   def new_fields
