@@ -1,0 +1,11 @@
+<td class="<%= attr_name.gsub(/[^\w\s]/, '') %>">
+  <%- data = model.send(attr_name) %>
+  <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
+    <%- data =  data.join ", " %>
+  <%- end %>
+  <%- if data.present? && attr_name == 'image_url' %>
+  <%= image_tag data, size: 25 %>
+  <%- else %>
+  <%= data %>
+  <% end %>
+</td>

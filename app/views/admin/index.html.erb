@@ -40,13 +40,7 @@
         <%- end %>
           </nobr></td>
         <%- model_attributes.each do |attr_name| %>
-          <td class="<%= attr_name.gsub(/[^\w\s]/, '') %>">
-            <%- data = model.send(attr_name) %>
-            <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
-              <%- data =  data.join ", " %>
-            <%- end %>
-            <%= data %>
-          </td>
+        <%= render partial: 'model_row', locals: { model: model, attr_name: attr_name } %>
         <%- end %>
       </tr>
     <% end %>
