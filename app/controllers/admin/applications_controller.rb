@@ -37,17 +37,17 @@ class Admin::ApplicationsController < AdminController
   private
 
   def application_attributes
-    %w[name display_url uid secret internal redirect_uri scopes order image_url confidential groups
+    %w[name display_url show_on_dashboard uid secret internal redirect_uri scopes order image_url confidential groups
        custom_userdata_types]
   end
   helper_method :application_attributes
 
   def model_attributes
-    %w[name display_url image_url internal scopes confidential groups custom_userdata_types]
+    %w[name display_url image_url show_on_dashboard internal scopes confidential groups custom_userdata_types]
   end
 
   def new_fields
-    %w[name display_url internal redirect_uri scopes order image_url description confidential]
+    %w[name display_url internal show_on_dashboard redirect_uri scopes order image_url description confidential]
   end
 
   def model
@@ -56,7 +56,7 @@ class Admin::ApplicationsController < AdminController
 
   def model_params
     p = params.require('application').permit(
-      :name, :display_url, :internal, :scopes, :uid, :order,
+      :name, :display_url, :internal, :scopes, :uid, :order, :show_on_dashboard,
       :redirect_uri, :confidential, :image_url, :description, group_ids: [],
       custom_userdata_type_ids: []
     )
