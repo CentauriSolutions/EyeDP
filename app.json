@@ -13,7 +13,7 @@
     ],
     "env": {
         "SEED_USERNAME": "admin",
-        "SEED_PASSWORD": "password",
+        "SEED_PASSWORD": "password1234",
         "SEED_EMAIL": "admin@example.com",
         "SSO_DOMAIN": ".example.com",
         "SECRET_KEY_BASE": {
