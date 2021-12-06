@@ -5,7 +5,7 @@
     "repository": "https://github.com/centaurisolutions/eyedp",
     "buildpacks": [
       {
-        "url": "heroku/nodejs",
+        "url": "heroku/nodejs"
       },
       {
         "url": "heroku/ruby"
@@ -25,7 +25,6 @@
     },
     "addons": [
         "heroku-postgresql",
-        "heroku-redis",
-        "scout"],
+        "heroku-redis"],
     "success_url": "/"
 }
