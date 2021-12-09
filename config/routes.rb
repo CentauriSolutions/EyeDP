@@ -78,7 +78,9 @@ Rails.application.routes.draw do
   end
 
   scope '(:locale)', locale: /en/ do
-    root to: 'pages#home'
+    devise_scope :user do
+      root to: 'sessions#new'
+    end
   end
 
   get 'users/2fa', to: 'users#new_2fa', as: 'new_user_2fa_registration'

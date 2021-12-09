@@ -1,37 +1,6 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "1b5e4ee151da24cae32d3e2dbb5b9e47ea332d0e903546eb7b3a811c4a0af130",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/pages/home.html.erb",
-      "line": 1,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "Liquid::Template.parse(Setting.home_template).render(template_variables)",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "PagesController",
-          "method": "home",
-          "line": 9,
-          "file": "app/controllers/pages_controller.rb",
-          "rendered": {
-            "name": "pages/home",
-            "file": "app/views/pages/home.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "pages/home"
-      },
-      "user_input": "Setting.home_template",
-      "confidence": "Weak",
-      "note": "Setting.home_template is only configurable by an admin"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "758ccf9becbd15fe137b40d2ac5592ff9a17b57fecf2b2b184f17f09120143e4",
@@ -154,6 +123,6 @@
       "note": "This is an admin only controller, and is restricted by a whitelist of acceptable options"
     }
   ],
-  "updated": "2021-11-24 08:41:23 +0100",
+  "updated": "2021-12-09 08:09:44 +0100",
   "brakeman_version": "5.1.1"
 }
