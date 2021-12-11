@@ -138,7 +138,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           perform_enqueued_jobs do
             post(:create, params: {
                    send_welcome_email: true,
-              user: { email: 'test@example.com', emails: ['test2@example.com'], username: 'test' }
+              user: { email: 'test@example.com', email_addresses: ['test2@example.com'], username: 'test' }
                  })
             expect(response.status).to eq(302)
             expect(User.find_by(username: 'test').emails.count).to eq 2
@@ -305,13 +305,13 @@ RSpec.describe Admin::UsersController, type: :controller do
         it 'shows if a user has two factor enabled' do
           user.update({ otp_required_for_login: true })
           get :index
-          expect(response.body).to match(/<td class="two_factor_enabled">\s+true/)
+          expect(response.body).to match(/<td class="two_factor_enabled">\s+<i class="fa fa-check/)
         end
 
         it 'shows if a user does not have two factor enabled' do
           user.update({ otp_required_for_login: false })
           get :index
-          expect(response.body).to match(/<td class="two_factor_enabled">\s+false/)
+          expect(response.body).to match(/<td class="two_factor_enabled">\s+<i class="fa fa-times/)
         end
       end
 
@@ -330,7 +330,7 @@ RSpec.describe Admin::UsersController, type: :controller do
             perform_enqueued_jobs do
               post(:create, params: {
                      send_welcome_email: true,
-                user: { email: 'test@example.com', emails: ['test2@example.com'], username: 'test' }
+                user: { email: 'test@example.com', email_addresses: ['test2@example.com'], username: 'test' }
                    })
               expect(response.status).to eq(302)
               expect(User.find_by(username: 'test').emails.count).to eq 2
@@ -343,7 +343,7 @@ RSpec.describe Admin::UsersController, type: :controller do
             perform_enqueued_jobs do
               post(:create, params: {
                      send_welcome_email: true,
-                user: { email: 'test@example.com', emails: ['', 'test2@example.com'], username: 'test' }
+                user: { email: 'test@example.com', email_addresses: ['', 'test2@example.com'], username: 'test' }
                    })
               expect(response.status).to eq(302)
               expect(User.find_by(username: 'test').emails.count).to eq 2

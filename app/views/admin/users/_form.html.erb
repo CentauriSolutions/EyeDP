@@ -14,7 +14,7 @@
 <%= form_with(model: [:admin, model], local: !remote, class: 'form', id: 'model_form') do |form| %>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-12">
         <% if model.errors.any? %>
             <%- if model.errors[:emails] %>
               <%- model.errors.merge!(model.primary_email_record.errors) %>
@@ -30,12 +30,16 @@
             </ul>
           </div>
         <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
               <%= form.label :username %>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <%= form.text_field :username, class: 'form-control' %>
             </div>
           </div>
@@ -43,10 +47,10 @@
 
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
               <%= form.label :password %>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <%= form.password_field :password, class: 'form-control' %>
             </div>
           </div>
@@ -54,10 +58,10 @@
 
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
               <%= form.label :name %>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <%= form.text_field :name, class: 'form-control' %>
             </div>
           </div>
@@ -65,20 +69,20 @@
 
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
               <%= form.label :email %>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <%= form.text_field :email, class: 'form-control' %>
             </div>
           </div>
         </div>
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
               <%= form.label :additional_emails %>
             </div>
-            <div class="col-sm-10" id="emails">
+            <div class="col-sm-8" id="emails">
               <%- @model.emails.where(primary: false).each do |email| %>
                 <div class="input-group" id="input-group-user-emails-<%= email.id %>">
                   <%= text_field_tag "user[email_addresses][]", email.address, class: 'form-control' %>
@@ -94,13 +98,13 @@
         </div>
 
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
               <%= form.label :expires_at %>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <%= form.text_field :expires_at, class: 'form-control', placeholder: 'YYYY-MM-DD HH:MM:SS TZ' %>
                 <a href='#' onclick="expire_now()">Now</a>
             </div>
@@ -109,10 +113,10 @@
 
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
               <%= form.label :last_activity_at %>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <%= form.text_field :last_activity_at, class: 'form-control' %>
                 <a href='#' onclick="clear_activity()">Reset</a>
             </div>
@@ -121,56 +125,48 @@
 
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
               <%= form.label :groups %>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
               <%- if current_user.admin? %>
                 <%- groups = Group.all %>
               <%- else %>
                 <%- groups = Group.where(admin: false, operator: false) %>
               <%- end %>
-            <%= form.collection_check_boxes :group_ids, groups, :id, :name do |group| %>
-              <div>
-                <%= group.check_box %><%= group.label %>
+              <div class="row">
+                <%= form.collection_check_boxes :group_ids, groups, :id, :name do |group| %>
+                  <div class="col-xs-1 checkbox">
+                    <span class="form-control">
+                      <%= group.check_box class: '' %> <%= group.label %>
+                    </span>
+                  </div>
+                <% end %>
               </div>
-            <% end %>
             </div>
           </div>
         </div>
-          <%- form_relations.each do |relation_name, info| %>
-
+        <%- form_relations.each do |relation_name, info| %>
           <div class="form-group">
             <div class="row">
-              <div class="col-sm-2">
+              <div class="col-sm-4">
                 <%= form.label relation_name %>
               </div>
-              <div class="col-sm-10">
+              <div class="col-sm-8">
                 <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
               </div>
             </div>
+          </div>
 
-        <%- end %>
-
-        <%- unless new_model %>
-        <div class="col-md-9 col-lg-10">
-          <h2>Additional Properties</h2>
-          <%= link_to "Manage User Data Types", admin_custom_userdata_types_path, class: 'btn btn-dark' %>
-            <%- custom_userdata = @model.custom_userdata.includes([:custom_userdata_type]).group_by(&:custom_userdata_type_id) %>
-            <%- CustomUserdataType.all.each do |data_type| %>
-              <%- custom_userdatum = custom_userdata[data_type.id].try(:first) || CustomUserdatum.new(user: @model, custom_userdata_type: data_type) %>
-              <%= render partial: 'custom_datum', locals: { data_type: data_type, custom_datum: custom_userdatum, disabled: false } %>
-          <%- end %>
-        </div>
         <%- end %>
 
         <%- if new_model %>
           <div class="form-group">
             <div class="row">
-              <div class="col-sm-2">
+              <div class="col-sm-4">
                 <%= label_tag :send_welcome_email %>
               </div>
-              <div class="col-sm-10">
+              <div class="col-sm-8">
                   <%= check_box_tag :send_welcome_email, true, true %>
               </div>
             </div>
@@ -178,6 +174,22 @@
         <%- end %>
       </div>
     </div>
+    <%- unless new_model %>
+      <div class="row">
+        <!-- <div class="col-md-12">
+          <h2>Additional Properties</h2>
+          <%= link_to "Manage User Data Types", admin_custom_userdata_types_path, class: 'btn btn-dark' %>
+          <%- custom_userdata = @model.custom_userdata.includes([:custom_userdata_type]).group_by(&:custom_userdata_type_id) %>
+        </div> -->
+        <%- CustomUserdataType.all.each do |data_type| %>
+          <%- custom_userdatum = custom_userdata[data_type.id].try(:first) || CustomUserdatum.new(user: @model, custom_userdata_type: data_type) %>
+
+          <div class="col-md-6">
+            <%= render partial: 'custom_datum', locals: { data_type: data_type, custom_datum: custom_userdatum, disabled: false } %>
+          </div>
+        <%- end %>
+      </div>
+    <%- end %>
     <div class="row justify-content-end">
       <div class="actions">
         <%- if new_model %>

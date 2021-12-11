@@ -1,39 +1,42 @@
 <div class="form-group">
-  <%= label_tag(custom_datum.name, custom_datum.name) %>
-  <%- case custom_datum.type %>
-  <%- when 'boolean' %>
-    <%= hidden_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value || false %>
-    <%= check_box_tag "custom_data[#{custom_datum.name}]", true, custom_datum.value, disabled: disabled %>
-  <%- when 'array' %>
-    <div id="<%= custom_datum.name %>">
-      <%- if custom_datum.value %>
-        <%- custom_datum.value.each do |value| %>
-          <div class="input-group" id="input-group-<%= custom_datum.name %>-<%= value.gsub('.', '_') %>">
-            <%= text_field_tag "custom_data[#{custom_datum.name}][]", value, class: 'form-control', disabled: disabled %>
-
-            <%- unless disabled %>
-              <div class="input-group-append">
-                <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-<%= custom_datum.name %>-<%= value.gsub('.', '_') %>">Remove</button>
-              </div>
-              <%- end %>
-          </div>
-        <%- end %>
-      <%- end %>
-      <%- unless disabled %>
-        <%= text_field_tag "custom_data[#{custom_datum.name}][]", nil, class: 'form-control', disabled: disabled, placeholder: 'Add Value' %>
-      <%- end %>
+  <div class="row">
+    <div class="col-sm-4">
+      <%= label_tag(custom_datum.name, custom_datum.name) %>
     </div>
-    <%- unless disabled %>
-      <button  type="button" onclick="add_field(this)" data-name="custom_data[<%= custom_datum.name %>]" data-target="<%= custom_datum.name %>" class="btn btn-dark btn-sm"><%= fa_icon 'plus' %> Add Item</button>
-    <%- end %>
-  <%- when 'integer' %>
-    <%= number_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
-  <%- when 'password' %>
-    <%= password_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
-  <%- else %>
-    <%= text_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
-  <%- end %>
+    <div class="col-sm-8">
+      <%- case custom_datum.type %>
+        <%- when 'boolean' %>
+          <%= hidden_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value || false %>
+          <%= check_box_tag "custom_data[#{custom_datum.name}]", true, custom_datum.value, disabled: disabled %>
+        <%- when 'array' %>
+          <div id="<%= custom_datum.name.gsub(' ', '_') %>">
+            <%- if custom_datum.value %>
+              <%- custom_datum.value.each do |value| %>
+                <div class="input-group" id="input-group-<%= custom_datum.name.gsub(' ', '_') %>-<%= value.gsub('.', '_') %>">
+                  <%= text_field_tag "custom_data[#{custom_datum.name}][]", value, class: 'form-control', disabled: disabled %>
+
+                  <%- unless disabled %>
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-<%= custom_datum.name.gsub(' ', '_') %>-<%= value.gsub('.', '_') %>">Remove</button>
+                    </div>
+                    <%- end %>
+                </div>
+              <%- end %>
+            <%- end %>
+            <%- unless disabled %>
+              <%= text_field_tag "custom_data[#{custom_datum.name}][]", nil, class: 'form-control', disabled: disabled, placeholder: 'Add Value' %>
+            <%- end %>
+          </div>
+          <%- unless disabled %>
+            <button  type="button" onclick="add_field(this)" data-name="custom_data[<%= custom_datum.name %>]" data-target="<%= custom_datum.name.gsub(' ', '_') %>" class="btn btn-dark btn-sm"><%= fa_icon 'plus' %> Add Item</button>
+          <%- end %>
+        <%- when 'integer' %>
+          <%= number_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
+        <%- when 'password' %>
+          <%= password_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
+        <%- else %>
+          <%= text_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
+        <%- end %>
+    </div>
+  </div>
 </div>
-
-
-

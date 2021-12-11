@@ -1,52 +1,53 @@
 <h1><%= @models.klass.name.pluralize %> <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New User', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %></h1>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th></th>
-      <%- model_attributes.each do |attr_name| %>
-        <th>
-          <%= attr_name %>
-          <%- if sort_whitelist.include? attr_name %>
-            <%= link_to fa_icon("sort-asc"), current_page_params.merge(sort_by: attr_name, sort_dir: 'asc') %>
-            <%= link_to fa_icon("sort-desc"), current_page_params.merge(sort_by: attr_name, sort_dir: 'desc') %>
-          <%- end %>
-          <%- if filter_whitelist.include? attr_name %>
-            <%= form_tag '', method: :get, class: 'form form-inline' do %>
-              <%- current_page_params.each do |name, value| %>
-                <%- unless ['filter', 'filter_by'].include?(name) %>
-                  <%= hidden_field_tag name, value %>
-                <%- end %>
-              <%- end %>
-              <%= hidden_field_tag :filter_by, attr_name %>
-              <%= text_field_tag :filter, params[:filter], value: params[:filter_by] == attr_name ? params[:filter] : '', placeholder: attr_name, class: 'form-control' %>
-              <button class='form-control btn btn-info'>
-                <%= fa_icon('search') %>
-              </button>
-            <% end %>
-          <%- end %>
-        </th>
-      <%- end %>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @models.each do |model| %>
+<div class="row">
+  <div class="col-md-6"></div>
+  <div class="col-md-6">
+    <%- if filter_whitelist.any? %>
+    <p class="small">Search</p>
+    <%= form_tag '', method: :get, class: 'form form-inline' do %>
+       <div class="right-inner-addon">
+         <%= fa_icon('search') %>
+         <%= text_field_tag :search, params[:search], value: params[:search], placeholder: filter_whitelist.join(' or '), class: 'form-control' %>
+       </div>
+    <% end %>
+    <%- end %>
+  </div>
+</div>
+<div class="row">
+  <table class="table table-striped">
+    <thead class="admin">
       <tr>
-        <td><nobr>
-        <%= link_to fa_icon('pencil', title: 'Edit'), [:edit, :admin, model], class: "btn btn-mini", data: { title: model.to_s, remote: url_for([:edit, :admin, model, :format => "js"]), toggle: "modal", target: "#edit-modal"} %>
-        <%- if can_destroy? %>
-          <%= link_to fa_icon('trash-o', title: "Delete"), [:admin, model], method: :delete,  class: "btn btn-mini", data: { confirm: 'Are you sure?' } %>
-        <%- end %>
-          </nobr></td>
+        <th></th>
         <%- model_attributes.each do |attr_name| %>
-        <%= render partial: 'model_field', locals: { model: model, attr_name: attr_name } %>
+          <th>
+            <%= attr_name.gsub('_', ' ') %>
+            <%- if sort_whitelist.include? attr_name %>
+              <%= link_to fa_icon("sort-asc"), current_page_params.merge(sort_by: attr_name, sort_dir: 'asc') %>
+              <%= link_to fa_icon("sort-desc"), current_page_params.merge(sort_by: attr_name, sort_dir: 'desc') %>
+            <%- end %>
+          </th>
         <%- end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= will_paginate @models, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </thead>
 
+    <tbody>
+      <% @models.each do |model| %>
+        <tr>
+          <td><nobr>
+          <%= link_to fa_icon('pencil', title: 'Edit'), [:edit, :admin, model], class: "btn btn-mini", data: { title: model.to_s, remote: url_for([:edit, :admin, model, :format => "js"]), toggle: "modal", target: "#edit-modal"} %>
+          <%- if can_destroy? %>
+            <%= link_to fa_icon('trash-o', title: "Delete"), [:admin, model], method: :delete,  class: "btn btn-mini", data: { confirm: 'Are you sure?' } %>
+          <%- end %>
+            </nobr></td>
+          <%- model_attributes.each do |attr_name| %>
+          <%= render partial: 'model_field', locals: { model: model, attr_name: attr_name } %>
+          <%- end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @models, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+</div>
 <%- content_for :end_html do %>
 <div class="modal fade" id="edit-modal" tabindex="-1"
     role="dialog" aria-labelledby="edit-modalLabel" aria-hidden="true">

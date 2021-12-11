@@ -11,7 +11,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
 
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/PerceivedComplexity
     options = model_params
-    emails = options.delete(:emails) || []
+    emails = options.delete(:email_addresses) || []
     @model = model.new(options)
     @model.primary_email_record.confirmed_at = Time.now.utc
     emails.each do |email|
@@ -37,14 +37,15 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     end
   end
 
-  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if (@model.admin? || @model.operator?) && !current_user.admin?
       redirect_to \
         [:admin, @model], \
         notice: "#{@model.class.name} was not updated because you lack admin privileges." \
         and return
     end
-    addresses = params[:user].delete(:email_addresses)
+
+    addresses = params[:user].delete(:email_addresses) || []
     update_custom_attributes if params[:custom_data]
     old_email = @model.email
     super
@@ -52,7 +53,9 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     all_addresses = addresses << address
     all_addresses.compact!
     @model.emails.where.not(address: all_addresses).destroy_all
-    all_addresses.each {|address| Email.find_or_create_by(user: @model, address: address, confirmed_at: Time.now) }
+    all_addresses.each do |email_address|
+      Email.find_or_create_by(user: @model, address: email_address, confirmed_at: Time.zone.now)
+    end
     return unless address && address != old_email
 
     email = @model.emails.find_by(address: address)
@@ -153,7 +156,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     allowlist_attrs = [
       :email, :username, :name, :expires_at,
       :password, :last_activity_at, :group_ids, { group_ids: [], email_addresses: [] }
@@ -174,27 +177,43 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   end
 
   def sort_whitelist
-    %w[created_at username email]
+    %w[created_at username name email]
   end
 
   def filter_whitelist
-    %w[username email group]
+    %w[username email]
   end
 
-  def filter(rel) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    if filter_whitelist.include? params[:filter_by]
-      case params[:filter_by]
-      when 'group'
-        rel.joins(:user_groups).where(user_groups: { group_id: params[:filter] })
-      when 'email'
-        rel.joins(:emails).where(emails: { address: params[:filter] })
-      else
-        users = User.arel_table
-        rel.where(users[params[:filter_by]].matches("%#{params[:filter]}%"))
-      end
-    else
-      rel
+  def filter(rel) # rubocop:disable Metrics/MethodLength
+    return rel if params[:search].blank?
+
+    clauses = []
+    rel = rel.joins(:emails)
+    filter_whitelist.each do |key|
+      clauses << case key
+                 # when 'group'
+                 #   rel.or(model.where(groups[:name].matches("%#{params[:search]}%")))
+                 when 'email'
+                   'emails.address ilike :query'
+                 else
+                   "#{key} ilike :query"
+                 end
     end
+    rel.where(clauses.join(' or '), query: "%#{params[:search]}%")
+  end
+
+  def order(rel) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    sort = {
+      sort_by: :created_at,
+      sort_dir: default_sort_dir
+    }
+    sort[:sort_by] = params[:sort_by] if params[:sort_by] && sort_whitelist.include?(params[:sort_by])
+    if sort[:sort_by] == 'email'
+      rel = rel.joins(:emails).where(emails: { primary: true })
+      sort[:sort_by] = 'address'
+    end
+    sort[:sort_dir] = params[:sort_dir] if params[:sort_dir] && %w[asc desc].include?(params[:sort_dir])
+    rel.order({ sort[:sort_by] => sort[:sort_dir] })
   end
 
   def custom_userdata_params

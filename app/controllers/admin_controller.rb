@@ -9,11 +9,12 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   # GET /admin/#{model}
   # GET /admin/#{model}.json
   def index
-    @models = model
+    models = model
+             .includes(includes)
+    models = filter(models)
+    models = order(models)
+    @models = models
               .page(params[:page] || 1)
-              .includes(includes)
-              .order(order)
-    @models = filter(@models)
   end
 
   # GET /admin/#{model}/1
@@ -25,7 +26,7 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
     @model = model.new
     respond_to do |format|
       format.html
-      format.js { render :layout => false }
+      format.js { render layout: false }
     end
   end
 
@@ -33,7 +34,7 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   def edit
     respond_to do |format|
       format.html
-      format.js { render :layout => false }
+      format.js { render layout: false }
     end
   end
 
@@ -108,11 +109,13 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def filter(rel)
-    if filter_whitelist.include? params[:filter_by]
-      rel.where(params[:filter_by] => params[:filter])
-    else
-      rel
+    return rel if params[:search].blank?
+
+    clauses = []
+    filter_whitelist.each do |key|
+      clauses << "#{key} ilike :query"
     end
+    rel.where(clauses.join(' or '), query: "%#{params[:search]}%")
   end
 
   def can_destroy?
@@ -120,14 +123,14 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
   helper_method :can_destroy?
 
-  def order # rubocop:disable Metrics/AbcSize
+  def order(rel) # rubocop:disable Metrics/AbcSize
     sort = {
       sort_by: :created_at,
       sort_dir: default_sort_dir
     }
     sort[:sort_by] = params[:sort_by] if params[:sort_by] && sort_whitelist.include?(params[:sort_by])
     sort[:sort_dir] = params[:sort_dir] if params[:sort_dir] && %w[asc desc].include?(params[:sort_dir])
-    { sort[:sort_by] => sort[:sort_dir] }
+    rel.order({ sort[:sort_by] => sort[:sort_dir] })
   end
 
   def default_sort_dir

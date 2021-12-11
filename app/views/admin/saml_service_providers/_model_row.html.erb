@@ -5,6 +5,10 @@
   <%- end %>
   <%- if data.present? && attr_name == 'image_url' %>
   <%= image_tag data, size: 25 %>
+  <%- elsif data.is_a? TrueClass %>
+    <%= fa_icon 'fa_check' %>
+  <%- elsif data.is_a? FalseClass %>
+  <%= fa_icon 'fa_times' %>
   <%- else %>
   <%= data %>
   <% end %>
