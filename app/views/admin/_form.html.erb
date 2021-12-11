@@ -1,65 +1,67 @@
-<%= form_with(model: [:admin, model], local: true, class: 'form') do |form| %>
-  <% if model.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
+<%= form_with(model: [:admin, model], local: remote.nil? ? true : false, class: 'form', id: 'model_form') do |form| %>
+  <div class="container-fluid">
+    <% if model.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
 
-      <ul>
-      <% model.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <% attributes = new_model ? new_fields : edit_fields %>
-  <% attributes.each do |attribute| %>
-    <div class="form-group">
-      <div class="row">
-        <div class="col-sm-2">
-          <%= form.label attribute %>
-        </div>
-        <div class="col-sm-10">
-          <%- if model.class.columns_hash[attribute].nil? %>
-            <%= form.text_field attribute, class: 'form-control' %>
-          <%- else %>
-            <%- case model.class.columns_hash[attribute].type %>
-            <%- when :boolean  %>
-              <%= form.check_box attribute, class: 'form-check' %>
-            <%- when :datetime%>
-              <%= form.date_field attribute, class: 'form-control' %>
-            <%- else %>
+        <ul>
+        <% model.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <% attributes = new_model ? new_fields : edit_fields %>
+    <% attributes.each do |attribute| %>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-2">
+            <%= form.label attribute %>
+          </div>
+          <div class="col-sm-10">
+            <%- if model.class.columns_hash[attribute].nil? %>
               <%= form.text_field attribute, class: 'form-control' %>
+            <%- else %>
+              <%- case model.class.columns_hash[attribute].type %>
+              <%- when :boolean  %>
+                <%= form.check_box attribute, class: 'form-check' %>
+              <%- when :datetime%>
+                <%= form.date_field attribute, class: 'form-control' %>
+              <%- else %>
+                <%= form.text_field attribute, class: 'form-control' %>
+              <%- end %>
             <%- end %>
-          <%- end %>
-          <%- text = help_text attribute %>
-          <%- if text %>
-            <small class="form-text text-muted"><%= text %></small>
-          <%- end %>
+            <%- text = help_text attribute %>
+            <%- if text %>
+              <small class="form-text text-muted"><%= text %></small>
+            <%- end %>
+          </div>
+        </div>
+        <!-- <label for="inputPassword6">Password</label>
+        <input type="password" id="inputPassword6" class="form-control mx-sm-3" aria-describedby="passwordHelpInline">
+        <small id="passwordHelpInline" class="text-muted">
+          Must be 8-20 characters long.
+        </small> -->
+      </div>
+    <%- end %>
+    <%- form_relations.each do |relation_name, info| %>
+
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-2">
+            <%= form.label relation_name %>
+          </div>
+          <div class="col-sm-10">
+            <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
+          </div>
         </div>
       </div>
-      <!-- <label for="inputPassword6">Password</label>
-      <input type="password" id="inputPassword6" class="form-control mx-sm-3" aria-describedby="passwordHelpInline">
-      <small id="passwordHelpInline" class="text-muted">
-        Must be 8-20 characters long.
-      </small> -->
+    <%- end %>
+
+    <%= render partial: 'sub_form', locals: { model: model, form: form, new_model: new_model } %>
+
+    <div class="actions row justify-content-end">
+      <%= form.submit nil, class: 'btn btn-light' %>
     </div>
-  <%- end %>
-  <%- form_relations.each do |relation_name, info| %>
-
-    <div class="form-group">
-      <div class="row">
-        <div class="col-sm-2">
-          <%= form.label relation_name %>
-        </div>
-        <div class="col-sm-10">
-          <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
-        </div>
-      </div>
-    </div>
-  <%- end %>
-
-  <%= render partial: 'sub_form', locals: { model: model, form: form, new_model: new_model } %>
-
-  <div class="actions">
-    <%= form.submit %>
   </div>
 <% end %>

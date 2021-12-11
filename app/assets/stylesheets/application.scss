@@ -15,18 +15,13 @@ main {
   margin-top: 30px; // accommodate the navbar
 }
 
-body.peek-enabled {
-   margin-bottom: 35px;
- }
-
-#peek {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
+.modal-open  .all-container {
+  -webkit-filter: blur(5px) grayscale(90%);
 }
 
+.modal-dialog {
+  max-width: 90%;
+}
 .profile-nav {
   border-right: 1px solid #cdcdcd;
 }

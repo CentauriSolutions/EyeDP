@@ -1,5 +1,4 @@
-<h1><%= @models.klass.name.pluralize %> <%= link_to "New #{@models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: 'btn btn-small btn-success', data: { hotkey: 'n' } %></h1>
-
+<h1><%= @models.klass.name.pluralize %> <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New User', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %></h1>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -33,17 +32,79 @@
   <tbody>
     <% @models.each do |model| %>
       <tr>
-        <td><nobr><%= link_to fa_icon('eye', title: 'Show'), [:admin, model] %>
-        <%= link_to fa_icon('pencil', title: 'Edit'), [:edit, :admin, model] %>
+        <td><nobr>
+        <%= link_to fa_icon('pencil', title: 'Edit'), [:edit, :admin, model], class: "btn btn-mini", data: { title: model.to_s, remote: url_for([:edit, :admin, model, :format => "js"]), toggle: "modal", target: "#edit-modal"} %>
         <%- if can_destroy? %>
-          <%= link_to fa_icon('trash-o', title: "Delete"), [:admin, model], method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to fa_icon('trash-o', title: "Delete"), [:admin, model], method: :delete,  class: "btn btn-mini", data: { confirm: 'Are you sure?' } %>
         <%- end %>
           </nobr></td>
         <%- model_attributes.each do |attr_name| %>
-        <%= render partial: 'model_row', locals: { model: model, attr_name: attr_name } %>
+        <%= render partial: 'model_field', locals: { model: model, attr_name: attr_name } %>
         <%- end %>
       </tr>
     <% end %>
   </tbody>
 </table>
 <%= will_paginate @models, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+
+<%- content_for :end_html do %>
+<div class="modal fade" id="edit-modal" tabindex="-1"
+    role="dialog" aria-labelledby="edit-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <div class="container-fluid">
+                <div class="row">
+                  <h3 class="modal-title" id="edit-modalLabel"></h3>
+                  <button type="button" class="close" data-dismiss="modal"
+                      aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="row">
+                  <p class="small">User info and setup.</p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <!-- <img alt="loading" src="resources/img/ajax-loader.gif"> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<%- end %>
+<%- content_for :local_js do %>
+<script type="text/javascript">
+$('body').on('click', '[data-toggle="modal"]', function(){
+  // e.preventDefault();
+  var link = $(this);
+  // var href = link[0].href;
+  $(link.data("target") + ' .modal-header .modal-title').text(link.data("title"))
+  $(link.data("target")+' .modal-body').load(link.data('remote'), () => {
+    var element = document.querySelector("#model_form");
+    element.addEventListener("ajax:success", (event) => {
+      location.reload();
+    });
+  });
+  $(link.data("target")).modal('show');
+
+  // $('#model_form').
+  return false;
+});
+// $( document ).ready(function() {
+//   // location.reload();
+//   // debugger
+//   // const element = document.querySelector("#edit-model");
+//   $('#edit-model').on("ajax:success", (event) => {
+//     debugger
+//     location.reload();
+//   });
+//   // element.addEventListener("ajax:error", () => {
+//   //   element.insertAdjacentHTML("beforeend", "<p>ERROR</p>");
+//   // });
+// });
+
+</script>
+<%- end %>

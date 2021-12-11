@@ -44,17 +44,23 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
         notice: "#{@model.class.name} was not updated because you lack admin privileges." \
         and return
     end
-
+    addresses = params[:user].delete(:email_addresses)
     update_custom_attributes if params[:custom_data]
     old_email = @model.email
     super
     address = model_params.delete(:email)
+    all_addresses = addresses << address
+    all_addresses.compact!
+    @model.emails.where.not(address: all_addresses).destroy_all
+    all_addresses.each {|address| Email.find_or_create_by(user: @model, address: address, confirmed_at: Time.now) }
     return unless address && address != old_email
 
     email = @model.emails.find_by(address: address)
     email.primary = true
     email.save
     email = @model.emails.find_by(address: old_email)
+    return if email.nil?
+
     email.primary = false
     email.save
   end
@@ -150,9 +156,9 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     allowlist_attrs = [
       :email, :username, :name, :expires_at,
-      :password, :last_activity_at, :group_ids, { group_ids: [] }
+      :password, :last_activity_at, :group_ids, { group_ids: [], email_addresses: [] }
     ]
-    allowlist_attrs.push(emails: []) if params[:action] == 'create'
+    # allowlist_attrs.push(emails: []) if params[:action] == 'create'
     p = params.require(:user).permit(
       allowlist_attrs
     )

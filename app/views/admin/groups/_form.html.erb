@@ -1,4 +1,4 @@
-<%= form_with(model: [:admin, model], local: true, class: 'form') do |form| %>
+<%= form_with(model: [:admin, model], local: !remote, class: 'form', id: 'model_form') do |form| %>
   <% if model.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
@@ -88,7 +88,7 @@
     <%- unless new_model %>
     <hr />
     <p class="small">Preview refreshes after save.</p>
-    <iframe class="col-sm-12" src="email" sandbox></iframe>
+    <iframe class="col-sm-12" src="<%= url_for [:admin, model, :email] %>" sandbox></iframe>
     <%- end %>
   </div>
 
@@ -105,9 +105,9 @@
     <%- end %>
     <div class="actions">
       <%- if new_model %>
-      <%= form.submit _('Create Group'), class: 'btn btn-success' %>
+      <%= form.submit _('Create Group'), class: 'btn btn-light' %>
       <%- else %>
-      <%= form.submit _('Update Group'), class: 'btn btn-success' %>
+      <%= form.submit _('Update Group'), class: 'btn btn-light' %>
       <%- end %>
     </div>
 <% end %>

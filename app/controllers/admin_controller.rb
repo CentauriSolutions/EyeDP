@@ -23,10 +23,19 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   # GET /admin/#{model}/new
   def new
     @model = model.new
+    respond_to do |format|
+      format.html
+      format.js { render :layout => false }
+    end
   end
 
   # GET /admin/#{model}/1/edit
-  def edit; end
+  def edit
+    respond_to do |format|
+      format.html
+      format.js { render :layout => false }
+    end
+  end
 
   # POST /admin/#{model}
   # POST /admin/#{model}.json
