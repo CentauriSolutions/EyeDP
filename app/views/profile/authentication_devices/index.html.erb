@@ -14,7 +14,7 @@
         <th class="col-md-2"><%= t('common.actions') %></th>
       </tr>
       </thead>
-      <tbody id="devices">
+      <tbody id="totp-devices">
         <%- if current_user.two_factor_otp_enabled? %>
           <tr id="totp_device">
             <td>TOTP</td>
@@ -22,15 +22,21 @@
             <td>
               <%= link_to _('Delete'), user_two_factor_auth_path(otp_only: true),
               method: :delete,
-              data: { confirm: ('Are you sure? This will invalidate your registered applications and U2F devices.') }, class: "btn btn-danger" %> |
+              data: { confirm: ('Are you sure? This will invalidate your registered applications and U2F devices.') },
+              class: "btn btn-danger" %>
             </td>
           </tr>
         <%- end %>
+      <tbody id="devices">
         <% current_user.fido_usf_devices.each do |device| %>
           <tr id="device_<%= device.id %>">
             <td><%= device.name %></td>
             <td class="text-nowrap"><%= l(device.last_authenticated_at, format: :long) %></td>
-            <td class="text-nowrap"><%= link_to _('Delete'), user_fido_usf_registration_path, id: device.id, remote: true, method: :delete, data: { confirm: "Should device #{device.name} be deleted?", class: "btn btn-danger" } %></td>
+            <td class="text-nowrap">
+              <%= link_to _('Delete'), user_fido_usf_registration_path(id: device.id),
+              method: :delete, remote: true,
+              data: { confirm: "Should device #{device.name} be deleted?"},
+              class: "btn btn-danger" %></td>
           </tr>
         <%- end %>
       </tbody>
