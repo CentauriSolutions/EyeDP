@@ -1,66 +1,124 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<%- users_page = current_page?(admin_users_path) ||  current_page?(admin_groups_path) || current_page?(admin_permissions_path) %>
+<%- sso_apps_page = current_page?(admin_sso_apps_path) ||  current_page?(admin_applications_path) || current_page?(admin_saml_service_providers_path) %>
+<%- settings_page = current_page?(admin_settings_path) || current_page?(admin_settings_branding_path) || current_page?(admin_custom_userdata_types_path) || current_page?(admin_custom_group_data_types_path) || current_page?(admin_settings_templates_path) || current_page?(admin_settings_openid_connect_path) || current_page?(admin_settings_saml_path) %>
+<%- integrations_page = current_page?(admin_api_keys_path) || current_page?(admin_web_hooks_path) %>
+<%- logs_page = current_page?(admin_audits_path) || current_page?(admin_jobs_path) %>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav">
       <%= nav_link "Dashboard", admin_dashboard_path %>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          User Management
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <%- if current_user.admin? || current_user.manager? %>
-            <%= dropdown_nav_link "Users", admin_users_path, data: { hotkey: "u" } %>
-            <%= dropdown_nav_link "Groups", admin_groups_path, data: { hotkey: "g" } %>
-          <% end %>
-          <%- if current_user.admin? || current_user.operator? %>
-            <%= dropdown_nav_link "Permissions", admin_permissions_path %>
-          <%- end %>
-        </div>
-      </li>
+
+      <%- if current_user.admin? || current_user.manager? %>
+        <%= nav_link "User Management", admin_users_path, data: { hotkey: "u" }, current_page_override: users_page %>
+      <%- end %>
+      <%- if current_user.operator? %>
+        <%= nav_link "Permissions", admin_permissions_path %>
+      <%- end %>
 
       <%- if current_user.admin? || current_user.operator? %>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            SSO Apps
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <%= dropdown_nav_link "OpenID Connect Applications", admin_applications_path %>
-            <%= dropdown_nav_link "Saml Applications", admin_saml_service_providers_path %>
-          </div>
-        </li>
+        <%= nav_link "SSO Apps", admin_sso_apps_path, current_page_override: sso_apps_page %>
+      <%- end %>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Settings
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <%= dropdown_nav_link "Settings", admin_settings_path %>
-            <%= dropdown_nav_link "Branding", admin_settings_branding_path %>
-            <%= dropdown_nav_link "Custom User Data", admin_custom_userdata_types_path %>
-            <%= dropdown_nav_link "Custom Group Data", admin_custom_group_data_types_path %>
-            <%= dropdown_nav_link "Templates", admin_settings_templates_path %>
-            <%= dropdown_nav_link "OpenID Connect", admin_settings_openid_connect_path %>
-            <%= dropdown_nav_link "SAML", admin_settings_saml_path %>
-          </div>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            API
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <%= dropdown_nav_link "API Keys", admin_api_keys_path %>
-            <%= dropdown_nav_link "Jobs", admin_jobs_path %>
-            <%= dropdown_nav_link "Web Hooks", admin_web_hooks_path %>
-          </div>
-        </li>
+      <%- if current_user.admin? || current_user.operator? %>
+        <%= nav_link "Settings", admin_settings_path, current_page_override: settings_page %>
+        <%= nav_link "Integrations", admin_api_keys_path, current_page_override: integrations_page %>
       <%- end %>
       <%- if current_user.admin? %>
-        <%= nav_link "Audit Log", admin_audits_path %>
+        <%= nav_link "Logs", admin_audits_path, current_page_override: logs_page %>
       <%- end %>
     </ul>
   </div>
 </nav>
+<%- if users_page %>
+  <nav class="navbar navbar-expand-lg navbar-light border-top border-dark bg-white">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-link"><%= fa_icon('angle-double-right') %></li>
+        <%- if current_user.admin? || current_user.manager? %>
+          <%= nav_link "Users", admin_users_path, data: { hotkey: "u" }  %>
+          <%= nav_link "Groups", admin_groups_path, data: { hotkey: "g" } %>
+        <%- end %>
+        <%- if current_user.admin? || current_user.operator? %>
+          <%= nav_link "Permissions", admin_permissions_path %>
+        <%- end %>
+      </ul>
+    </div>
+  </nav>
+<%- end %>
+
+<%- if sso_apps_page  %>
+  <nav class="navbar navbar-expand-lg navbar-light border-top border-dark bg-white">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-link"><%= fa_icon('angle-double-right') %></li>
+        <%= nav_link "SSO Apps", admin_sso_apps_path %>
+        <%= nav_link "OpenID Apps", admin_applications_path %>
+        <%= nav_link "SAML Apps", admin_saml_service_providers_path %>
+      </ul>
+    </div>
+  </nav>
+<%- end %>
+
+<%- if settings_page %>
+  <nav class="navbar navbar-expand-lg navbar-light border-top border-dark bg-white">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-link"><%= fa_icon('angle-double-right') %></li>
+        <%= nav_link "Settings", admin_settings_path %>
+        <%= nav_link "Branding", admin_settings_branding_path %>
+        <%= nav_link "Custom User Data", admin_custom_userdata_types_path %>
+        <%= nav_link "Custom Group Data", admin_custom_group_data_types_path %>
+        <%= nav_link "Templates", admin_settings_templates_path %>
+        <%= nav_link "OpenID Connect", admin_settings_openid_connect_path %>
+        <%= nav_link "SAML", admin_settings_saml_path %>
+      </ul>
+    </div>
+  </nav>
+<%- end %>
+<%- if integrations_page  %>
+  <nav class="navbar navbar-expand-lg navbar-light border-top border-dark bg-white">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-link"><%= fa_icon('angle-double-right') %></li>
+        <%= nav_link "API Keys", admin_api_keys_path %>
+        <%= nav_link "Web Hooks", admin_web_hooks_path %>
+      </ul>
+    </div>
+  </nav>
+<%- end %>
+
+<%- if logs_page  %>
+  <nav class="navbar navbar-expand-lg navbar-light border-top border-dark bg-white">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-link"><%= fa_icon('angle-double-right') %></li>
+        <%= nav_link "Logs", admin_audits_path %>
+        <%= nav_link "Jobs", admin_jobs_path %>
+      </ul>
+    </div>
+  </nav>
+<%- end %>

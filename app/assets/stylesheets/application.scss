@@ -19,6 +19,10 @@ main {
   -webkit-filter: blur(5px) grayscale(90%);
 }
 
+.modal-open  nav {
+  -webkit-filter: blur(5px) grayscale(90%);
+}
+
 .modal-dialog {
   max-width: 90%;
 }
@@ -35,3 +39,13 @@ main {
 // @import "layouts/index";
 // @import "components/index";
 // @import "pages/index";
+
+form.search {
+  input {
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-radius: 0px;
+    width: 100%;
+  }
+}

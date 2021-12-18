@@ -1,5 +1,6 @@
 <div class="col-md-3 col-lg-2 profile-nav">
   <ul class="nav flex-column">
+    <%= nav_link _("Account activity"), profile_account_activity_path %>
     <%= nav_link _("Account"), profile_account_path %>
     <%- if CustomUserdataType.any? %>
     <%= nav_link _("Profile"), profile_path %>
@@ -9,7 +10,6 @@
     <%= nav_link _("Access tokens"), profile_access_tokens_path %>
     <%- end %>
     <%= nav_link _("Authentication devices"), profile_authentication_devices_path %>
-    <%= nav_link _("Account activity"), profile_account_activity_path %>
   </ul>
   <hr class="d-none d-sm-block d-md-none" />
 </div>

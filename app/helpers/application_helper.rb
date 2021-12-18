@@ -15,7 +15,7 @@ module ApplicationHelper
   end
 
   def nav_link(link_text, link_path, opts = {})
-    current_page = current_page?(link_path)
+    current_page = opts[:current_page_override] || current_page?(link_path)
     class_name = 'nav-item'
     class_name = [opts[:class], class_name].join(' ')
     opts[:class] = current_page ? 'nav-link active' : 'nav-link'

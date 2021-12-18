@@ -36,3 +36,42 @@ thead.admin th {
     padding-left: 20px;
   }
 }
+
+nav {
+  font-variant: small-caps;
+}
+
+.table {
+  th {
+    border-top-width: 0px;
+  }
+  td {
+    font-size: 0.8em;
+    a {
+      color: black;
+      text-decoration: underline;
+    }
+  }
+}
+
+.card {
+
+  p.small {
+    font-size: 0.8em;
+  }
+  span {
+    font-size: 2em;
+
+    a {
+      color: black;
+    }
+  }
+  span.large {
+    font-size: 4em;
+  }
+
+  span.small {
+    font-size: 1.5em;
+  }
+}
+

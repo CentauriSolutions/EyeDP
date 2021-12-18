@@ -1,15 +1,23 @@
-<h1><%= @models.klass.name.pluralize %> <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New User', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %></h1>
-<div class="row">
+<!-- <h1><%= @models.klass.name.pluralize %> <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New User', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %></h1> -->
+<div class="row mb-5">
   <div class="col-md-6"></div>
-  <div class="col-md-6">
+  <div class="col-md-6 ml-auto">
+
     <%- if filter_whitelist.any? %>
-    <p class="small">Search</p>
-    <%= form_tag '', method: :get, class: 'form form-inline' do %>
-       <div class="right-inner-addon">
-         <%= fa_icon('search') %>
-         <%= text_field_tag :search, params[:search], value: params[:search], placeholder: filter_whitelist.join(' or '), class: 'form-control' %>
-       </div>
-    <% end %>
+      <p class="small">Search</p>
+    <%- end %>
+    <div class="float-right">
+      <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New User', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %>
+    </div>
+    <%- if filter_whitelist.any? %>
+      <div class="" style="width: auto; overflow: auto">
+        <%= form_tag '', method: :get, class: 'form form-inline search' do %>
+           <div class="right-inner-addon" style="width: 100%">
+             <%= fa_icon('search') %>
+             <%= text_field_tag :search, params[:search], value: params[:search], placeholder: filter_whitelist.map(&:titlecase).join(' or '), class: 'form-control', style:"width: 100%" %>
+           </div>
+        <%- end %>
+      </div>
     <%- end %>
   </div>
 </div>

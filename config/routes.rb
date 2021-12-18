@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   use_doorkeeper_openid_connect
   get 'admin' => 'admin/dashboard#index', as: :admin_dashboard
   namespace :admin do
-    # get 'dashboard/index'
+    get 'sso_apps', to: 'dashboard#apps'
     resources :api_keys
     resources :groups do
       get :email, to: 'groups#email'
