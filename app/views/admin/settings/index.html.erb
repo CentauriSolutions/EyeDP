@@ -5,6 +5,15 @@
       <td>Base</td>
       <td><input type="text" name="setting[idp_base]" class="form-control" value="<%= Setting.idp_base %>" /></td>
     </tr>
+
+    <tr>
+      <td>Libravatar compatible URL</td>
+      <td>
+        <input type="text" name="setting[libravatar_url]" class="form-control" value="<%= Setting.libravatar_url %>" />
+        <p class="small">Any gravatar / libravatar compatible profile picture server. Will be used to display user profile pictures</p>
+      </td>
+    </tr>
+
     <tr>
       <td>Enable User Registration</td>
       <td>

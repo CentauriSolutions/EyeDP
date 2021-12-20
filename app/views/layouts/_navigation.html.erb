@@ -1,16 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white">
+<nav class="navbar navbar-expand navbar-light bg-white">
   <%- if Setting.logo && ( Setting.logo[0..3] == 'http' || asset_available?(Setting.logo)) %>
     <a class="navbar-brand" title="Home" href="<%= root_path %>"><%= image_tag Setting.logo, height: Setting.logo_height, width: Setting.logo_width, alt: "logo" %></a>
   <%- else %>
     <a class="navbar-brand" title="Home" href="<%= root_path %>"><%= fa_icon("eye") %>dP</a>
   <%- end %>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+  <div class="navbar ml-auto" id="navbarTogglerDemo02">
     <%- if current_user %>
-    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+    <ul class="navbar-nav mt-2 mt-lg-0">
         <%= render partial: 'layouts/profile_links' %>
     </ul>
     <%- end %>
