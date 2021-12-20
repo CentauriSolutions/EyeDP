@@ -1,94 +1,102 @@
 <%= form_with(model: [:admin, model], local: !remote, class: 'form', id: 'model_form') do |form| %>
-  <% if model.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
+  <div class="row">
+    <% if model.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
 
-      <ul>
-      <% model.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <% attributes = new_model ? new_fields : edit_fields %>
-  <% attributes.each do |attribute| %>
-    <div class="form-group">
+        <ul>
+        <% model.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+  <div class="row">
+    <% attributes = new_model ? new_fields : edit_fields %>
+    <% attributes.each do |attribute| %>
+      <div class="form-group col-md-6">
+        <div class="row">
+          <div class="col-sm-2">
+            <%= form.label attribute %>
+          </div>
+          <div class="col-sm-10">
+            <%- if [true, false].include? model.send(attribute) %>
+              <%= form.check_box attribute, class: 'form-check' %>
+            <%- else %>
+              <%= form.text_field attribute, class: 'form-control' %>
+            <%- end %>
+          </div>
+        </div>
+      </div>
+    <%- end %>
+    <%- form_relations.each do |relation_name, info| %>
+
+      <div class="form-group col-md-6">
+        <div class="row">
+          <div class="col-sm-2">
+            <%= form.label relation_name %>
+          </div>
+          <div class="col-sm-10">
+            <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
+          </div>
+        </div>
+      </div>
+    <%- end %>
+    <div class="form-group col-md-6">
       <div class="row">
         <div class="col-sm-2">
-          <%= form.label attribute %>
+          <%= form.label :roles %>
         </div>
         <div class="col-sm-10">
-          <%- if [true, false].include? model.send(attribute) %>
-            <%= form.check_box attribute, class: 'form-check' %>
-          <%- else %>
-            <%= form.text_field attribute, class: 'form-control' %>
+          <div>
+            <%= form.check_box :manager %> Manager
+          </div>
+          <%- if current_user.admin? %>
+            <div>
+              <%= form.check_box :operator %> Operator
+            </div><div>
+              <%= form.check_box :admin %> Admin
+            </div>
           <%- end %>
         </div>
       </div>
     </div>
-  <%- end %>
-  <%- form_relations.each do |relation_name, info| %>
 
-    <div class="form-group">
+    <div class="form-group col-md-6">
       <div class="row">
         <div class="col-sm-2">
-          <%= form.label relation_name %>
+          <%= form.label :permissions %>
         </div>
         <div class="col-sm-10">
-          <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
-        </div>
-      </div>
-    </div>
-  <%- end %>
-
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :roles %>
-      </div>
-      <div class="col-sm-10">
-        <div>
-          <%= form.check_box :manager %> Manager
-        </div>
-        <%- if current_user.admin? %>
+        <%= form.collection_check_boxes :permission_ids, Permission.all, :id, :name do |group| %>
           <div>
-            <%= form.check_box :operator %> Operator
-          </div><div>
-            <%= form.check_box :admin %> Admin
+            <%= group.check_box %><%= group.label %>
           </div>
-        <%- end %>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :permissions %>
-      </div>
-      <div class="col-sm-10">
-      <%= form.collection_check_boxes :permission_ids, Permission.all, :id, :name do |group| %>
-        <div>
-          <%= group.check_box %><%= group.label %>
+        <% end %>
         </div>
-      <% end %>
       </div>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :welcome_email %>
-      </div>
-      <div class="col-sm-10">
-          <%= form.text_area :welcome_email, class: 'form-control' %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-2">
+            <%= form.label :welcome_email %>
+          </div>
+          <div class="col-sm-10">
+              <%= form.text_area :welcome_email, class: 'form-control' %>
+          </div>
+        </div>
       </div>
     </div>
     <%- unless new_model %>
-    <hr />
-    <p class="small">Preview refreshes after save.</p>
-    <iframe class="col-sm-12" src="<%= url_for [:admin, model, :email] %>" sandbox></iframe>
+    <div class="col-md-6">
+      <p class="small">Preview refreshes after save.</p>
+      <iframe class="col-sm-12" src="<%= url_for [:admin, model, :email] %>" sandbox></iframe>
+    </div>
     <%- end %>
   </div>
 
