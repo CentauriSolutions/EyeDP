@@ -3,18 +3,19 @@
     <div class="card border-top-0 border-left-0 border-right-0 border-bottom-1 rounded-0 border-dark" style="height: 100%;">
       <div class="card-body">
         <p class="small card-title">Total User(s)</p>
-
-        <% current = User.where('created_at > ?', 30.days.ago).count %>
-        <span class="large"><%= User.where('last_activity_at >= ?', 1.week.ago).count %></span> / <span><%= User.count %></span>
-        <%- growth = current > 0 %>
-        <span class="<%= growth ? 'green' : ''%>">
-          (
-          <%- if growth %>
-            <%= fa_icon 'arrow-up' %>
-          <%- end %>
-          <%= current %>
-          )
-      </span>
+        <a href="<%= admin_users_path %>">
+          <% current = User.where('created_at > ?', 30.days.ago).count %>
+          <span class="large"><%= User.where('last_activity_at >= ?', 1.week.ago).count %></span> / <span><%= User.count %></span>
+          <%- growth = current > 0 %>
+          <span class="<%= growth ? 'green' : ''%>">
+            (
+            <%- if growth %>
+              <%= fa_icon 'arrow-up' %>
+            <%- end %>
+            <%= current %>
+            )
+          </span>
+        </a>
       </div>
     </div>
   </div>
@@ -23,8 +24,10 @@
     <div class="card border-top-0 border-left-0 border-right-0 border-bottom-1 rounded-0 border-dark" style="height: 100%;">
       <div class="card-body">
         <p class="small card-title">SSO Logins</p>
-        <% current = Login.where('created_at > ?', 30.days.ago).count %>
-        <span class="large"><%= current %></span>
+        <a href="<%= admin_sso_apps_path %>">
+          <% current = Login.where('created_at > ?', 30.days.ago).count %>
+          <span class="large"><%= current %></span>
+        </a>
       </div>
     </div>
   </div>
@@ -67,46 +70,6 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="row">
-  <div class="col-sm-12">
-    <h2>Weekly Stats</h2>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-6">
-    <div class="card card-body">
-      <h5 class="card-title">Top applications by login</h5>
-      <table class="table">
-      <%- logins_by_app.each do |app, count| %>
-        <tr>
-          <%- if app.is_a? Doorkeeper::Application %>
-            <td><%= link_to app.name, admin_application_path(app) %></td>
-          <%- else %>
-            <td><%= link_to app.name, [:admin, app] %></td>
-          <%- end %>
-          <td><%= count %></td>
-        </tr>
-      <%- end %>
-      </table>
-    </div>
-  </div>
-
-  <div class="col-md-6">
-    <div class="card card-body">
-      <h5 class="card-title">Top user by login</h5>
-      <table class="table">
-      <%- logins_by_user.each do |user, count| %>
-        <tr>
-          <td><%= link_to user.username, [:admin, user] %></td>
-          <td><%= count %></td>
-        </tr>
-      <%- end %>
-      </table>
-    </div>
-  </div>
-</div> -->
 
 <div class="row">
   <div class="col-md-12 col-lg-12">
