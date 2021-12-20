@@ -182,5 +182,5 @@ class Setting < ApplicationRecord
 
   field :profiler_enabled, default: false, type: :boolean
 
-  field :libravatar_url, default: 'https://www.gravatar.com/'
+  field :libravatar_url, default: 'https://www.gravatar.com'
 end

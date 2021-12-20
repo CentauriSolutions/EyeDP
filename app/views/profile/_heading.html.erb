@@ -1,5 +1,5 @@
 <div class="row">
-  <img class="mr-4" src="<%= Setting.libravatar_url %>/avatar/<%= Digest::MD5.hexdigest current_user.email %>" />
+  <img class="mr-4" src="<%= Setting.libravatar_url %>/avatar/<%= Digest::MD5.hexdigest current_user.email %>?d=identicon&s=100" />
   <div class="col-xs-10">
     <div class="row">
       <h1 class="flex justify-center"><%= current_user.name || current_user.username || current_user.email %></h1>
