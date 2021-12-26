@@ -56,7 +56,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :group_permissions, through: :groups
   has_many :permissions, through: :group_permissions
 
-  has_many :oatch_access_grants,
+  has_many :oauth_access_grants,
            class_name: 'Doorkeeper::AccessGrant',
            foreign_key: :resource_owner_id,
            dependent: :delete_all # or :destroy if you need callbacks

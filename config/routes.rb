@@ -105,5 +105,8 @@ Rails.application.routes.draw do
       post 'resend_confirmation', to: 'emails#resend_confirmation', as: :resend_confirmation
     end
     resources :access_tokens
+    get :access_grants, to: 'access_grants#index'
+    delete :access_grants, to: 'access_grants#revoke'
+    delete :revoke_access_grants, to: 'access_grants#revoke_all'
   end
 end
