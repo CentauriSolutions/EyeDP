@@ -95,6 +95,12 @@ RSpec.describe Admin::DashboardController, type: :controller do
     end
 
     context 'signed in admin' do
+      let(:app) do
+        Application.create!(
+          name: 'https://test.example.com', redirect_uri: 'https://test.example.com'
+        )
+      end
+
       before do
         sign_in(admin)
       end
@@ -132,6 +138,19 @@ RSpec.describe Admin::DashboardController, type: :controller do
           get :index
           expect(response.body).to include EyedP::Application::GIT_SHA[0..7]
         end
+      end
+
+      it 'includes recent logins' do
+        Login.create(user: admin, service_provider: app)
+        get :index
+        expect(@controller.helpers.logins_by_app.map(&:first).map(&:id)).to include app.id
+        expect(@controller.helpers.logins_by_user.map(&:first)).to include admin
+      end
+
+      it 'shows logins by app on apps dashboard' do
+        login = Login.create(user: admin, service_provider: app)
+        get :apps
+        expect(@controller.instance_variable_get(:@logins)).to include(login)
       end
     end
 
