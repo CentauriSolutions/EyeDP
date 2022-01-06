@@ -205,7 +205,17 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def inactive_message
-    expired? ? :user_expired : super
+    if expired?
+      :user_expired
+    elsif disabled?
+      :user_disabled
+    else
+      super
+    end
+  end
+
+  def disabled?
+    disabled_at.present?
   end
 
   def admin?

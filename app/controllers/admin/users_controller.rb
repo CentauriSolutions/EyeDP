@@ -144,11 +144,11 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   end
 
   def show_whitelist_attributes
-    %w[primary_email name username two_factor_enabled? groups roles expires_at last_activity_at]
+    %w[primary_email name username two_factor_enabled? disabled? groups roles expires_at last_activity_at]
   end
 
   def whitelist_attributes
-    %w[email username name two_factor_enabled? groups roles expired?]
+    %w[email username name two_factor_enabled? groups roles expired? disabled?]
   end
 
   def model
@@ -158,7 +158,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   # Never trust parameters from the scary internet, only allow the white list through.
   def model_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     allowlist_attrs = [
-      :email, :username, :name, :expires_at,
+      :email, :username, :name, :expires_at, :disabled_at,
       :password, :last_activity_at, :group_ids, { group_ids: [], email_addresses: [] }
     ]
     # allowlist_attrs.push(emails: []) if params[:action] == 'create'

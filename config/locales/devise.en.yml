@@ -20,6 +20,7 @@ en:
       unconfirmed: You have to confirm your email address before continuing.
       user:
         user_expired: Your account is expired.
+        user_disabled: Your account is disabled.
     mailer:
       confirmation_instructions:
         subject: Confirmation instructions

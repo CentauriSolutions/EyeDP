@@ -56,7 +56,7 @@ module Devise
       #
       # @return [bool]
       def active_for_authentication?
-        super && !expired?
+        super && !expired? && !disabled?
       end
 
       # The message sym, if {#active_for_authentication?} returns +false+. E.g. needed

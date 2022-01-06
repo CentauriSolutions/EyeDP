@@ -106,6 +106,28 @@ RSpec.describe BasicAuthController, type: :controller do
         expect(response.status).to eq(200)
         expect(warden.session('user')['last_request_at']).not_to eq(start)
       end
+
+      it 'forbids an expired user' do
+        @request.env['devise.mapping'] = Devise.mappings[:user]
+        user.groups << group
+        sign_in user
+        user.update(expires_at: 1.day.ago)
+        get :create, params: { permission_name: 'use.test_app' }
+
+        expect(response.status).to eq(302)
+        expect(response.headers['Location']).to match /users\/sign_in/
+      end
+
+      it 'forbids a disabled user' do
+        @request.env['devise.mapping'] = Devise.mappings[:user]
+        user.groups << group
+        sign_in user
+        user.update(disabled_at: 1.day.ago)
+        get :create, params: { permission_name: 'use.test_app' }
+
+        expect(response.status).to eq(302)
+        expect(response.headers['Location']).to match /users\/sign_in/
+      end
     end
 
     it 'forbids authenticated role without required two factor' do
@@ -147,7 +169,6 @@ RSpec.describe BasicAuthController, type: :controller do
       token.reload
       expect(token.last_used_at).to be_nil
     end
-
     it 'denies access without group access' do
       token = AccessToken.create!(user: user)
 
