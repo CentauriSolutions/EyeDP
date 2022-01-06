@@ -20,7 +20,7 @@
           <% name = sp.try(:name) || sp.to_s %>
           <%- if sp.is_a? Doorkeeper::Application %>
             <td>
-              <%- if sp.image_url %>
+              <%- if sp.image_url.present? %>
                 <%= image_tag sp.image_url, size: 25 %>
               <%- end %>
               <%= link_to sp.name, admin_application_path(sp) %>
