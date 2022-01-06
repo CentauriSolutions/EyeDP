@@ -1,8 +1,8 @@
 <h2><%= @model.class.name %> <%= @model %></h2>
 <%= render partial: 'sub_heading' %>
 <div class="row">
-  <%= link_to 'Edit', [:edit, :admin, @model] %> |
-  <%= link_to 'Back', [:admin, @model.class] %>
+  <%= link_to 'Edit', [:edit, :admin, @model], class: "btn btn-mini", data: { title: @odel.to_s, remote: url_for([:edit, :admin, @model, :format => "js"]), toggle: "modal", target: "#edit-modal"} %>
+  <%= link_to 'Back', [:admin, @model.class], class: "btn btn-mini" %>
 </div>
 
 <div class="row">
@@ -33,3 +33,4 @@
 <% rescue ActionView::MissingTemplate %>
 <% end %>
 
+<%= render partial: 'edit_modal' %>
