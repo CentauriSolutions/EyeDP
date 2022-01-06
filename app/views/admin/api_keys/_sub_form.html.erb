@@ -1,13 +1,15 @@
-<div class="form-group">
-  <div class="row">
-    <div class="col-sm-2">
-      <%= form.label :custom_data %>
-    </div>
-    <div class="col-sm-10">
-      <%= form.text_field :custom_data, class: 'form-control' %>
-      <small id="helpInline" class="text-muted">
-        Semicolon separated list of custom data. This is required when enabling the Read / Write custom data capabilities, and is a whitelist of custom attributes that will be permitted.
-      </small>
+<div class="col-md-6">
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-2">
+        <%= form.label :custom_data %>
+      </div>
+      <div class="col-sm-10">
+        <%= form.text_field :custom_data, class: 'form-control' %>
+        <small id="helpInline" class="text-muted">
+          Semicolon separated list of custom data. This is required when enabling the Read / Write custom data capabilities, and is a whitelist of custom attributes that will be permitted.
+        </small>
+      </div>
     </div>
   </div>
 </div>

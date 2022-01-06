@@ -1,4 +1,4 @@
-<!-- <h1><%= @models.klass.name.pluralize %> <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New User', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %></h1> -->
+<!-- <h1><%= @models.klass.name.pluralize %> <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New #{ @models.klass.name}', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %></h1> -->
 <div class="row mb-5">
   <div class="col-md-6"></div>
   <div class="col-md-6 ml-auto">
@@ -7,7 +7,7 @@
       <p class="small">Search</p>
     <%- end %>
     <div class="float-right">
-      <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New User', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %>
+      <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: "New #{ @models.klass.name}", remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %>
     </div>
     <%- if filter_whitelist.any? %>
       <div class="" style="width: auto; overflow: auto">
