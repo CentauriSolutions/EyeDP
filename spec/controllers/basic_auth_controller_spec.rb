@@ -115,7 +115,7 @@ RSpec.describe BasicAuthController, type: :controller do
         get :create, params: { permission_name: 'use.test_app' }
 
         expect(response.status).to eq(302)
-        expect(response.headers['Location']).to match /users\/sign_in/
+        expect(response.headers['Location']).to match(%r{users/sign_in})
       end
 
       it 'forbids a disabled user' do
@@ -126,7 +126,7 @@ RSpec.describe BasicAuthController, type: :controller do
         get :create, params: { permission_name: 'use.test_app' }
 
         expect(response.status).to eq(302)
-        expect(response.headers['Location']).to match /users\/sign_in/
+        expect(response.headers['Location']).to match(%r{users/sign_in})
       end
     end
 

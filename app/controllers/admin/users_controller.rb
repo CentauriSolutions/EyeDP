@@ -68,6 +68,25 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     email.save
   end
 
+  def bulk_action # rubocop:disable Metrics/MethodLength
+    finder = model.where(id: params[:ids])
+    flash[:notice] = case params[:bulk_action]
+                     when 'disable'
+                       finder.update(disabled_at: Time.zone.now)
+                       'Users were successfully disabled'
+                     when 'enable'
+                       finder.update(disabled_at: nil)
+                       'Users were successfully enabled'
+                     when 'reset_password'
+                       finder.map(&:force_password_reset!)
+                       'Password reset emails were successfully sent'
+                     when 'resend_welcome_email'
+                       finder.map(&:send_admin_welcome_email)
+                       'Welcome emails will be sent.'
+                     end
+    render plain: ''
+  end
+
   def resend_welcome_email
     @model = User.find(params[:user_id])
     respond_to do |format|
@@ -175,6 +194,16 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     p.delete(:password) if p[:password] && p[:password].empty?
     p
   end
+
+  def bulk_actions?
+    true
+  end
+  helper_method :bulk_actions?
+
+  def bulk_actions
+    %i[disable enable reset_password resend_welcome_email]
+  end
+  helper_method :bulk_actions
 
   def sort_whitelist
     %w[created_at username name email]

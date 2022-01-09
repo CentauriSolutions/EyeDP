@@ -1,9 +1,9 @@
 <h2><%= @model.class.name %> <%= @model %></h2>
 <%= render partial: 'sub_heading' %>
 <div class="row">
-  <%= link_to 'Edit', [:edit, :admin, @model], class: 'btn btn-mini', data: { title: @model.to_s, remote: url_for([:edit, :admin, @model, :format => "js"]), toggle: "modal", target: "#edit-modal"} %>
-  <%= link_to 'Back', [:admin, @model.class], class: 'btn btn-mini' %>
-  <%= link_to 'Renew Secret', [:admin, @model, :renew_secret], class: 'btn btn-mini', method: :post, data: { confirm: 'Are you sure? Rotating an Application secret requires updating all users of the secret'} %>
+  <%= link_to 'Edit', [:edit, :admin, @model], class: 'btn btn-sm', data: { title: @model.to_s, remote: url_for([:edit, :admin, @model, :format => "js"]), toggle: "modal", target: "#edit-modal"} %>
+  <%= link_to 'Back', [:admin, @model.class], class: 'btn btn-sm' %>
+  <%= link_to 'Renew Secret', [:admin, @model, :renew_secret], class: 'btn btn-sm', method: :post, data: { confirm: 'Are you sure? Rotating an Application secret requires updating all users of the secret'} %>
 </div>
 
 <div class="row">

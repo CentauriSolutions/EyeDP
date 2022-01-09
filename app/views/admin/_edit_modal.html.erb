@@ -38,7 +38,7 @@ $('body').on('click', '[data-toggle="modal"]', function(){
   $(link.data("target")+' .modal-body').load(link.data('remote'), () => {
     var element = document.querySelector("#model_form");
     element.addEventListener("ajax:success", (event) => {
-      location.reload();
+      location.reload(true);
     });
   });
   $(link.data("target")).modal('show');

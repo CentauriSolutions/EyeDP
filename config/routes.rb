@@ -26,6 +26,7 @@ Rails.application.routes.draw do
         post :confirm, to: 'emails#confirm'
       end
     end
+    post 'users/bulk_action', to: 'users#bulk_action'
     resources :custom_userdata_types
     resources :custom_group_data_types
     resources :permissions

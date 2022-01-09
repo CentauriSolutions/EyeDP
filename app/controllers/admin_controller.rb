@@ -147,6 +147,16 @@ class AdminController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
   helper_method :sort_whitelist
 
+  def bulk_actions?
+    false
+  end
+  helper_method :bulk_actions?
+
+  def bulk_actions
+    []
+  end
+  helper_method :bulk_actions
+
   def form_relations
     []
   end

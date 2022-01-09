@@ -1,6 +1,13 @@
 <!-- <h1><%= @models.klass.name.pluralize %> <%= link_to "New #{ @models.klass.name}", [:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym], class: "btn btn-sm btn-dark", data: { title: 'New #{ @models.klass.name}', remote: url_for([:new, :admin, @models.klass.name.underscore.gsub('/', '_').to_sym, :format => "js"]), toggle: "modal", target: "#edit-modal", hotkey: 'n' } %></h1> -->
 <div class="row mb-5">
-  <div class="col-md-6"></div>
+  <div class="col-md-6">
+    <%- if bulk_actions? %>
+      <h6>Batch Selection</h6>
+      <%- bulk_actions.each do |action| %>
+        <%= link_to action.to_s.titlecase, [:admin, @models.klass.name.pluralize.downcase.to_sym, :bulk_action],  class: "btn btn-sm btn-inverse btn-dark",  onclick: 'bulk_action(event, this)', data: { action: action } %>
+      <%- end %>
+    <%- end %>
+  </div>
   <div class="col-md-6 ml-auto">
 
     <%- if filter_whitelist.any? %>
@@ -25,6 +32,9 @@
   <table class="table table-striped">
     <thead class="admin">
       <tr>
+        <%- if bulk_actions? %>
+        <th></th>
+        <%- end %>
         <th></th>
         <%- model_attributes.each do |attr_name| %>
           <th>
@@ -41,11 +51,14 @@
     <tbody>
       <% @models.each do |model| %>
         <tr>
+          <%- if bulk_actions? %>
+          <td><%= check_box_tag 'model_id[]', model.id %></td>
+          <%- end %>
           <td><nobr>
-          <%= link_to fa_icon('pencil', title: 'Edit'), [:edit, :admin, model], class: "btn btn-mini", data: { title: model.to_s, remote: url_for([:edit, :admin, model, :format => "js"]), toggle: "modal", target: "#edit-modal"} %>
-          <%= link_to fa_icon('eye', title: 'Show'), [:admin, model], class: 'btn btn-mini' %>
+          <%= link_to fa_icon('pencil', title: 'Edit'), [:edit, :admin, model], class: "btn btn-sm", data: { title: model.to_s, remote: url_for([:edit, :admin, model, :format => "js"]), toggle: "modal", target: "#edit-modal"} %>
+          <%= link_to fa_icon('eye', title: 'Show'), [:admin, model], class: 'btn btn-sm' %>
           <%- if can_destroy? %>
-            <%= link_to fa_icon('trash-o', title: "Delete"), [:admin, model], method: :delete,  class: "btn btn-mini", data: { confirm: 'Are you sure?' } %>
+            <%= link_to fa_icon('trash-o', title: "Delete"), [:admin, model], method: :delete,  class: "btn btn-sm", data: { confirm: 'Are you sure?' } %>
           <%- end %>
             </nobr></td>
           <%- model_attributes.each do |attr_name| %>
@@ -58,3 +71,15 @@
   <%= will_paginate @models, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
 </div>
 <%= render partial: 'edit_modal' %>
+
+<%= content_for :local_js do %>
+<script tyope="text/javascript">
+function bulk_action(event) {
+  event.preventDefault()
+  el = $(event.target)
+  action = el.data('action')
+  selected = $.map($("input[name='model_id[]']:checked"), function(checkbox) { return $(checkbox).val()})
+  $.post(el.attr('href'), { ids: selected, bulk_action: action }, function() { location.reload(true) })
+}
+</script>
+<%- end %>
