@@ -10,6 +10,5 @@ function add_field(item) {
 function remove_element(item) {
 	var button = $(item);
 	var target = button.data('target');
-  debugger
 	$('#'+target).remove()
 }

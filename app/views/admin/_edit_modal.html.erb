@@ -31,9 +31,7 @@
 <%- content_for :local_js do %>
 <script type="text/javascript">
 $('body').on('click', '[data-toggle="modal"]', function(){
-  // e.preventDefault();
   var link = $(this);
-  // var href = link[0].href;
   $(link.data("target") + ' .modal-header .modal-title').text(link.data("title"))
   $(link.data("target")+' .modal-body').load(link.data('remote'), () => {
     var element = document.querySelector("#model_form");
@@ -43,21 +41,8 @@ $('body').on('click', '[data-toggle="modal"]', function(){
   });
   $(link.data("target")).modal('show');
 
-  // $('#model_form').
   return false;
 });
-// $( document ).ready(function() {
-//   // location.reload();
-//   // debugger
-//   // const element = document.querySelector("#edit-model");
-//   $('#edit-model').on("ajax:success", (event) => {
-//     debugger
-//     location.reload();
-//   });
-//   // element.addEventListener("ajax:error", () => {
-//   //   element.insertAdjacentHTML("beforeend", "<p>ERROR</p>");
-//   // });
-// });
 
 </script>
 <%- end %>
