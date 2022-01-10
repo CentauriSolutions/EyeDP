@@ -143,7 +143,7 @@
   cal.init({
     domain: "month",
     subDomain: "day",
-    range: 12,
+    range: 13,
     data: <%= raw logins.map{ |date, count| [date.to_time.to_i, count] }.to_h.to_json %>,
     start: new Date(<%= 12.months.ago.to_time.to_i * 1000 %>),
     // domainMargin: 2,
