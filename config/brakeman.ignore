@@ -3,6 +3,26 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "0d397b68a35ce834a819fc2cea25c7f87b866af69522552878057fc36de75b43",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/admin_controller.rb",
+      "line": 118,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "rel.where(\"#{\"#{key} ilike :query\"}\", :query => (\"%#{params[:search]}%\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AdminController",
+        "method": "filter"
+      },
+      "user_input": "key",
+      "confidence": "Weak",
+      "note": "Key comes from a hardcoded whitelist; all user-supplied parameters are escaped via prepared statement paremeters (:query)"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "758ccf9becbd15fe137b40d2ac5592ff9a17b57fecf2b2b184f17f09120143e4",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -19,6 +39,26 @@
       "user_input": "JSON.parse(event, :object_class => (NotificationEvent)).model_type",
       "confidence": "Medium",
       "note": "A NotificationEvent is only created in code, via an admin action (creating, updating ,or deleting certain models). The specific fields noted (model_type and event_type) are generated from the model's class name and the lifeclcye callback name."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "8b34b86172779236c878dc632831a2c2c19a6aa2e10bf46424811fe79e12de0e",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/admin/users_controller.rb",
+      "line": 202,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "rel.joins(:emails).where(\"#{case key\nwhen \"email\" then\n  \"emails.address ilike :query\"\nelse\n  \"#{key} ilike :query\"\nend}\", :query => (\"%#{params[:search]}%\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::UsersController",
+        "method": "filter"
+      },
+      "user_input": "case key\nwhen \"email\" then\n  \"emails.address ilike :query\"\nelse\n  \"#{key} ilike :query\"\nend",
+      "confidence": "Weak",
+      "note": "Key comes from a hardcoded whitelist; all user-supplied parameters are escaped via prepared statement paremeters (:query)"
     },
     {
       "warning_type": "Redirect",
@@ -103,26 +143,37 @@
       "note": "Setting.registered_home_template is only configurable by an admin."
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "ded083a60327240307d2f69b0215746d34ab49f4580f611080a7f584647c1b6a",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/admin_controller.rb",
-      "line": 103,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "rel.where(params[:filter_by] => params[:filter])",
-      "render_path": null,
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "d8b56afa5b1bbeadb976a865bfe5b32a3cc33c198ac523fb44b8868ff95b31fa",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/dashboard/home.html.erb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Liquid::Template.parse(Setting.dashboard_template).render(template_variables)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "DashboardController",
+          "method": "home",
+          "line": 9,
+          "file": "app/controllers/dashboard_controller.rb",
+          "rendered": {
+            "name": "dashboard/home",
+            "file": "app/views/dashboard/home.html.erb"
+          }
+        }
+      ],
       "location": {
-        "type": "method",
-        "class": "AdminController",
-        "method": "filter"
+        "type": "template",
+        "template": "dashboard/home"
       },
-      "user_input": "params[:filter_by]",
-      "confidence": "Medium",
-      "note": "This is an admin only controller, and is restricted by a whitelist of acceptable options"
+      "user_input": "Setting.dashboard_template",
+      "confidence": "Weak",
+      "note": "Setting.dashboard_template is only configurable by an admin."
     }
   ],
-  "updated": "2021-12-09 08:09:44 +0100",
+  "updated": "2021-12-11 17:21:29 +0100",
   "brakeman_version": "5.1.1"
 }

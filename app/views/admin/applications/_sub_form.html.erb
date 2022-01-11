@@ -1,51 +1,56 @@
 
 <%- if not new_model %>
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <Label>Secret</Label>
-      </div>
-      <div class="col-sm-10">
-        <%- if @show_secret %>
-          <%- value = model.secret %>
-        <%- else %>
-          <%- value = '*' * 30 %>
-        <%- end %>
-        <%= form.text_field :secret, value: value, class: 'form-control', disabled: true %>
-        <%= link_to 'Renew Secret', [:admin, model, :renew_secret], method: :post, data: { confirm: 'Are you sure? Rotating an Application secret requires updating all users of the secret'}, class: "btn btn-warning"  %>
+
+  <div class="col-md-6">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-2">
+          <Label>Secret</Label>
+        </div>
+        <div class="col-sm-10">
+          <%- if @show_secret %>
+            <%- value = model.secret %>
+          <%- else %>
+            <%- value = '*' * 30 %>
+          <%- end %>
+          <%= form.text_field :secret, value: value, class: 'form-control', disabled: true %>
+          <%= link_to 'Renew Secret', [:admin, model, :renew_secret], method: :post, data: { confirm: 'Are you sure? Rotating an Application secret requires updating all users of the secret'}, class: "btn btn-warning"  %>
+        </div>
       </div>
     </div>
   </div>
 <%- end %>
-
-<div class="form-group">
-  <div class="row">
-    <div class="col-sm-2">
-      <%= form.label :groups %>
-    </div>
-    <div class="col-sm-10">
-    <%- groups = Group.all %>
-    <%= form.collection_check_boxes :group_ids, groups, :id, :name do |group| %>
-      <div>
-        <%= group.check_box %><%= group.label %>
+<div class="col-md-6">
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-2">
+        <%= form.label :groups %>
       </div>
-    <% end %>
+      <div class="col-sm-10">
+      <%- groups = Group.all %>
+      <%= form.collection_check_boxes :group_ids, groups, :id, :name do |group| %>
+        <div>
+          <%= group.check_box %><%= group.label %>
+        </div>
+      <% end %>
+      </div>
     </div>
   </div>
 </div>
-
-<div class="form-group">
-  <div class="row">
-    <div class="col-sm-2">
-      <%= form.label :custom_userdata_types %>
-    </div>
-    <div class="col-sm-10">
-    <%- types = CustomUserdataType.all %>
-    <%= form.collection_check_boxes :custom_userdata_type_ids, types, :id, :name do |custom_type| %>
-      <div>
-        <%= custom_type.check_box %><%= custom_type.label %>
+<div class="col-md-6">
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-2">
+        <%= form.label :custom_userdata_types %>
       </div>
-    <% end %>
+      <div class="col-sm-10">
+      <%- types = CustomUserdataType.all %>
+      <%= form.collection_check_boxes :custom_userdata_type_ids, types, :id, :name do |custom_type| %>
+        <div>
+          <%= custom_type.check_box %><%= custom_type.label %>
+        </div>
+      <% end %>
+      </div>
     </div>
   </div>
 </div>

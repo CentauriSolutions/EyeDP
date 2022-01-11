@@ -181,4 +181,6 @@ class Setting < ApplicationRecord
   field :webhook_timeout, default: 60, type: :integer
 
   field :profiler_enabled, default: false, type: :boolean
+
+  field :libravatar_url, default: 'https://www.gravatar.com'
 end

@@ -5,6 +5,13 @@ class Admin::DashboardController < AdminController
     @logins = Login.order(created_at: :desc).limit(50).includes(:service_provider, :user)
   end
 
+  def apps
+    @logins = Login
+              .order(created_at: :desc)
+              .page(params[:page] || 1)
+              .includes(:service_provider, :user)
+  end
+
   def jobs; end
 
   private

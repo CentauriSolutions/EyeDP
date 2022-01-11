@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   use_doorkeeper_openid_connect
   get 'admin' => 'admin/dashboard#index', as: :admin_dashboard
   namespace :admin do
-    # get 'dashboard/index'
+    get 'sso_apps', to: 'dashboard#apps'
     resources :api_keys
     resources :groups do
       get :email, to: 'groups#email'
@@ -26,6 +26,7 @@ Rails.application.routes.draw do
         post :confirm, to: 'emails#confirm'
       end
     end
+    post 'users/bulk_action', to: 'users#bulk_action'
     resources :custom_userdata_types
     resources :custom_group_data_types
     resources :permissions
@@ -105,5 +106,8 @@ Rails.application.routes.draw do
       post 'resend_confirmation', to: 'emails#resend_confirmation', as: :resend_confirmation
     end
     resources :access_tokens
+    get :access_grants, to: 'access_grants#index'
+    delete :access_grants, to: 'access_grants#revoke'
+    delete :revoke_access_grants, to: 'access_grants#revoke_all'
   end
 end

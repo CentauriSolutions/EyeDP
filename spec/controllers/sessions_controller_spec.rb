@@ -56,6 +56,14 @@ RSpec.describe SessionsController do
             .to match(/account is expired/)
         end
 
+        it 'does not authenticate an disabled user' do
+          user.update!(disabled_at: 10.minutes.ago)
+
+          post(:create, params: { user: user_params })
+          expect(flash[:alert])
+            .to match(/account is disabled/)
+        end
+
         it 'redirects to a known application' do
           Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
           post(:create, params: { user: user_params, redirect_to: 'https://example.com' })

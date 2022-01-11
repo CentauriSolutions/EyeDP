@@ -29,6 +29,10 @@ class WebHook < ApplicationRecord
     )
   }
 
+  def to_s
+    "WebHook: #{url}"
+  end
+
   def setup_template
     self.template ||= {
       "event": '{{ event_type }}',

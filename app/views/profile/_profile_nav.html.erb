@@ -1,15 +1,21 @@
-<div class="col-md-3 col-lg-2 profile-nav">
-  <ul class="nav flex-column">
-    <%= nav_link _("Account"), profile_account_path %>
-    <%- if CustomUserdataType.any? %>
-    <%= nav_link _("Profile"), profile_path %>
-    <%- end %>
-    <%= nav_link _("Emails"), profile_emails_path %>
-    <%- if current_user.groups.where(permit_token: true).any? %>
-    <%= nav_link _("Access tokens"), profile_access_tokens_path %>
-    <%- end %>
-    <%= nav_link _("Authentication devices"), profile_authentication_devices_path %>
-    <%= nav_link _("Account activity"), profile_account_activity_path %>
-  </ul>
-  <hr class="d-none d-sm-block d-md-none" />
-</div>
+<nav class="navbar navbar-expand-sm navbar-light bg-white ml-0 pl-0">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav">
+      <%= nav_link _("Activity"), profile_account_activity_path %>
+      <%= nav_link _("Settings"), profile_account_path %>
+      <%- if CustomUserdataType.any? %>
+      <%= nav_link _("Profile"), profile_path %>
+      <%- end %>
+      <%= nav_link _("Emails"), profile_emails_path %>
+      <%= nav_link _("Authorised Applications"), profile_access_grants_path %>
+      <%- if current_user.groups.where(permit_token: true).any? %>
+      <%= nav_link _("Tokens"), profile_access_tokens_path %>
+      <%- end %>
+      <%= nav_link _("Devices"), profile_authentication_devices_path %>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <h2>App Activity</h2>
+
+    <p>These are SSO requests made by SAML and OIDC applications.</p>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>App</th>
+          <th>User</th>
+          <th>Login Type</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%- @logins.each do |login| %>
+        <tr>
+          <%- sp = login.service_provider %>
+          <% name = sp.try(:name) || sp.to_s %>
+          <%- if sp.is_a? Doorkeeper::Application %>
+            <td>
+              <%- if sp.image_url.present? %>
+                <%= image_tag sp.image_url, size: 25 %>
+              <%- end %>
+              <%= link_to sp.name, admin_application_path(sp) %>
+            </td>
+          <%- else %>
+            <td>
+              <%- if sp.image_url %>
+                <%= image_tag sp.image_url, size: 25 %>
+              <%- end %>
+              <%= link_to sp.name, [:admin, sp] %>
+            </td>
+          <%- end %>
+          <td><%= link_to login.user.username, [:admin, login.user] %></td>
+          <td><%= login.auth_type %></td>
+          <td><%= login.created_at.to_formatted_s(:long) %></td>
+        </tr>
+        <%- end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%= will_paginate @logins, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>

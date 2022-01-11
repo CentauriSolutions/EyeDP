@@ -15,23 +15,13 @@ module ApplicationHelper
   end
 
   def nav_link(link_text, link_path, opts = {})
-    current_page = current_page?(link_path)
+    current_page = opts[:current_page_override] || current_page?(link_path)
     class_name = 'nav-item'
     class_name = [opts[:class], class_name].join(' ')
     opts[:class] = current_page ? 'nav-link active' : 'nav-link'
     tag.li(class: class_name) do
       link_to link_text, link_path, opts
     end
-  end
-
-  def dropdown_nav_link(link_text, link_path, opts = {})
-    current_page = current_page?(link_path)
-    class_name = 'dropdown-item'
-    class_name_parts = [opts[:class], class_name]
-    class_name_parts << 'active' if current_page
-    class_name = class_name_parts.join(' ')
-    opts[:class] = class_name
-    link_to link_text, link_path, opts
   end
 
   # rubocop:disable Metrics/AbcSize

@@ -1,21 +1,6 @@
+
+<%= nav_link fa_icon('user'), profile_account_activity_path, title: 'User' %>
 <%- if [:admin, :manager, :operator].intersection(current_user.roles).any? %>
-  <%= nav_link _('Admin Dashboard'), admin_dashboard_path %>
+  <%= nav_link fa_icon('gear'), admin_dashboard_path, title: 'Admin', current_page_override: params[:controller].include?('admin') %>
 <%- end %>
-<li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <%= fa_icon('user') %>
-  </a>
-  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-    <h6 class="dropdown-header">
-      <%- if current_user.name %>
-        <%= current_user.name %><br />
-      <%- end %>
-      <span class="small">@<%= current_user.username %></span>
-    </h6>
-    <%- if CustomUserdataType.any? %>
-      <%= dropdown_nav_link _("Edit Profile"), profile_path %>
-    <%- end %>
-    <%= dropdown_nav_link _("Preferences"), profile_account_path %>
-    <%= dropdown_nav_link _('Sign out'), destroy_user_session_path, :method=>'delete' %>
-  </div>
-</li>
+<%= nav_link fa_icon('power-off'), destroy_user_session_path, :method=>'delete', title: 'Log Out' %>

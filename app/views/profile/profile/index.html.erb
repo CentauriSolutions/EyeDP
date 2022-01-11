@@ -1,7 +1,5 @@
-<h1 class="flex justify-center">Welcome, <%= current_user.username || current_user.email %></h1>
-<hr />
+<%= render  partial: 'profile/heading' %>
 <div class="row">
-  <%= render partial: 'profile/profile_nav' %>
   <div class="col-md-9 col-lg-10">
     <h2>Profile</h2>
     <%= bootstrap_form_for(current_user, as: 'user', url: profile_path, html: { method: :post }) do |f| %>

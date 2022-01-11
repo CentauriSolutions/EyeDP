@@ -1,4 +1,4 @@
-<%- if not new_model %>
+<%- unless (remote || new_model) %>
   <div class="form-group">
     <div class="row">
       <div class="col-sm-12">
@@ -11,174 +11,194 @@
     </div>
   </div>
 <%- end %>
-<%= form_with(model: [:admin, model], local: true, class: 'form') do |form| %>
-  <% if model.errors.any? %>
-      <%- if model.errors[:emails] %>
-        <%- model.errors.merge!(model.primary_email_record.errors) %>
-        <%- model.errors.delete(:emails) %>
-      <%- end %>
-    <div id="error_explanation">
-      <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
-
-      <ul>
-      <% model.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <div class="form-group">
+<%= form_with(model: [:admin, model], local: !remote, class: 'form', id: 'model_form') do |form| %>
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :username %>
-      </div>
-      <div class="col-sm-10">
-          <%= form.text_field :username, class: 'form-control' %>
-      </div>
-    </div>
-  </div>
+      <div class="col-md-12">
+        <% if model.errors.any? %>
+            <%- if model.errors[:emails] %>
+              <%- model.errors.merge!(model.primary_email_record.errors) %>
+              <%- model.errors.delete(:emails) %>
+            <%- end %>
+          <div id="error_explanation">
+            <h2><%= pluralize(model.errors.count, "error") %> prohibited this model from being saved:</h2>
 
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :password %>
-      </div>
-      <div class="col-sm-10">
-          <%= form.password_field :password, class: 'form-control' %>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :name %>
-      </div>
-      <div class="col-sm-10">
-          <%= form.text_field :name, class: 'form-control' %>
+            <ul>
+            <% model.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
       </div>
     </div>
-  </div>
-
-  <div class="form-group">
     <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :email %>
-      </div>
-      <div class="col-sm-10">
-          <%= form.text_field :email, class: 'form-control' %>
-      </div>
-    </div>
-  </div>
-  <%- if new_model %>
-    <div class="form-group">
-      <div class="row">
-        <div class="col-sm-2">
-          <%= form.label :additional_emails %>
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= form.label :username %>
+            </div>
+            <div class="col-sm-8">
+                <%= form.text_field :username, class: 'form-control' %>
+            </div>
+          </div>
         </div>
-        <div class="col-sm-10" id="emails">
-          <%- @model.emails.each do |email| %>
-            <div class="input-group" id="input-group-user-emails-<%= email.id %>">
-              <%= text_field_tag "user[emails][#{email.id}]", email.address, class: 'form-control' %>
-              <div class="input-group-append">
-                <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-user-emails-<%= email.id %>">Remove</button>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= form.label :password %>
+            </div>
+            <div class="col-sm-8">
+                <%= form.password_field :password, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= form.label :name %>
+            </div>
+            <div class="col-sm-8">
+                <%= form.text_field :name, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= form.label :email %>
+            </div>
+            <div class="col-sm-8">
+                <%= form.text_field :email, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= form.label :additional_emails %>
+            </div>
+            <div class="col-sm-8" id="emails">
+              <%- @model.emails.where(primary: false).each do |email| %>
+                <div class="input-group" id="input-group-user-emails-<%= email.id %>">
+                  <%= text_field_tag "user[email_addresses][]", email.address, class: 'form-control' %>
+                  <div class="input-group-append">
+                    <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-user-emails-<%= email.id %>">Remove</button>
+                  </div>
+                </div>
+                <%- end %>
+              <%= text_field_tag "user[email_addresses][]", nil, class: 'form-control', placeholder: 'Email' %>
+            </div>
+            <button  type="button" onclick="add_field(this)" data-name="user[email_addresses]" data-target="emails" class="btn btn-dark"><%= fa_icon 'plus' %> Add Email</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= form.label :expires_at %>
+            </div>
+            <div class="col-sm-8">
+                <%= form.text_field :expires_at, class: 'form-control', placeholder: 'YYYY-MM-DD HH:MM:SS TZ' %>
+                <a href='#' onclick="expire_now()">Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= form.label :last_activity_at %>
+            </div>
+            <div class="col-sm-8">
+                <%= form.text_field :last_activity_at, class: 'form-control' %>
+                <a href='#' onclick="clear_activity()">Reset</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-4">
+              <%= form.label :groups %>
+            </div>
+            <div class="col-sm-8">
+              <%- if current_user.admin? %>
+                <%- groups = Group.all %>
+              <%- else %>
+                <%- groups = Group.where(admin: false, operator: false) %>
+              <%- end %>
+              <div class="row">
+                <%= form.collection_check_boxes :group_ids, groups, :id, :name do |group| %>
+                  <div class="col-xs-1 checkbox">
+                    <span class="form-control">
+                      <%= group.check_box class: '' %> <%= group.label %>
+                    </span>
+                  </div>
+                <% end %>
               </div>
             </div>
-            <%- end %>
-          <%= text_field_tag "user[emails][]", nil, class: 'form-control', placeholder: 'Email' %>
+          </div>
         </div>
-        <button  type="button" onclick="add_field(this)" data-name="user[emails]" data-target="emails" class="btn btn-info"><%= fa_icon 'plus' %> Add Email</button>
-      </div>
-    </div>
-  <%- end %>
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :expires_at %>
-      </div>
-      <div class="col-sm-10">
-          <%= form.text_field :expires_at, class: 'form-control', placeholder: 'YYYY-MM-DD HH:MM:SS TZ' %>
-          <a href='#' onclick="expire_now()">Now</a>
-      </div>
-    </div>
-  </div>
+        <%- form_relations.each do |relation_name, info| %>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-4">
+                <%= form.label relation_name %>
+              </div>
+              <div class="col-sm-8">
+                <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
+              </div>
+            </div>
+          </div>
 
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :last_activity_at %>
-      </div>
-      <div class="col-sm-10">
-          <%= form.text_field :last_activity_at, class: 'form-control' %>
-          <a href='#' onclick="clear_activity()">Reset</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="row">
-      <div class="col-sm-2">
-        <%= form.label :groups %>
-      </div>
-      <div class="col-sm-10">
-        <%- if current_user.admin? %>
-          <%- groups = Group.all %>
-        <%- else %>
-          <%- groups = Group.where(admin: false, operator: false) %>
         <%- end %>
-      <%= form.collection_check_boxes :group_ids, groups, :id, :name do |group| %>
-        <div>
-          <%= group.check_box %><%= group.label %>
-        </div>
-      <% end %>
+
+        <%- if new_model %>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-4">
+                <%= label_tag :send_welcome_email %>
+              </div>
+              <div class="col-sm-8">
+                  <%= check_box_tag :send_welcome_email, true, true %>
+              </div>
+            </div>
+          </div>
+        <%- end %>
       </div>
     </div>
-  </div>
-    <%- form_relations.each do |relation_name, info| %>
-
-    <div class="form-group">
+    <%- unless new_model %>
       <div class="row">
-        <div class="col-sm-2">
-          <%= form.label relation_name %>
-        </div>
-        <div class="col-sm-10">
-          <%= form.send(info[:type], relation_name, info[:finder].call, info[:options] || {}, (info[:html_options] || {}).merge({class: 'form-control'}) ) %>
-        </div>
+        <!-- <div class="col-md-12">
+          <h2>Additional Properties</h2>
+          <%= link_to "Manage User Data Types", admin_custom_userdata_types_path, class: 'btn btn-dark' %>
+          <%- custom_userdata = @model.custom_userdata.includes([:custom_userdata_type]).group_by(&:custom_userdata_type_id) %>
+        </div> -->
+        <%- CustomUserdataType.all.each do |data_type| %>
+          <%- custom_userdatum = custom_userdata[data_type.id].try(:first) || CustomUserdatum.new(user: @model, custom_userdata_type: data_type) %>
+
+          <div class="col-md-6">
+            <%= render partial: 'custom_datum', locals: { data_type: data_type, custom_datum: custom_userdatum, disabled: false } %>
+          </div>
+        <%- end %>
       </div>
-
-  <%- end %>
-
-  <%- unless new_model %>
-  <div class="col-md-9 col-lg-10">
-    <h2>Additional Properties</h2>
-    <%= link_to "Manage User Data Types", admin_custom_userdata_types_path, class: 'btn btn-info' %>
-      <%- custom_userdata = @model.custom_userdata.includes([:custom_userdata_type]).group_by(&:custom_userdata_type_id) %>
-      <%- CustomUserdataType.all.each do |data_type| %>
-        <%- custom_userdatum = custom_userdata[data_type.id].try(:first) || CustomUserdatum.new(user: @model, custom_userdata_type: data_type) %>
-        <%= render partial: 'custom_datum', locals: { data_type: data_type, custom_datum: custom_userdatum, disabled: false } %>
     <%- end %>
-  </div>
-  <%- end %>
-
-  <%- if new_model %>
-    <div class="form-group">
-      <div class="row">
-        <div class="col-sm-2">
-          <%= label_tag :send_welcome_email %>
-        </div>
-        <div class="col-sm-10">
-            <%= check_box_tag :send_welcome_email, true, true %>
-        </div>
+    <div class="row justify-content-end">
+      <div class="actions">
+        <%- if new_model %>
+        <%= form.submit _('Create User'), class: 'btn btn-light' %>
+        <%- else %>
+        <%= form.submit _('Update User'), class: 'btn btn-light' %>
+        <%- end %>
       </div>
     </div>
-  <%- end %>
-
-  <div class="actions">
-    <%- if new_model %>
-    <%= form.submit _('Create User'), class: 'btn btn-success' %>
-    <%- else %>
-    <%= form.submit _('Update User'), class: 'btn btn-success' %>
-    <%- end %>
   </div>
 <% end %>
 

@@ -3,6 +3,11 @@
     <%= content_tag :div, "This user is expired" %>
   </div>
 <%- end %>
+<%- if @model.disabled? %>
+  <div class="alert alert-warning" role="alert">
+    <%= content_tag :div, "This user is disabled" %>
+  </div>
+<%- end %>
 <div class="col-sm-12">
   <%= form_with(model: [:admin, @model], local: true, class: 'form-inline') do |form| %>
     <%= link_to 'Resend welcome email', [:admin, @model, :resend_welcome_email], method: :post, data: { confirm: 'Each welcome email resets the password reset link. Are you sure you want to continue?'}, class: "btn btn-warning"  %>

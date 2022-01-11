@@ -11,3 +11,64 @@ kbd {
     border-radius: 6px;
     box-shadow: inset 0 -1px 0;
 }
+
+thead.admin th {
+  font-variant: small-caps;
+  font-size: 0.75em;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.right-inner-addon {
+  i {
+    position: absolute;
+    left: 0px;
+    padding: 12px 20px;
+    pointer-events: none;
+  }
+  .form-control {
+    padding-left: 20px;
+  }
+}
+
+.table {
+  th {
+    border-top-width: 0px;
+  }
+  td {
+    font-size: 0.8em;
+    a {
+      color: black;
+      text-decoration: underline;
+    }
+  }
+}
+
+.card {
+
+  p.small {
+    font-size: 0.8em;
+  }
+  a {
+    color: black;
+  }
+  span {
+    font-size: 2em;
+
+
+  }
+  span.large {
+    font-size: 4em;
+  }
+
+  span.small {
+    font-size: 1.5em;
+  }
+}
+

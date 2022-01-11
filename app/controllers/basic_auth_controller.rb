@@ -9,7 +9,7 @@ class BasicAuthController < ApplicationController
   # rubocop:disable Metrics/PerceivedComplexity
   def create
     key = request.headers['EyeDP-Authorize']
-    token = AccessToken.where(token: key).where('expires_at > ? or expires_at IS NULL', Time.now.utc).first
+    token = AccessToken.where(token: key).where('expires_at > NOW() or expires_at IS NULL').first
     if token && token.user.groups.where(permit_token: true).any?
       @user = token.user
       token.update(last_used_at: Time.now.utc)

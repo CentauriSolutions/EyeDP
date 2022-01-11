@@ -1,0 +1,48 @@
+
+<%- content_for :end_html do %>
+<%- name = @model.present? ? @model.class.name : @models.klass.name %>
+<div class="modal fade" id="edit-modal" tabindex="-1"
+    role="dialog" aria-labelledby="edit-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <div class="container-fluid">
+                <div class="row">
+                  <h3 class="modal-title" id="edit-modalLabel"></h3>
+                  <button type="button" class="close" data-dismiss="modal"
+                      aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="row">
+                  <p class="small"><%= name  %> info and setup.</p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <!-- <img alt="loading" src="resources/img/ajax-loader.gif"> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<%- end %>
+<%- content_for :local_js do %>
+<script type="text/javascript">
+$('body').on('click', '[data-toggle="modal"]', function(){
+  var link = $(this);
+  $(link.data("target") + ' .modal-header .modal-title').text(link.data("title"))
+  $(link.data("target")+' .modal-body').load(link.data('remote'), () => {
+    var element = document.querySelector("#model_form");
+    element.addEventListener("ajax:success", (event) => {
+      location.reload(true);
+    });
+  });
+  $(link.data("target")).modal('show');
+
+  return false;
+});
+
+</script>
+<%- end %>

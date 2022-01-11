@@ -113,6 +113,11 @@ RSpec.describe User, type: :model do
     expect(user.expired?).to be true
   end
 
+  it 'can be disabled' do
+    user.update!(disabled_at: 10.minutes.ago)
+    expect(user.disabled?).to be true
+  end
+
   it 'only changes password when encrypted_password is nil' do
     user.password = nil
     expect(user.valid_password?('test123456')).to be true
