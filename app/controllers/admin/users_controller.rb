@@ -180,7 +180,6 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
       :email, :username, :name, :expires_at, :disabled_at,
       :password, :last_activity_at, :group_ids, { group_ids: [], email_addresses: [] }
     ]
-    # allowlist_attrs.push(emails: []) if params[:action] == 'create'
     p = params.require(:user).permit(
       allowlist_attrs
     )
