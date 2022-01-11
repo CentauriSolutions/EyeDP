@@ -587,6 +587,64 @@ RSpec.describe Admin::UsersController, type: :controller do
           expect(user.otp_required_for_login).to be false
         end
       end
+
+      context 'bulk_actions' do
+        let(:user1) do
+          user = User.new(username: 'user1', email: 'user1@localhost', password: 'test123456')
+          user.emails[0].confirmed_at = Time.now.utc
+          user.save!
+          user
+        end
+
+        let(:user2) do
+          user = User.new(username: 'user2', email: 'user2@localhost', password: 'test123456')
+          user.emails[0].confirmed_at = Time.now.utc
+          user.save!
+          user
+        end
+
+        it 'can bulk disable users' do
+          expect(user1.disabled?).to be false
+          expect(user2.disabled?).to be false
+          post :bulk_action, params: { ids: [user1.id, user2.id], bulk_action: 'disable' }
+          user1.reload
+          user2.reload
+          expect(user1.disabled?).to be true
+          expect(user2.disabled?).to be true
+        end
+
+        it 'can bulk enable users' do
+          user1.update(disabled_at: Time.zone.now)
+          user2.update(disabled_at: Time.zone.now)
+          expect(user1.disabled?).to be true
+          expect(user2.disabled?).to be true
+          post :bulk_action, params: { ids: [user1.id, user2.id], bulk_action: 'enable' }
+          user1.reload
+          user2.reload
+          expect(user1.disabled?).to be false
+          expect(user2.disabled?).to be false
+        end
+
+        it 'can bulk resend confirmation emails' do
+          expect do
+            perform_enqueued_jobs do
+              post :bulk_action, params: { ids: [user1.id, user2.id], bulk_action: 'resend_welcome_email' }
+              expect(response.status).to eq(200)
+            end
+          end.to change { ActionMailer::Base.deliveries.count }.by(2)
+          expect(flash[:notice]).to match('Welcome emails will be sent.')
+        end
+
+        it 'can bulk reset user passwords' do
+          expect do
+            perform_enqueued_jobs do
+              post :bulk_action, params: { ids: [user1.id, user2.id], bulk_action: 'reset_password' }
+              expect(response.status).to eq(200)
+            end
+          end.to change { ActionMailer::Base.deliveries.count }.by(2)
+          expect(flash[:notice]).to match('Password reset emails were successfully requested')
+        end
+      end
     end
 
     context 'signed in user' do

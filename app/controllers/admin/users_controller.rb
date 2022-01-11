@@ -79,7 +79,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
                        'Users were successfully enabled'
                      when 'reset_password'
                        finder.map(&:force_password_reset!)
-                       'Password reset emails were successfully sent'
+                       'Password reset emails were successfully requested'
                      when 'resend_welcome_email'
                        finder.map(&:send_admin_welcome_email)
                        'Welcome emails will be sent.'
