@@ -24,16 +24,6 @@ module ApplicationHelper
     end
   end
 
-  def dropdown_nav_link(link_text, link_path, opts = {})
-    current_page = current_page?(link_path)
-    class_name = 'dropdown-item'
-    class_name_parts = [opts[:class], class_name]
-    class_name_parts << 'active' if current_page
-    class_name = class_name_parts.join(' ')
-    opts[:class] = class_name
-    link_to link_text, link_path, opts
-  end
-
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   def settings_row(head, subline, options = {}, &block)
