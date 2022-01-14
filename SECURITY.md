@@ -2,9 +2,12 @@
 
 ## Supported Versions
 
-As EyeDP is still under active development towards a 1.0 release, the
-only supported version is on the main development branch. This will
-change as soon as a 1.0 release is cut.
+In addition to major versions listed below, the main branch is
+also supported for security fixes.
+
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.0.x   | :white_check_mark: |
 
 <!--
 Use this section to tell people about which versions of your project are
