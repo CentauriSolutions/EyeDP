@@ -76,7 +76,7 @@ gem 'stackprof'
 gem 'tipsy-rails'
 
 # SAML the things!
-gem 'saml_idp'
+gem 'saml_idp', '< 0.14'
 
 gem 'groupdate'
 

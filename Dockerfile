@@ -1,4 +1,4 @@
-FROM ruby:2.7.1
+FROM ruby:2.7
 
 ENV LANG C.UTF-8
 ENV RAILS_ENV=production
@@ -9,7 +9,7 @@ RUN groupadd -g 1000 appuser && \
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev graphviz
 
 # gpg keys listed at https://github.com/nodejs/node#release-team
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs
 
 RUN mkdir /eyedp
