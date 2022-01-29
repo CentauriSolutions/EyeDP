@@ -49,5 +49,9 @@ Doorkeeper.configure do # rubocop:disable Metrics/BlockLength
   default_scopes :openid
   optional_scopes :profile, :email, :address, :phone
 
-  grant_flows %w[authorization_code implicit_oidc password]
+  flows = %w[authorization_code implicit_oidc]
+  if ENV['ENABLE_PASSWORD_GRANT_FLOW']
+    flows << 'password'
+  end
+  grant_flows flows
 end
