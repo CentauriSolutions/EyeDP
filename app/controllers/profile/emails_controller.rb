@@ -32,6 +32,8 @@ class Profile::EmailsController < ApplicationController
   # DELETE /profile/emails/#{model}/1.json
   def destroy
     @email = Email.find(params[:id])
+    redirect_to profile_emails_path, notice: 'You cannot delete your primary email.' and return if @email.primary
+
     redirect_to :back, notice: "You don't have permission to delete this email" if @email.user != current_user
     @email.destroy
     respond_to do |format|
