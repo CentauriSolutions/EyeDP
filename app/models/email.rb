@@ -2,6 +2,7 @@
 
 class Email < ApplicationRecord
   belongs_to :user
+  audited only: %i[address primary]
 
   validates :address, presence: true, uniqueness: { case_sensitive: false }
 

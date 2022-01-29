@@ -28,7 +28,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   extend Notifiable
   include Notifiable
 
-  audited
+  audited only: %i[username name]
 
   has_many :emails, dependent: :destroy
   has_many :access_tokens, dependent: :destroy

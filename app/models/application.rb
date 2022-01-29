@@ -20,7 +20,7 @@
 #
 
 class Application < Doorkeeper::Application
-  audited
+  audited only: %i[confidential name scopes redirect_uri]
 
   has_many :logins, as: :service_provider, dependent: :destroy
   has_many :group_service_providers, as: :service_provider, dependent: :destroy

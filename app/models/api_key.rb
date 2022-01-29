@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApiKey < ApplicationRecord
-  audited
+  audited except: %i[key created_at updated_at]
 
   after_initialize :set_key
 
