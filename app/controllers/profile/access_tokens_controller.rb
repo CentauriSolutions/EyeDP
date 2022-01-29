@@ -48,6 +48,7 @@ class Profile::AccessTokensController < ApplicationController
   end
 
   def verify_user_permission!
-    current_user.groups.where(permit_token: true).any?
+    raise(ActionController::RoutingError, 'Not Found') unless \
+      current_user.groups.where(permit_token: true).any?
   end
 end
