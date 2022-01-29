@@ -146,17 +146,28 @@ RSpec.describe Admin::UsersController, type: :controller do
         end.to change { ActionMailer::Base.deliveries.count }.by(2)
       end
 
-      context 'duplicate' do
+      context 'with rendered views' do
         render_views
 
-        it 'can see errors' do
-          User.create!(username: 'test', email: 'testing@localhost')
-          expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
-          post(:create,
-               params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
-          expect(response.status).to eq(200)
-          expect(response.body).to include('Address has already been taken')
-          expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
+        it 'cannot create a user with a space in username' do
+          expect do
+            post(:create,
+                 params: { send_welcome_email: false, user: { email: 'testing@localhost', username: 'testing name' } })
+            expect(response.status).to eq(200)
+            expect(response.body).to include('Username is invalid')
+          end.to change { User.count }.by(0)
+        end
+
+        context 'duplicate' do
+          it 'can see errors' do
+            User.create!(username: 'test', email: 'testing@localhost')
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
+            post(:create,
+                 params: { send_welcome_email: true, user: { email: 'testing@localhost', username: 'testing-name' } })
+            expect(response.status).to eq(200)
+            expect(response.body).to include('Address has already been taken')
+            expect(User.joins(:emails).where(emails: { address: 'testing@localhost' }).count).to eq 1
+          end
         end
       end
 

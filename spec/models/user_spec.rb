@@ -129,6 +129,12 @@ RSpec.describe User, type: :model do
     expect(user.encrypted_password).not_to eq(old_encrypted)
   end
 
+  it 'cannot have spaces in the username' do
+    user.username = 'user name'
+    expect(user.valid?).to be false
+    expect(user.errors.first.attribute).to eq :username
+  end
+
   context 'Expirable' do
     context 'expire_after 30 days' do
       before do
