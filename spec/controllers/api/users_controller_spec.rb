@@ -128,6 +128,20 @@ RSpec.describe Api::UsersController, type: :controller do
         expect(response.status).to eq(200)
       end
 
+      it 'shows a user' do
+        get :show, params: { api_key: api_key.key, id: user.id }
+        expect(response.status).to eq(200)
+        user_attrs = JSON.parse(response.body)['result']
+        expect(user_attrs['username']).to eq(user.username)
+      end
+
+      it 'does not show restricted attributes' do
+        get :show, params: { api_key: api_key.key, id: user.id }
+        expect(response.status).to eq(200)
+        user_attrs = JSON.parse(response.body)['result']
+        expect(user_attrs.keys).not_to include('otp_backup_codes')
+      end
+
       context 'Edit' do
         it 'can edit the name' do
           expect(user.name).to eq(nil)

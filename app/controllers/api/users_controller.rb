@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::UsersController < ApiController
+class Api::UsersController < ApiController # rubocop:disable Metrics/ClassLength
   def index
     error('missing permission') and return unless @api_key.list_users?
 
@@ -15,7 +15,7 @@ class Api::UsersController < ApiController
 
     render json: {
       status: 'ok',
-      result: User.find(params[:id])
+      result: allow_list(User.find(params[:id]))
     }
   end
 
@@ -113,5 +113,19 @@ class Api::UsersController < ApiController
 
   def user_data_params
     params.require(:attributes)
+  end
+
+  def allow_list(user) # rubocop:disable Metrics/MethodLength
+    {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      username: user.username,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+      expires_at: user.expires_at,
+      last_activity_at: user.last_activity_at,
+      disabled_at: user.disabled_at
+    }
   end
 end
