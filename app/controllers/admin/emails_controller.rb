@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
 class Admin::EmailsController < AdminController
-  def create
+  def create # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @model = User.find(params[:user_id])
+
+    if (@model.admin? || @model.operator?) && !current_user.admin?
+      redirect_to \
+        [:admin, @model], \
+        notice: "#{@model.class.name} was not added because you lack admin privileges." \
+        and return
+    end
+
     @email = Email.new(email_params)
     respond_to do |format|
       if @email.save
@@ -27,8 +35,16 @@ class Admin::EmailsController < AdminController
     redirect_to admin_user_path(model, anchor: 'emails'), notice: 'Confirmation email was sent.'
   end
 
-  def confirm
+  def confirm # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     email = Email.find_by(id: params[:email_id], user_id: params[:user_id])
+
+    if (email.user.admin? || email.user.operator?) && !current_user.admin?
+      redirect_to \
+        [:admin, email.user], \
+        notice: 'Email was not confirmed because you lack admin privileges.' \
+        and return
+    end
+
     respond_to do |format|
       if email.confirm
         format.html do

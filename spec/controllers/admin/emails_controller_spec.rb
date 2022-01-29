@@ -76,6 +76,54 @@ RSpec.describe Admin::EmailsController, type: :controller do
       end
     end
 
+    context 'signed in manager' do
+      before do
+        sign_in(manager)
+      end
+
+      it 'cannot add an email to an admin' do
+        expect(admin.emails.count).to eq 1
+        expect do
+          perform_enqueued_jobs do
+            post(:create, params: { user_id: admin.id, email: { address: 'user2@localhost' } })
+            expect(response.status).to eq(302)
+          end
+        end.to change { Devise.mailer.deliveries.count }.by(0)
+        expect(user.emails.count).to eq 1
+        expect(flash[:notice]).to match('User was not added because you lack admin privileges.')
+      end
+
+      it 'cannot add an email to an operator' do
+        expect(operator.emails.count).to eq 1
+        expect do
+          perform_enqueued_jobs do
+            post(:create, params: { user_id: operator.id, email: { address: 'user2@localhost' } })
+            expect(response.status).to eq(302)
+          end
+        end.to change { Devise.mailer.deliveries.count }.by(0)
+        expect(user.emails.count).to eq 1
+        expect(flash[:notice]).to match('User was not added because you lack admin privileges.')
+      end
+
+      it 'cannot confirm an email on an admin' do
+        email = Email.create(user: admin, address: 'user2@localhost')
+        post(:confirm, params: { user_id: admin.id, email_id: email.id })
+        expect(response.status).to eq(302)
+        expect(flash[:notice]).to match('Email was not confirmed because you lack admin privileges.')
+        email.reload
+        expect(email.confirmed?).to be false
+      end
+
+      it 'cannot confirm an email on an operator' do
+        email = Email.create(user: operator, address: 'user2@localhost')
+        post(:confirm, params: { user_id: operator.id, email_id: email.id })
+        expect(response.status).to eq(302)
+        expect(flash[:notice]).to match('Email was not confirmed because you lack admin privileges.')
+        email.reload
+        expect(email.confirmed?).to be false
+      end
+    end
+
     context 'signed in operator' do
       before do
         sign_in(operator)
