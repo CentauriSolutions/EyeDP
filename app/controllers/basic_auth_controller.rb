@@ -10,7 +10,7 @@ class BasicAuthController < ApplicationController
   def create
     key = request.headers['EyeDP-Authorize']
     token = AccessToken.where(token: key).where('expires_at > NOW() or expires_at IS NULL').first
-    if token && token.user.groups.where(permit_token: true).any?
+    if token && token.user.asserted_groups.where(permit_token: true).any?
       @user = token.user
       token.update(last_used_at: Time.now.utc)
     end
