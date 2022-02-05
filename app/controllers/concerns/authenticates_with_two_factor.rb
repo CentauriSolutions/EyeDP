@@ -21,15 +21,17 @@ module AuthenticatesWithTwoFactor
 
     session[:otp_user_id] = user.id
     session[:user_password_hash] = Digest::SHA256.hexdigest(user.encrypted_password)
-
+    session[:otp_started] = Time.now.utc
     setup_u2f_authentication(user)
 
     render 'devise/sessions/two_factor'
   end
 
-  def authenticate_with_two_factor # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def authenticate_with_two_factor # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     user = self.resource = find_user
     return handle_changed_user(user) if user_password_changed?(user)
+
+    return handle_expired_attempt if attempt_expired?
 
     if user_params[:otp_attempt].present? && session[:otp_user_id]
       authenticate_with_two_factor_via_otp(user)
@@ -114,5 +116,20 @@ module AuthenticatesWithTwoFactor
     return false unless session[:user_password_hash]
 
     Digest::SHA256.hexdigest(user.encrypted_password) != session[:user_password_hash]
+  end
+
+  def handle_expired_attempt
+    clear_two_factor_attempt!
+
+    redirect_to new_user_session_path,
+                alert: _('It took too long to verify your authentication device. Please try again')
+  end
+
+  def attempt_expired?
+    return false if session[:otp_started].nil?
+
+    started = Time.zone.parse(session[:otp_started])
+
+    started + 5.minutes < Time.now.utc
   end
 end
