@@ -36,6 +36,7 @@ module AuthenticatesWithTwoFactor
     elsif user_params[:device_response].present? && session[:otp_user_id]
       authenticate_with_two_factor_via_u2f(user)
     elsif user&.valid_password?(user_params[:password])
+      reset_session
       prompt_for_two_factor(user)
     end
   end
@@ -98,6 +99,7 @@ module AuthenticatesWithTwoFactor
     session.delete(:otp_user_id)
     session.delete(:user_password_hash)
     session.delete(:challenge)
+    reset_session
   end
 
   def handle_changed_user(_user)
