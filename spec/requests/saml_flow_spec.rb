@@ -61,6 +61,15 @@ RSpec.describe 'SAML Flow', type: :request do
       Setting.clear_cache
     end
 
+    it 'handles a nil SAML service provider' do
+      auth_request = OneLogin::RubySaml::Authrequest.new
+      settings = saml_settings('https://example2.com/wrong_saml/consume')
+      settings.issuer = 'https://example2.com'
+      auth_url = auth_request.create(settings)
+      get auth_url
+      expect(response.status).to eq(403)
+    end
+
     it 'gets user attributes' do
       saml_request!
       expect(response.body).to match(/id="SAMLResponse" value="(.*)"/)

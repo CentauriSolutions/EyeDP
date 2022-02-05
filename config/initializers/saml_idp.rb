@@ -155,9 +155,10 @@ SamlIdp.configure do |config|
   config.service_provider.finder = lambda { |issuer_or_entity_id|
     # service_providers[issuer_or_entity_id]
     filtered_attributes = ["created_at", "updated_at", "id"]
-    SamlServiceProvider.
-      find_by(issuer_or_entity_id: issuer_or_entity_id).
-      attributes.
+    idp = SamlServiceProvider.
+      find_by(issuer_or_entity_id: issuer_or_entity_id)
+    return if idp.nil?
+    idp.attributes.
       filter{|k,_| ! filtered_attributes.include?(k)}
   }
 end
