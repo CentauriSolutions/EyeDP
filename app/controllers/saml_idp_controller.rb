@@ -11,7 +11,7 @@ class SamlIdpController < SamlIdp::IdpController
   def create
     if user_signed_in?
       app = SamlServiceProvider.find_by(issuer_or_entity_id: @saml_request.issuer)
-      if app&.groups&.any? && (current_user.groups & app.groups).empty?
+      if app&.groups&.any? && (current_user.asserted_groups & app.groups).empty?
         redirect_to main_app.root_url,
                     notice: 'You are not authorized to access this application.' and return
       end

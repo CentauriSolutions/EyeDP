@@ -40,7 +40,7 @@ class DashboardController < ApplicationController
                    .where(show_on_dashboard: true)
                    .or(
                      SamlServiceProvider
-                     .where(group_service_providers: { group: current_user.groups })
+                     .where(group_service_providers: { group: current_user.asserted_groups })
                    )
   end
 
@@ -51,7 +51,7 @@ class DashboardController < ApplicationController
                      .where(show_on_dashboard: true)
                      .or(
                        Application
-                       .where(group_service_providers: { group: current_user.groups })
+                       .where(group_service_providers: { group: current_user.asserted_groups })
                      )
   end
 end
