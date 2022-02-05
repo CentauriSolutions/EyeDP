@@ -32,3 +32,4 @@ puts "Creating user '#{user.username}' with password: '#{user.password}'"
 user.password_confirmation = ENV['SEED_PASSWORD'].presence || 'password123'
 user.groups << groups[:administrators]
 user.save!
+user.confirm!

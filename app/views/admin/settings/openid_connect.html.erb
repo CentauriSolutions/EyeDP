@@ -5,7 +5,14 @@
       <tr>
         <td>Signing Key</td>
         <td>
-          <textarea name="setting[oidc_signing_key]" class="form-control"><%= Setting.oidc_signing_key %></textarea>
+          <textarea name="setting[oidc_signing_key]" class="form-control" <%- if Setting.oidc_signing_key %>placeholder="The current OIDC Signing Key has a SHA1 hash of <%= OpenSSL::Digest::SHA1.hexdigest Setting.oidc_signing_key %>" <%- end %>></textarea>
+          <p class="small"></p>
+          <%- if Setting.oidc_signing_key %>
+            <%- audit = Setting.find_by(var: 'oidc_signing_key').audits.last %>
+            <%- if audit && audit.user %>
+              <p class="small">Last updated <%= time_ago_in_words audit.created_at %> ago by <%= audit.user.username %></p>
+            <%- end %>
+          <% end %>
         </td>
       </tr>
     </tbody>
