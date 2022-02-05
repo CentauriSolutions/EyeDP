@@ -120,6 +120,20 @@ RSpec.describe Admin::SettingsController, type: :controller do
           get :saml
           expect(response.body).to include('4C:51:74:2D:C7:00:32:1A:87:79:AD:B8:1D:D8:8A:66:0C:FB:73:F3')
         end
+
+        it 'cannot see the current SAML key' do
+          Setting.saml_key = 'this is a test'
+          get(:saml)
+          expect(response.body).not_to include('this is a test')
+          expect(response.body).to include(Digest::SHA1.hexdigest('this is a test'))
+        end
+
+        it 'cannot see the current oidc signing key' do
+          Setting.oidc_signing_key = 'this is a test'
+          get(:openid_connect)
+          expect(response.body).not_to include('this is a test')
+          expect(response.body).to include(Digest::SHA1.hexdigest('this is a test'))
+        end
       end
 
       context 'Edit' do
@@ -237,6 +251,12 @@ RSpec.describe Admin::SettingsController, type: :controller do
           expect(Setting.saml_timeout).to be 0
           post(:update, params: { setting: { saml_timeout: '86400' } })
           expect(Setting.saml_timeout).to eq 86_400
+        end
+
+        it 'can update the oidc signing key' do
+          expect(Setting.oidc_signing_key).to be nil
+          post(:update, params: { setting: { oidc_signing_key: 'this is a test' } })
+          expect(Setting.oidc_signing_key).to eq 'this is a test'
         end
       end
     end
