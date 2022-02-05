@@ -185,9 +185,13 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     )
     if p[:group_ids] && current_user.manager? && !current_user.admin?
       # A Manager cannot add a user to an operator or admin group
-      p[:group_ids] -= Group.where(admin: true).or(Group.where(operator: true)).pluck(:id)
+      p[:group_ids] -= Group.where(admin: true).pluck(:id)
+      p[:group_ids] -= Group.where(operator: true).pluck(:id)
       # A manager cannot remove admin from an admin user nor operator from an operator user
-      p[:group_ids] += @model.groups.where(admin: true).or(Group.where(operator: true)).pluck(:id) unless @model.nil?
+      unless @model.nil?
+        p[:group_ids] += @model.groups.where(admin: true).pluck(:id)
+        p[:group_ids] += @model.groups.where(operator: true).pluck(:id)
+      end
       p[:group_ids].uniq!
     end
     p.delete(:password) if p[:password] && p[:password].empty?
