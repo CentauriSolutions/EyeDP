@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
-RSpec.describe SessionsController do
+RSpec.describe SessionsController, type: :controller do
   include DeviseHelpers
 
   before do
@@ -154,6 +154,12 @@ RSpec.describe SessionsController do
 
           expect(response.cookies['remember_user_token']).to be_nil
         end
+      end
+
+      it 'has a strict timeout on OTP attempts' do
+        post(:create, params: { user: { remember_me: '0', otp_attempt: user.current_otp } },
+session: { otp_user_id: user.id, otp_started: (Time.now.utc - 10.minutes).to_s })
+        expect(flash.now[:alert]).to eq('It took too long to verify your authentication device. Please try again')
       end
 
       it 'redirects to a known application' do
