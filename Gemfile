@@ -81,6 +81,7 @@ gem 'saml_idp', '< 0.14'
 gem 'groupdate'
 
 gem 'liquid'
+gem 'liquid-autoescape'
 
 gem 'attr_encrypted', '~> 3.1.0'
 gem 'httparty'
