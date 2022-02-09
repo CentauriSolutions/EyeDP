@@ -81,6 +81,17 @@ RSpec.describe DashboardController, type: :controller do
         expect(@controller.instance_variable_get(:@applications)).to match [app]
       end
 
+      context 'with views' do
+        render_views
+        it 'escapes templated details' do
+          app.name = 'alert("Hello, world!")'
+          app.save
+          get :home
+          expect(response.body).not_to include('alert("Hello, world!")')
+          expect(response.body).to include('alert(&quot;Hello, world!&quot;)')
+        end
+      end
+
       context 'with a restricted app' do
         let(:app) do
           a = Application.create!(

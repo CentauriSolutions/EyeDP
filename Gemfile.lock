@@ -228,6 +228,8 @@ GEM
       aes_key_wrap
       bindata
     liquid (5.1.0)
+    liquid-autoescape (4.0.0)
+      liquid (>= 2.3)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -523,6 +525,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   liquid
+  liquid-autoescape
   listen (>= 3.0.5)
   memory_profiler
   nokogiri (>= 1.11.0.rc4)
