@@ -22,7 +22,7 @@ class RegistrationsController < Devise::RegistrationsController
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
-  def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def update # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
     old_email = resource.email
@@ -30,11 +30,13 @@ class RegistrationsController < Devise::RegistrationsController
     address = account_update_params.delete(:email)
     if address && (address != old_email)
       email = resource.emails.find_by(address: address)
-      email.primary = true
-      email.save
-      email = resource.emails.find_by(address: old_email)
-      email.primary = false
-      email.save
+      if email.confirmed?
+        email.primary = true
+        email.save
+        email = resource.emails.find_by(address: old_email)
+        email.primary = false
+        email.save
+      end
     end
     yield resource if block_given?
     if resource_updated

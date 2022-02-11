@@ -48,10 +48,19 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     it 'can edit email' do
+      Email.create(user: user, email: 'test2@localhost', confirmed_at: Time.zone.now)
       patch(:update, params: { id: user.id, user: { email: 'test2@localhost', current_password: 'test123456' } })
       expect(response.status).to eq(302)
       user.reload
       expect(user.email).to eq('test2@localhost')
+    end
+
+    it 'cannot set email to an unconfirmed email' do
+      Email.create(user: user, email: 'test2@localhost')
+      patch(:update, params: { id: user.id, user: { email: 'test2@localhost', current_password: 'test123456' } })
+      expect(response.status).to eq(302)
+      user.reload
+      expect(user.email).to eq('test@localhost')
     end
   end
 end
