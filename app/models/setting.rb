@@ -147,6 +147,18 @@ class Setting < ApplicationRecord
     end
   end
 
+  def maybe_hide_attribute(data)
+    return nil if data['value'].nil?
+    return if data['value'].last.nil?
+    value = if data['value'].is_a?(Array)
+      data['value']
+    else
+      [data['value']]
+    end
+    filtered_attrs = ['saml_key', 'oidc_signing_key']
+    return value.last unless filtered_attrs.include? var
+    return "Sha1 of secret: #{OpenSSL::Digest::SHA1.hexdigest value.last}"
+  end
   field :idp_base
   field :saml_certificate
   field :saml_key

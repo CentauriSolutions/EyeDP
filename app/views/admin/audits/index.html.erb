@@ -34,6 +34,9 @@
   <tbody>
     <% @models.each do |model| %>
       <tr>
+      <% begin %>
+        <%= render partial: "#{model.auditable_type.underscore.gsub('/', '_')}_row", locals: {model: model} %>
+      <% rescue ActionView::MissingTemplate %>
         <td class="text-nowrap">
           <%= link_to fa_icon('eye', title: 'Show'), admin_audit_path(model.id) %>
         </td>
@@ -45,12 +48,13 @@
               <%- data =  data.join ", " %>
             <%- end %>
             <%- if attr_name == 'audited_changes' %>
-                <pre><code><%= data.to_yaml %></code></pre>
+                <pre><code><%= redact(data).to_yaml %></code></pre>
             <%- else %>
               <%= data %>
-              <%- end %>
+            <%- end %>
           </td>
         <%- end %>
+      <%- end %>
       </tr>
     <% end %>
   </tbody>
