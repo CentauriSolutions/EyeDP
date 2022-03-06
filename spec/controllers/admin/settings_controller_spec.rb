@@ -78,6 +78,28 @@ RSpec.describe Admin::SettingsController, type: :controller do
           expect(response.body).not_to include 'Confirm password to continue'
         end
       end
+
+      it 'cannot change dashboard_template' do
+        Setting.dashboard_template = 'Default EyeDP Template'
+        post(:update, params: { setting: { dashboard_template: 'Custom dashboard Template' } })
+        expect(Setting.dashboard_template).to eq 'Default EyeDP Template'
+      end
+
+      it 'cannot change the registered_home_template' do
+        Setting.registered_home_template = 'Default EyeDP Template'
+        post(:update, params: { setting: { registered_home_template: 'Custom home Template' } })
+        expect(Setting.registered_home_template).to eq 'Default EyeDP Template'
+      end
+
+      context 'with rendered views' do
+        render_views
+        it 'Does not show forbidden templates' do
+          Setting.saml_certificate = File.read(Rails.root.join('spec/myCert.crt'))
+          get :templates
+          expect(response.body).not_to include('registered_home_template')
+          expect(response.body).not_to include('dashboard_template')
+        end
+      end
     end
 
     context 'signed in admin' do
@@ -257,6 +279,18 @@ RSpec.describe Admin::SettingsController, type: :controller do
           expect(Setting.oidc_signing_key).to be nil
           post(:update, params: { setting: { oidc_signing_key: 'this is a test' } })
           expect(Setting.oidc_signing_key).to eq 'this is a test'
+        end
+
+        it 'can change dashboard_template' do
+          Setting.dashboard_template = 'Default EyeDP Template'
+          post(:update, params: { setting: { dashboard_template: 'Custom dashboard Template' } })
+          expect(Setting.dashboard_template).to eq 'Custom dashboard Template'
+        end
+
+        it 'can change the registered_home_template' do
+          Setting.registered_home_template = 'Default EyeDP Template'
+          post(:update, params: { setting: { registered_home_template: 'Custom home Template' } })
+          expect(Setting.registered_home_template).to eq 'Custom home Template'
         end
       end
     end
