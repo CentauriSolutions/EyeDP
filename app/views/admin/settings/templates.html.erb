@@ -1,5 +1,6 @@
 <%= form_tag({controller: "settings", action: "update"}, method: :post, class: "form") do |form| %>
   <h1>Templates</h1>
+  <%- if current_user.admin? %>
   <div class="form-group">
     <label for="settings[dashboard_template]">Dashboard template</label>
     <textarea name="setting[dashboard_template]" class="form-control" ><%= Setting.dashboard_template %></textarea>
@@ -8,6 +9,7 @@
     <label for="settings[registered_home_template]">Profile header template</label>
     <textarea name="setting[registered_home_template]" class="form-control" ><%= Setting.registered_home_template %></textarea>
   </div>
+  <%- end %>
   <div class="form-group">
     <label for="settings[admin_reset_email_template]">Password reset email template</label>
     <textarea name="setting[admin_reset_email_template]" class="form-control" ><%= Setting.admin_reset_email_template %></textarea>

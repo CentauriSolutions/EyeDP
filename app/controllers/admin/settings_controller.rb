@@ -46,21 +46,22 @@ class Admin::SettingsController < AdminController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def setting_params # rubocop:disable Metrics/MethodLength
-    params.fetch(:setting, {}).permit(
-      :idp_base, :html_title_base,
-      :profiler_enabled,
-      :devise_reset_password_within,
-      :session_timeout_in,
-      :sudo_session_duration, :sudo_enabled, :sudo_for_sso,
-      :saml_certificate, :saml_key, :saml_timeout,
-      :oidc_signing_key,
-      :registration_enabled, :permanent_email,
-      :logo, :logo_height, :logo_width, :favicon,
-      :dashboard_template, :registered_home_template,
-      :expire_after, :welcome_from_email,
-      :admin_reset_email_template, :admin_welcome_email_template,
-      :admin_reset_email_template_plaintext, :admin_welcome_email_template_plaintext
-    )
+    permitted_settings = %i[
+      idp_base html_title_base
+      profiler_enabled
+      devise_reset_password_within
+      session_timeout_in
+      sudo_session_duration sudo_enabled sudo_for_sso
+      saml_certificate saml_key saml_timeout
+      oidc_signing_key
+      registration_enabled permanent_email
+      logo logo_height logo_width favicon
+      expire_after welcome_from_email
+      admin_reset_email_template admin_welcome_email_template
+      admin_reset_email_template_plaintext admin_welcome_email_template_plaintext
+    ]
+    permitted_settings += %i[dashboard_template registered_home_template] if current_user.admin?
+    params.fetch(:setting, {}).permit(permitted_settings)
   end
 
   def ensure_user_is_authorized!
