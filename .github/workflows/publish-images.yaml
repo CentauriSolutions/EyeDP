@@ -12,8 +12,8 @@ on:
     branches:
       - main
       - master
-  tags:
-    - 'v*'
+    tags:
+      - 'v*'
 
 jobs:
   push_to_registries:
