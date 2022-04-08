@@ -23,7 +23,7 @@ RSpec.describe Profile::ProfileController, type: :controller do
     it 'shows custom attributes' do
       custom_bool
       get :index
-      expect(response.body).to include('id="custom_data_Has_pets" value="false" />')
+      expect(response.body).to include('id="custom_data_Has_pets" value="false"')
     end
   end
 
