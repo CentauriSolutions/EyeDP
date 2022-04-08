@@ -32,7 +32,7 @@ class Profile::AccessGrantsController < ApplicationController
 
   def tokens
     current_user.oauth_access_tokens
-                .select('DISTINCT ON (application_id) *')
+                .select('DISTINCT ON ("oauth_access_tokens"."application_id") *')
                 .joins(:application)
                 .includes(:application)
                 .where(revoked_at: nil, application: { internal: false })
@@ -41,7 +41,7 @@ class Profile::AccessGrantsController < ApplicationController
 
   def grants
     current_user.oauth_access_grants
-                .select('DISTINCT ON (application_id) oauth_access_grants.*')
+                .select('DISTINCT ON ("oauth_access_grants"."application_id") oauth_access_grants.*')
                 .joins(:application)
                 .includes(:application)
                 .where(revoked_at: nil, application: { internal: false })
