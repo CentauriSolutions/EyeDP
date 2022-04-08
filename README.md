@@ -99,7 +99,7 @@ The easiest way to start using EyeDP is by deploying it to
 
 If you are reading this document in a browser all you need to do is click the
 button bellow and fill in the environment variables for your seed user (admin):
-`SEED_USERNAME`, `SEED_PASSWORD` and `SEED_EMAIL`. Please note that `SEED_PASSWORD` must be at least 8 characters long. 
+`SEED_USERNAME`, `SEED_PASSWORD` and `SEED_EMAIL`. Please note that `SEED_PASSWORD` must be at least 10 characters long. 
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/centaurisolutions/eyedp)
 
