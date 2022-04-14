@@ -22,9 +22,12 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     respond_to do |format|
       if @model.save
         format.html { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully created." }
+        format.js { redirect_to [:admin, @model], notice: "#{@model.class.name} was successfully created." }
         format.json { render :show, status: :created, location: [:admin, @model] }
       else
+        Rails.logger.warn("Error creating user: #{@model.errors}")
         format.html { render :new }
+        format.js { render :new }
         format.json { render json: @model.errors, status: :unprocessable_entity }
       end
     end
