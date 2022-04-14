@@ -3,6 +3,7 @@
 class Email < ApplicationRecord
   belongs_to :user
   audited only: %i[address primary]
+  before_validation :normalize_address
 
   validates :address, presence: true, uniqueness: { case_sensitive: false }
 
@@ -30,5 +31,11 @@ class Email < ApplicationRecord
 
   def send_devise_notification(notification, *args)
     devise_mailer.send(notification, self, *args).deliver_later
+  end
+
+  private
+
+  def normalize_address
+    self.address = address.downcase
   end
 end
