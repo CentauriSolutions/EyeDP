@@ -12,12 +12,13 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/PerceivedComplexity
     options = model_params
     emails = options.delete(:email_addresses) || []
+    options[:email] = options[:email].downcase
     @model = model.new(options)
     @model.primary_email_record.confirmed_at = Time.now.utc
     emails.each do |email|
       next if email.blank?
 
-      @model.emails << Email.new(address: email, confirmed_at: Time.now.utc)
+      @model.emails << Email.new(address: email.downcase, confirmed_at: Time.now.utc)
     end
     respond_to do |format|
       if @model.save
