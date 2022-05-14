@@ -37,21 +37,21 @@ class DashboardController < ApplicationController
     @saml_apps ||= SamlServiceProvider
                    .includes(:group_service_providers)
                    .where(group_service_providers: { id: nil })
-                   .where(show_on_dashboard: true)
                    .or(
                      SamlServiceProvider
                      .where(group_service_providers: { group: current_user.asserted_groups })
                    )
+                   .where(show_on_dashboard: true)
   end
 
   def openid_apps
     @openid_apps ||= Application
                      .includes(:group_service_providers)
                      .where(group_service_providers: { id: nil })
-                     .where(show_on_dashboard: true)
                      .or(
                        Application
                        .where(group_service_providers: { group: current_user.asserted_groups })
                      )
+                     .where(show_on_dashboard: true)
   end
 end

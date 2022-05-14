@@ -125,6 +125,14 @@ RSpec.describe DashboardController, type: :controller do
           get :home
           expect(@controller.instance_variable_get(:@applications)).to be_empty
         end
+
+        it 'does not include the restricted app in the dashboard variables' do
+          group = Group.create!
+          app.groups << group
+          user.groups << group
+          get :home
+          expect(@controller.instance_variable_get(:@applications)).to be_empty
+        end
       end
     end
 
