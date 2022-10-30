@@ -519,6 +519,24 @@ RSpec.describe Admin::UsersController, type: :controller do
             expect(user.emails.first.address).to eq('user2@localhost')
             expect(user.emails.first.confirmed?).to be_truthy
           end
+
+          it "can edit a user's additional emails and it gets confirmed" do
+            first = user.emails.order(created_at: :asc).first
+
+            expect(first.address).to eq('user@localhost')
+            expect(first.confirmed?).to be_truthy
+            post(:update, params: { id: user.id, user: {
+              email: user.emails.first.address, email_addresses: ['user2@localhost']
+            } })
+            user.reload
+
+            first = user.emails.order(created_at: :asc).first
+            last = user.emails.order(created_at: :asc).last
+            expect(first.address).to eq('user@localhost')
+            expect(first.confirmed?).to be_truthy
+            expect(last.address).to eq('user2@localhost')
+            expect(last.confirmed?).to be_truthy
+          end
         end
         it 'can expire a user' do
           expect(user.expired?).to be false
