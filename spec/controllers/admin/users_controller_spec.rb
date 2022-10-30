@@ -510,6 +510,15 @@ RSpec.describe Admin::UsersController, type: :controller do
               'type="hidden" name="custom_data[Has pets]" id="custom_data_Has_pets" value="false"'
             )
           end
+
+          it "can edit a user's primary email and it gets confirmed" do
+            expect(user.emails.first.address).to eq('user@localhost')
+            expect(user.emails.first.confirmed?).to be_truthy
+            post(:update, params: { id: user.id, user: { email: 'user2@localhost' } })
+            user.reload
+            expect(user.emails.first.address).to eq('user2@localhost')
+            expect(user.emails.first.confirmed?).to be_truthy
+          end
         end
         it 'can expire a user' do
           expect(user.expired?).to be false
