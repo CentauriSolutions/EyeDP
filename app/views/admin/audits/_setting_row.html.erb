@@ -1,0 +1,22 @@
+<td class="text-nowrap">
+  <%= link_to fa_icon('eye', title: 'Show'), admin_audit_path(model.id) %>
+</td>
+<td class="text-nowrap"><%= model.user.try(:username) %></td>
+
+<%- model_attributes.each do |attr_name| %>
+  <td class="<%= attr_name.gsub(/[^\w\s]/, '') %>">
+    <%- data = model.send(attr_name) %>
+    <%- if data.is_a? ActiveRecord::Associations::CollectionProxy %>
+      <%- data =  data.join ", " %>
+    <%- end %>
+    <%- if attr_name == 'audited_changes' %>
+      <%- change = data["value"].is_a?(Array) ? data["value"].last : data["value"]%>
+      <%- if model.auditable.respond_to?(:maybe_hide_attribute) %>
+        <%- data = { 'setting' => model.auditable.var, 'value' => model.auditable.maybe_hide_attribute(data) } %>
+      <%- end %>
+        <pre><code><%= redact(data).to_yaml %></code></pre>
+    <%- else %>
+      <%= data %>
+    <%- end %>
+  </td>
+<%- end %>
