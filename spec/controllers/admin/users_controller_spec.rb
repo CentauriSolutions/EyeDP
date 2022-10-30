@@ -526,8 +526,8 @@ RSpec.describe Admin::UsersController, type: :controller do
             expect(first.address).to eq('user@localhost')
             expect(first.confirmed?).to be_truthy
             post(:update, params: { id: user.id, user: {
-              email: user.emails.first.address, email_addresses: ['user2@localhost']
-            } })
+                   email: user.emails.first.address, email_addresses: ['user2@localhost']
+                 } })
             user.reload
 
             first = user.emails.order(created_at: :asc).first
