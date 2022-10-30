@@ -64,6 +64,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
 
     email = @model.emails.find_by(address: address)
     email.primary = true
+    email.confirm
     email.save
     email = @model.emails.find_by(address: old_email)
     return if email.nil?
