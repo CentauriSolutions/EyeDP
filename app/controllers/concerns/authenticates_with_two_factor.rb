@@ -97,11 +97,11 @@ module AuthenticatesWithTwoFactor
     sign_in(user, message: :two_factor_authenticated, event: :authentication)
   end
 
-  def clear_two_factor_attempt!
+  def clear_two_factor_attempt!(purge: true)
     session.delete(:otp_user_id)
     session.delete(:user_password_hash)
     session.delete(:challenge)
-    reset_session
+    reset_session if purge
   end
 
   def handle_changed_user(_user)
