@@ -8,8 +8,8 @@ class SessionsController < Devise::SessionsController
                         if: -> { action_name == 'create' && two_factor_enabled? }
 
   # replaced with :require_no_authentication_without_flash
-  skip_before_action :require_no_authentication, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
-  prepend_before_action :require_no_authentication_without_flash, only: %i[new create] # rubocop:disable Rails/LexicallyScopedActionFilter
+  skip_before_action :require_no_authentication, only: %i[new create]
+  prepend_before_action :require_no_authentication_without_flash, only: %i[new create]
   # protect_from_forgery is already prepended in ApplicationController but
   # authenticate_with_two_factor which signs in the user is prepended before
   # that here.
@@ -20,6 +20,11 @@ class SessionsController < Devise::SessionsController
   # RequestForgeryProtection#verify_authenticity_token would fail because of
   # token mismatch.
   protect_from_forgery with: :exception, prepend: true, except: :destroy
+
+  def new
+    clear_two_factor_attempt!(purge: false)
+    super
+  end
 
   def create
     super do |resource|
