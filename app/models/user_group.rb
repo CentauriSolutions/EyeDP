@@ -40,6 +40,20 @@ class UserGroup < ApplicationRecord
     end
   end
 
+  def notification_attributes # rubocop:disable Metrics/MethodLength
+    {
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username
+      },
+      group: {
+        id: group.id,
+        name: group.name
+      }
+    }
+  end
+
   def notifiable_name
     'group_membership'
   end

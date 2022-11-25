@@ -8,7 +8,6 @@ class NotificationWebHookSenderWorker
     event_raw = JSON.parse(event)
     template = Liquid::Template.parse(hook.template)
     body = template.render(event_raw, [WebHookFilters])
-
     template = Liquid::Template.parse(hook.headers)
     headers = template.render(event_raw, [WebHookFilters])
     headers = begin
@@ -25,5 +24,9 @@ end
 module WebHookFilters
   def random_hash(length)
     SecureRandom.hex(length)
+  end
+
+  def to_json(obj)
+    obj.to_json
   end
 end
