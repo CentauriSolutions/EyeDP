@@ -13,7 +13,7 @@ module Notifiable
     return if !check.nil? && !send(check)
 
     NotificationSetupWorker.perform_async(
-      NotificationEvent.new(notifiable_name, id, action, notifiable_attrs).to_json
+      NotificationEvent.new(notifiable_name, id, action, notifiable_attrs, updates).to_json
     )
   end
 
@@ -24,6 +24,17 @@ module Notifiable
       notification_attributes
     else
       attributes
+    end
+  end
+
+  def updates
+    saved_changes.reject do |k, _v|
+      %w[updated_at last_activity_at].include?(k)
+    end.map do |key, values| # rubocop:disable Style/MultilineBlockChain
+      { key => {
+        old: values[0],
+        new: values[1]
+      } }
     end
   end
 
