@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 class NotificationEvent
-  attr_accessor :model_type, :model_id, :model_attributes
+  attr_accessor :model_type, :model_id, :model_attributes, :updates
 
   attr_reader :event_type
 
-  def initialize(model_type = nil, model_id = nil, event_type = nil, model_attributes = nil) # rubocop:disable Metrics/ParameterLists
+  def initialize(model_type = nil, model_id = nil, event_type = nil, model_attributes = nil, updates = nil) # rubocop:disable Metrics/ParameterLists
     self.model_type = model_type if model_type
     self.model_id = model_id if model_id
     self.event_type = event_type if event_type
     self.model_attributes = model_attributes || {}
+    self.updates = updates || {}
   end
 
   def event_type=(value)
