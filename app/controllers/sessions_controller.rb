@@ -23,6 +23,7 @@ class SessionsController < Devise::SessionsController
 
   def new
     clear_two_factor_attempt!(purge: false)
+    @template = Liquid::Template.parse(Setting.login_template) if Setting.login_template.present?
     super
   end
 

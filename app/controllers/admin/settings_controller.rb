@@ -60,7 +60,12 @@ class Admin::SettingsController < AdminController
       admin_reset_email_template admin_welcome_email_template
       admin_reset_email_template_plaintext admin_welcome_email_template_plaintext
     ]
-    permitted_settings += %i[dashboard_template registered_home_template] if current_user.admin?
+    if current_user.admin?
+      permitted_settings += %i[
+        dashboard_template registered_home_template
+        login_template
+      ]
+    end
     params.fetch(:setting, {}).permit(permitted_settings)
   end
 
