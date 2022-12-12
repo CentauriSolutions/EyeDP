@@ -1,7 +1,18 @@
+
+
 <div class="row justify-content-center">
   <div class="col-12 col-md-4">
     <h2><%= t('.sign_in') %></h2>
-
+  </div>
+</div>
+  <%- if @template %>
+    <div class="row justify-content-center">
+      <%= @template.render().html_safe %>
+    </div>
+  <%- end %>
+<hr />
+<div class="row justify-content-center">
+  <div class="col-12 col-md-4">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="form-group">
         <%= f.label :login %><br />

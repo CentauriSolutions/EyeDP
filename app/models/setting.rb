@@ -176,6 +176,7 @@ class Setting < ApplicationRecord
   field :sudo_session_duration, type: :time
   field :sudo_for_sso, default: false, type: :boolean
 
+  field :login_template, default: '', type: :string
   field :registered_home_template, default: '', type: :string
   field :dashboard_template, default: File.read(Rails.root.join('templates/dashboard.liquid'))
 
