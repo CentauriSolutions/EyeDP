@@ -30,11 +30,11 @@ module Notifiable
   def updates
     saved_changes.reject do |k, _v|
       %w[updated_at last_activity_at].include?(k)
-    end.map do |key, values| # rubocop:disable Style/MultilineBlockChain
-      { key => {
+    end.transform_values do |values| # rubocop:disable Style/MultilineBlockChain
+      {
         old: values[0],
         new: values[1]
-      } }
+      }
     end
   end
 
