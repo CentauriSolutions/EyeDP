@@ -75,10 +75,13 @@ class ApplicationController < ActionController::Base
     return unless hostname
 
     apps = Application.arel_table
-    return redirect_to if Application.where(apps[:redirect_uri].matches("https://#{hostname}%")).any? ||
-                          SamlServiceProvider.where(
-                            '? = ANY ("saml_service_providers"."response_hosts")', hostname
-                          ).any?
+    possible_matching_apps = Application.where(apps[:redirect_uri].matches("https://#{hostname}%"))
+    possible_matching_apps.each do |app|
+      return redirect_to if URI.parse(app.redirect_uri).hostname == hostname
+    end
+    return redirect_to if SamlServiceProvider.where(
+      '? = ANY ("saml_service_providers"."response_hosts")', hostname
+    ).any?
   end
 
   def set_useragent_and_ip_in_session
