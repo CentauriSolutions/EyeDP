@@ -90,6 +90,29 @@ RSpec.describe SessionsController, type: :controller do
           expect(response.headers['Location']).to eq('http://test.host/')
         end
 
+        it 'does not redirect to a partial match URL with OIDC' do
+          post(:create, params: { user: user_params })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('http://test.host/')
+          Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
+          get(:new, params: { redirect_to: 'https://ex' })
+          expect(response.headers['Location']).to eq('http://test.host/')
+        end
+
+        it 'does not redirect to a partial match URL with SAML' do
+          post(:create, params: { user: user_params })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('http://test.host/')
+          SamlServiceProvider.create!(
+            issuer_or_entity_id: 'https://example.com',
+            metadata_url: 'https://example.com/metadata', response_hosts: ['example.com']
+          )
+          get(:new, params: { redirect_to: 'https://exam' })
+          expect(response.headers['Location']).to eq('http://test.host/')
+        end
+
         context 'with multiple emails' do
           let(:user) do
             user = User.create!(username: 'example', email: 'test@localhost', password: 'test123456')
