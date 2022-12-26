@@ -86,9 +86,11 @@ class ApplicationController < ActionController::Base
       '? = ANY ("saml_service_providers"."response_hosts")', hostname
     )
     possible_matching_apps.each do |app|
-      uri = URI.parse(app.redirect_uri)
-      if uri.hostname == hostname
-        return build_app_redirect_uri_from(redirect_to, app, uri)
+      app.response_hosts.each do |host|
+        uri = URI.parse(host)
+        if uri.hostname == hostname
+          return build_app_redirect_uri_from(redirect_to, app, uri)
+        end
       end
     end
   end
