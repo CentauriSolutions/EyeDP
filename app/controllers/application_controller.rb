@@ -64,8 +64,9 @@ class ApplicationController < ActionController::Base
     store_location_for(:user, request.fullpath)
   end
 
-  def can_redirect_to(redirect_to) # rubocop:disable Metrics/MethodLength
+  def can_redirect_to(redirect_to) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize,Metrics/CyclomaticComplexity
     return unless redirect_to
+
     redirect_to = URI.parse(redirect_to)
     hostname = begin
       redirect_to.hostname
@@ -78,9 +79,7 @@ class ApplicationController < ActionController::Base
     possible_matching_apps = Application.where(apps[:redirect_uri].matches("https://#{hostname}%"))
     possible_matching_apps.each do |app|
       uri = URI.parse(app.redirect_uri)
-      if uri.hostname == hostname
-        return build_app_redirect_uri_from(redirect_to, app, uri)
-      end
+      return build_app_redirect_uri_from(redirect_to, app, uri) if uri.hostname == hostname
     end
     possible_matching_apps = SamlServiceProvider.where(
       '? = ANY ("saml_service_providers"."response_hosts")', hostname
@@ -88,9 +87,7 @@ class ApplicationController < ActionController::Base
     possible_matching_apps.each do |app|
       app.response_hosts.each do |host|
         uri = URI.parse(host)
-        if uri.hostname == hostname
-          return build_app_redirect_uri_from(redirect_to, app, uri)
-        end
+        return build_app_redirect_uri_from(redirect_to, app, uri) if uri.hostname == hostname
       end
     end
   end
@@ -101,7 +98,7 @@ class ApplicationController < ActionController::Base
   end
 
   def build_app_redirect_uri_from(redirect_to, app, app_uri)
-    uri = URI::parse('')
+    uri = URI.parse('')
     uri.scheme = app_uri.scheme
     uri.hostname = redirect_to.hostname
 
