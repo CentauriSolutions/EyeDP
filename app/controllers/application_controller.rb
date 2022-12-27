@@ -66,6 +66,7 @@ class ApplicationController < ActionController::Base
 
   def can_redirect_to(redirect_to) # rubocop:disable Metrics/MethodLength
     return unless redirect_to
+
     redirect_to = URI.parse(redirect_to)
     hostname = begin
       redirect_to.hostname
@@ -73,6 +74,7 @@ class ApplicationController < ActionController::Base
       nil
     end
     return unless hostname
+
     oidc_app = oidc_app_redirect(redirect_to)
     return oidc_app if oidc_app
 
@@ -91,7 +93,7 @@ class ApplicationController < ActionController::Base
       uri = URI.parse(app.redirect_uri)
       return build_app_redirect_uri_from(redirect_to, app, uri) if uri.hostname == redirect_to.hostname
     end
-    return
+    nil
   end
 
   def saml_app_redirect(redirect_to)
@@ -104,7 +106,7 @@ class ApplicationController < ActionController::Base
         return build_app_redirect_uri_from(redirect_to, app, uri) if uri.hostname == redirect_to.hostname
       end
     end
-    return
+    nil
   end
 
   def build_app_redirect_uri_from(redirect_to, app, app_uri)
