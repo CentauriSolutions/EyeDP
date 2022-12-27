@@ -113,6 +113,48 @@ RSpec.describe SessionsController, type: :controller do
           expect(response.headers['Location']).to eq('http://test.host/')
         end
 
+        it 'allows a redirect with path for correctly configured SAML app' do
+          SamlServiceProvider.create!(
+            issuer_or_entity_id: 'https://example.com',
+            metadata_url: 'https://example.com/metadata', response_hosts: ['example.com'],
+            allow_path_in_redirects: true
+          )
+          post(:create, params: { user: user_params, redirect_to: 'https://example.com/test/path' })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('https://example.com/test/path')
+        end
+
+        it 'allows a redirect with path for correctly configured OIDC app' do
+          Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test',
+                              allow_path_in_redirects: true)
+          post(:create, params: { user: user_params, redirect_to: 'https://example.com/test/path' })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('https://example.com/test/path')
+        end
+
+        it 'does now allow a redirect with path for correctly configured SAML app' do
+          SamlServiceProvider.create!(
+            issuer_or_entity_id: 'https://example.com',
+            metadata_url: 'https://example.com/metadata', response_hosts: ['example.com'],
+            allow_path_in_redirects: false # this is the default
+          )
+          post(:create, params: { user: user_params, redirect_to: 'https://example.com/test/path' })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('https://example.com')
+        end
+
+        it 'does now allow a redirect with path for correctly configured OIDC app' do
+          Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test',
+                              allow_path_in_redirects: false)
+          post(:create, params: { user: user_params, redirect_to: 'https://example.com/test/path' })
+          expect(subject.current_user).to eq user
+          expect(response.status).to eq(302)
+          expect(response.headers['Location']).to eq('https://example.com')
+        end
+
         context 'with multiple emails' do
           let(:user) do
             user = User.create!(username: 'example', email: 'test@localhost', password: 'test123456')

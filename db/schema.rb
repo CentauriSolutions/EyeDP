@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_06_163646) do
+ActiveRecord::Schema.define(version: 2022_12_26_143741) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -250,6 +250,7 @@ ActiveRecord::Schema.define(version: 2022_01_06_163646) do
     t.text "image_url"
     t.text "description"
     t.boolean "show_on_dashboard", default: true
+    t.boolean "allow_path_in_redirects", default: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -278,6 +279,7 @@ ActiveRecord::Schema.define(version: 2022_01_06_163646) do
     t.text "image_url"
     t.text "description"
     t.boolean "show_on_dashboard", default: true
+    t.boolean "allow_path_in_redirects", default: false
     t.index ["issuer_or_entity_id"], name: "index_saml_service_providers_on_issuer_or_entity_id", unique: true
   end
 

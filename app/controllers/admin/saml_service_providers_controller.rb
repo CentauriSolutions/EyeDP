@@ -10,12 +10,12 @@ class Admin::SamlServiceProvidersController < AdminController
 
   def model_attributes
     %w[name display_url show_on_dashboard image_url order description issuer_or_entity_id metadata_url fingerprint
-       response_hosts groups]
+       response_hosts allow_path_in_redirects groups]
   end
 
   def new_fields
     %w[name display_url show_on_dashboard image_url order description issuer_or_entity_id metadata_url fingerprint
-       response_hosts]
+       allow_path_in_redirects response_hosts]
   end
 
   def model
@@ -29,7 +29,7 @@ class Admin::SamlServiceProvidersController < AdminController
           :name, :display_url, :show_on_dashboard,
           :image_url, :description, :order,
           :issuer_or_entity_id, :metadata_url,
-          :fingerprint, :response_hosts, group_ids: []
+          :fingerprint, :response_hosts, :allow_path_in_redirects, group_ids: []
         )
     p[:group_ids]&.reject!(&:empty?)
     p[:group_ids] ||= []
