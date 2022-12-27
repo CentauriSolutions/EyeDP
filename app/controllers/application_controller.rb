@@ -64,9 +64,8 @@ class ApplicationController < ActionController::Base
     store_location_for(:user, request.fullpath)
   end
 
-  def can_redirect_to(redirect_to) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize,Metrics/CyclomaticComplexity
+  def can_redirect_to(redirect_to) # rubocop:disable Metrics/MethodLength
     return unless redirect_to
-
     redirect_to = URI.parse(redirect_to)
     hostname = begin
       redirect_to.hostname
@@ -74,22 +73,10 @@ class ApplicationController < ActionController::Base
       nil
     end
     return unless hostname
+    oidc_app = oidc_app_redirect(redirect_to)
+    return oidc_app if oidc_app
 
-    apps = Application.arel_table
-    possible_matching_apps = Application.where(apps[:redirect_uri].matches("https://#{hostname}%"))
-    possible_matching_apps.each do |app|
-      uri = URI.parse(app.redirect_uri)
-      return build_app_redirect_uri_from(redirect_to, app, uri) if uri.hostname == hostname
-    end
-    possible_matching_apps = SamlServiceProvider.where(
-      '? = ANY ("saml_service_providers"."response_hosts")', hostname
-    )
-    possible_matching_apps.each do |app|
-      app.response_hosts.each do |host|
-        uri = URI.parse(host)
-        return build_app_redirect_uri_from(redirect_to, app, uri) if uri.hostname == hostname
-      end
-    end
+    saml_app_redirect(redirect_to)
   end
 
   def set_useragent_and_ip_in_session
@@ -97,9 +84,32 @@ class ApplicationController < ActionController::Base
     session['user-agent'] = request.user_agent
   end
 
+  def oidc_app_redirect(redirect_to)
+    apps = Application.arel_table
+    possible_matching_apps = Application.where(apps[:redirect_uri].matches("https://#{redirect_to.hostname}%"))
+    possible_matching_apps.each do |app|
+      uri = URI.parse(app.redirect_uri)
+      return build_app_redirect_uri_from(redirect_to, app, uri) if uri.hostname == redirect_to.hostname
+    end
+    return
+  end
+
+  def saml_app_redirect(redirect_to)
+    possible_matching_apps = SamlServiceProvider.where(
+      '? = ANY ("saml_service_providers"."response_hosts")', redirect_to.hostname
+    )
+    possible_matching_apps.each do |app|
+      app.response_hosts.each do |host|
+        uri = URI.parse("https://#{host}")
+        return build_app_redirect_uri_from(redirect_to, app, uri) if uri.hostname == redirect_to.hostname
+      end
+    end
+    return
+  end
+
   def build_app_redirect_uri_from(redirect_to, app, app_uri)
     uri = URI.parse('')
-    uri.scheme = app_uri.scheme
+    uri.scheme = app_uri.scheme || 'https'
     uri.hostname = redirect_to.hostname
 
     uri.path = redirect_to.path if app.allow_path_in_redirects

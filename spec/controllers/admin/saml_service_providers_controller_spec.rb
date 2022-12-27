@@ -145,7 +145,6 @@ RSpec.describe Admin::SamlServiceProvidersController, type: :controller do
         end
 
         it 'can toggle allow_path_in_redirects' do
-
           expect(app.allow_path_in_redirects).to be false
           post(:update, params: { id: app.id, saml_service_provider: { allow_path_in_redirects: '1' } })
           app.reload
