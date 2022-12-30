@@ -28,7 +28,9 @@ class Admin::WebHooksController < AdminController
   end
 
   def model_params
-    params.require(:web_hook).permit(model_attributes)
+    p = params.require(:web_hook).permit(model_attributes)
+    p[:template] = nil if p[:template].empty?
+    p
   end
 
   def ensure_user_is_authorized!
