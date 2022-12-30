@@ -81,7 +81,7 @@ class WebHookService
       'User-Agent' => 'EyeDP/1.0'
     }.tap do |hash|
       hash['EyeDP-Token'] = hook.token if hook.token.present?
-      @headers.each do |header, value|
+      @headers&.each do |header, value|
         hash[header] = value
       end
     end
