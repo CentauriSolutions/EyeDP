@@ -13,7 +13,7 @@
         <div class="form-group">
           <%= f.label 'Two-Factor Authentication code', name: :otp_attempt %>
           <br />
-          <%= f.text_field :otp_attempt, required: true, autofocus: true, autocomplete: 'one-time-code', title: 'This field is required.', data: { qa_selector: 'two_fa_code_field' }, inputmode: "numeric", pattern: "[0-9]*" %>
+          <%= f.text_field :otp_attempt, required: true, autofocus: true, autocomplete: 'one-time-code', title: 'This field is required.', data: { qa_selector: 'two_fa_code_field' }, pattern: "[a-zA-Z0-9]+" %>
           <p class="form-text text-muted hint">Enter the code from the two-factor app on your mobile device. If you've lost your device, you may enter one of your recovery codes.</p>
           <div class="prepend-top-20">
             <%= f.submit "Verify code", class: "btn btn-primary", data: { qa_selector: 'verify_code_button' } %>
