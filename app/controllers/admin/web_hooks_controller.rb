@@ -30,6 +30,7 @@ class Admin::WebHooksController < AdminController
   def model_params
     p = params.require(:web_hook).permit(model_attributes)
     p[:template] = nil if p[:template].empty?
+    p[:headers] = nil if p[:headers].empty?
     p
   end
 
