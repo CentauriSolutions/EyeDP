@@ -24,7 +24,7 @@
 
     <% if @user.two_factor_u2f_enabled? %>
     <h2>Authenticate key</h2>
-    <button class="btn btn-success" onclick="enable_u2f()">Use security token</button>
+    <button class="btn btn-success" onclick="enable_u2f()" autofocus>Use security token</button>
     <p id="description" class="d-none">Please insert one of your registered keys and press the button within 15 seconds</p>
     <p id="waiting" class="d-none">Waiting...</p>
     <p id="error" class="d-none"></p>
