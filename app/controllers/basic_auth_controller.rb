@@ -2,6 +2,7 @@
 
 class BasicAuthController < ApplicationController
   skip_before_action :authorize_rack_mini_profiler
+  skip_before_action :set_flash_on_restrictions
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
