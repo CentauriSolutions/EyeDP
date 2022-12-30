@@ -11,6 +11,9 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   before_action :store_user_location!, if: :storable_location?
+
+  before_action :set_flash_on_restrictions, if: -> { current_user }
+
   # The callback which stores the current location must be added before you authenticate the user
   # as `authenticate_user!` (or whatever your resource is) will halt the filter chain and redirect
   # before the location can be stored.
@@ -45,6 +48,23 @@ class ApplicationController < ActionController::Base
       devise_parameter_sanitizer.permit(:account_update, keys: %i[name])
     else
       devise_parameter_sanitizer.permit(:account_update, keys: %i[email name])
+    end
+  end
+
+  def check_group_2fa
+    @two_factor_required = []
+    return if current_user.two_factor_enabled?
+
+    groups = current_user.groups.where(requires_2fa: true)
+    @two_factor_required = groups.pluck(:name) if groups.any?
+  end
+
+  def set_flash_on_restrictions
+    check_group_2fa
+    @two_factor_required.each do |name|
+      flash[name] = "You are a member of the group '#{name}' and it requires " \
+                    "two factor. This group won't be accessible until you " \
+                    'enable two-factor on your account'
     end
   end
 
