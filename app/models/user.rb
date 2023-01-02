@@ -94,7 +94,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def notify_if
     saved_changes.keys.reject do |k|
-      %w[updated_at last_activity_at].include?(k)
+      %w[updated_at last_activity_at consumed_timestep].include?(k)
     end.any?
   end
 
