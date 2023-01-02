@@ -27,9 +27,12 @@ module Notifiable
     end
   end
 
-  def updates
+  def updates # rubocop:disable Metrics/MethodLength
     saved_changes.reject do |k, _v|
-      %w[updated_at last_activity_at].include?(k)
+      %w[
+        updated_at last_activity_at consumed_timestep
+        reset_password_token failed_attempts reset_password_token
+      ].include?(k)
     end.transform_values do |values| # rubocop:disable Style/MultilineBlockChain
       {
         old: values[0],
