@@ -94,7 +94,10 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def notify_if
     saved_changes.keys.reject do |k|
-      %w[updated_at last_activity_at consumed_timestep].include?(k)
+      %w[
+        updated_at last_activity_at consumed_timestep
+        reset_password_token failed_attempts reset_password_token
+      ].include?(k)
     end.any?
   end
 
