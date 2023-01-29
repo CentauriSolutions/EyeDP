@@ -135,6 +135,41 @@ RSpec.describe User, type: :model do
     expect(user.errors.first.attribute).to eq :username
   end
 
+  it 'does not allow usernames to overlap emails' do
+    user
+    user2 = User.new(username: 'test@localhost', email: 'test2@localhost', password: 'test123456')
+
+    expect(user2.valid?).to be false
+    expect(user2.errors.first.attribute).to eq :username
+    expect(user2.errors.first.message).to eq 'is invalid'
+  end
+
+  it 'does not allow usernames to include content types' do
+    user.username = 'test.html'
+    expect(user.valid?).to be false
+    expect(user.errors.first.attribute).to eq :username
+    expect(user.errors.first.message).to eq 'ending with a reserved file extension is not allowed.'
+  end
+
+  it 'allows numbers after first charater in usernames' do
+    user.username = 'test1'
+    expect(user.valid?).to be true
+  end
+
+  it 'allows hyphen, underscore, and period after first character in usernames' do
+    user.username = 'test-_.'
+    expect(user.valid?).to be true
+  end
+
+  it 'does not allow interesting characters in usernames' do
+    user.username = 'test_øåé'
+    expect(user.valid?).to be false
+    expect(user.errors.first.attribute).to eq :username
+    expect(user.errors.first.message).to(
+      eq 'must contain only basic letters, numbers, -, and _; and start with a letter.'
+    )
+  end
+
   context 'Expirable' do
     context 'expire_after 30 days' do
       before do
