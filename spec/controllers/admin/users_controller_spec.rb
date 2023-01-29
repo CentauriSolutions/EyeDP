@@ -170,7 +170,9 @@ RSpec.describe Admin::UsersController, type: :controller do
             post(:create,
                  params: { send_welcome_email: false, user: { email: 'testing@localhost', username: 'testing name' } })
             expect(response.status).to eq(200)
-            expect(response.body).to include('Username is invalid')
+            expect(response.body).to include(
+              'Username must contain only basic letters, numbers, -, and _; and start with a letter'
+            )
           end.to change { User.count }.by(0)
         end
 

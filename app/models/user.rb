@@ -72,14 +72,17 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   validates :username, # rubocop:disable Rails/UniqueValidationWithoutIndex
             presence: true,
-            uniqueness: { case_sensitive: false },
-            format: { without: /\s/ }
+            uniqueness: { case_sensitive: false }
 
-  validate :validate_username
+  validate :validate_username, if: :username_changed?
+  validate :check_username_format, if: :username_changed?
+  validate :check_username_characters, if: :username_changed?
 
   before_validation :ensure_password
 
   notify_for %i[create update destroy], check: :notify_if
+
+  USERNAME_PATTERN = Regexp.new(/\A[a-zA-Z]+([a-zA-Z]|\d|-|_|\.)*\Z/).freeze
 
   def self.send_reset_password_instructions(attributes = {}) # rubocop:disable Metrics/CyclomaticComplexity
     recoverables = find_or_initialize_with_errors([:address], {
@@ -116,6 +119,21 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def validate_username
     errors.add(:username, :invalid) if User.joins(:emails).exists?(emails: { address: username })
+  end
+
+  def check_username_characters
+    return if USERNAME_PATTERN.match?(username)
+
+    errors.add(
+      :username,
+      _('must contain only basic letters, numbers, -, and _; and start with a letter.')
+    )
+  end
+
+  def check_username_format
+    return if username.blank? || Mime::EXTENSION_LOOKUP.keys.none? { |type| username.end_with?(".#{type}") }
+
+    errors.add(:username, _('ending with a reserved file extension is not allowed.'))
   end
 
   def send_devise_notification(notification, *args)
