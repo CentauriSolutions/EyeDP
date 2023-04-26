@@ -81,6 +81,22 @@
       "note": "This is restricted to be only a same-host redirect or to a non fully-qualified path"
     },
     {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 121,
+      "fingerprint": "9a3951031616a07c8e02c86652f537e92c08685da97f5ec2b12d5d3602b55bb8",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 2.7.1 ended on 2023-03-31",
+      "file": "Gemfile.lock",
+      "line": 295,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "a3a01e05b8cd146c65165655f46883113d7dbb4dca33096f53796438aa46d889",
@@ -174,6 +190,6 @@
       "note": "Setting.dashboard_template is only configurable by an admin."
     }
   ],
-  "updated": "2021-12-11 17:21:29 +0100",
-  "brakeman_version": "5.1.1"
+  "updated": "2023-04-26 14:52:25 -0400",
+  "brakeman_version": "5.2.1"
 }
