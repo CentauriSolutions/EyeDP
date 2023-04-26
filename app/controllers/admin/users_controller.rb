@@ -56,6 +56,8 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     address = model_params.delete(:email)
     all_addresses = addresses << address
     all_addresses.compact!
+    return unless all_addresses.any?
+
     @model.emails.where.not(address: all_addresses).destroy_all
     all_addresses.each do |email_address|
       Email.find_or_create_by(user: @model, address: email_address, confirmed_at: Time.zone.now)

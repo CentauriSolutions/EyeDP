@@ -495,6 +495,16 @@ RSpec.describe Admin::UsersController, type: :controller do
             expect(response.body).to include(%(type="checkbox" value="#{manager_group.id}" name="user[group_ids][]"))
           end
 
+          it 'disables a user without removing data' do
+            expect(user.emails.first.address).to eq('user@localhost')
+            expect(user.emails.first.confirmed?).to be_truthy
+            post(:update, params: { id: user.id, user: { disabled_at: Time.now.utc } })
+            user.reload
+            expect(user.emails.first.address).to eq('user@localhost')
+            expect(user.emails.first.confirmed?).to be_truthy
+            expect(user.disabled?).to be_truthy
+          end
+
           it "shows a user's custom attributes" do
             t = CustomUserdataType.create(name: 'Has pets', custom_type: 'boolean')
             admin.custom_userdata << CustomUserdatum.create(custom_userdata_type: t, value: true)
