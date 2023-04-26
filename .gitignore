@@ -31,11 +31,17 @@ config/database.yml
 
 /public/packs
 /public/packs-test
+
+# npm ecosystem
 /node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
-erd.pdf
+/.npm
 
+# build artifacts
+/vendor/bundle
+
+erd.pdf
 config/deploy
 coverage
