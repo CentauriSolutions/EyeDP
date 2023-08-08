@@ -120,7 +120,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     respond_to do |format|
       if @model.disable_two_factor!
         format.html do
-          redirect_to [:edit, :admin, @model], notice: 'Two factor was disabled successfully'
+          redirect_to [:admin, @model], notice: 'Two factor was disabled successfully'
         end
         format.json { render :show, status: :ok, location: [:admin, @model] }
       else
