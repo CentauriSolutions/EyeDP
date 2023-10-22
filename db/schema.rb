@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_26_143741) do
+ActiveRecord::Schema.define(version: 2023_10_22_122932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -67,6 +67,19 @@ ActiveRecord::Schema.define(version: 2022_12_26_143741) do
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["request_uuid"], name: "index_audits_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
+  end
+
+  create_table "credentials", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "external_id"
+    t.text "public_key"
+    t.text "nickname"
+    t.uuid "user_id", null: false
+    t.datetime "last_authenticated_at", null: false
+    t.bigint "sign_count", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["external_id"], name: "index_credentials_on_external_id", unique: true
+    t.index ["user_id"], name: "index_credentials_on_user_id"
   end
 
   create_table "custom_attribute_service_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -326,6 +339,7 @@ ActiveRecord::Schema.define(version: 2022_12_26_143741) do
     t.datetime "locked_at"
     t.string "unlock_token"
     t.datetime "disabled_at"
+    t.text "webauthn_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
@@ -368,6 +382,7 @@ ActiveRecord::Schema.define(version: 2022_12_26_143741) do
   end
 
   add_foreign_key "access_tokens", "users"
+  add_foreign_key "credentials", "users"
   add_foreign_key "custom_attribute_service_providers", "custom_userdata_types"
   add_foreign_key "custom_groupdata", "custom_group_data_types"
   add_foreign_key "custom_groupdata", "groups"

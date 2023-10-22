@@ -3,7 +3,7 @@
 # == AuthenticatesWithTwoFactor
 #
 # Controller concern to handle two-factor authentication
-module AuthenticatesWithTwoFactor
+module AuthenticatesWithTwoFactor # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   # Store the user's ID in the session for later retrieval and render the
@@ -23,6 +23,7 @@ module AuthenticatesWithTwoFactor
     session[:user_password_hash] = Digest::SHA256.hexdigest(user.encrypted_password)
     session[:otp_started] = Time.now.utc
     setup_u2f_authentication(user)
+    setup_webauthn_authentication(user)
 
     render 'devise/sessions/two_factor'
   end
@@ -37,6 +38,8 @@ module AuthenticatesWithTwoFactor
       authenticate_with_two_factor_via_otp(user)
     elsif user_params[:device_response].present? && session[:otp_user_id]
       authenticate_with_two_factor_via_u2f(user)
+    elsif session[:authentication_challenge] && session[:otp_user_id]
+      authenticate_with_two_factor_via_webauthn(user)
     elsif user&.valid_password?(user_params[:password])
       reset_session
       prompt_for_two_factor(user)
@@ -80,6 +83,44 @@ module AuthenticatesWithTwoFactor
     else
       handle_two_factor_failure(user, 'U2F')
     end
+  end
+
+  def setup_webauthn_authentication(user)
+    return unless user.credentials.any?
+
+    @options = WebAuthn::Credential.options_for_get(allow: user.credentials.map(&:external_id))
+
+    # Store the newly generated challenge somewhere so you can have it
+    # for the verification phase.
+    session[:authentication_challenge] = @options.challenge
+  end
+
+  def authenticate_with_two_factor_via_webauthn(user) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    # Assuming you're using @github/webauthn-json package to send the `PublicKeyCredential` object back
+    # in params[:publicKeyCredential]:
+    # binding.pry
+    webauthn_credential, stored_credential = relying_party.verify_authentication(
+      webauthn_params,
+      session[:authentication_challenge]
+    ) do |webauthn_credential|
+      # the returned object needs to respond to #public_key and #sign_count
+      user.credentials.find_by(external_id: Base64.strict_encode64(webauthn_credential.raw_id))
+    end
+
+    # Update the stored credential sign count with the value from `webauthn_credential.sign_count`
+    stored_credential.update!(
+      sign_count: webauthn_credential.sign_count,
+      last_authenticated_at: Time.zone.now
+    )
+
+    # Continue with successful sign in or 2FA verification...
+    params[:format] = 'html'
+    handle_two_factor_success(user)
+  rescue WebAuthn::SignCountVerificationError, WebAuthn::Error
+    # Cryptographic verification of the authenticator data succeeded, but the signature counter was less then or equal
+    # to the stored value. This can have several reasons and depending on your risk tolerance you can choose to fail or
+    # pass authentication. For more information see https://www.w3.org/TR/webauthn/#sign-counter
+    handle_two_factor_failure(user, 'WebAuthn')
   end
 
   def handle_two_factor_failure(user, method)
@@ -131,5 +172,17 @@ module AuthenticatesWithTwoFactor
     started = Time.zone.parse(session[:otp_started])
 
     started + 5.minutes < Time.now.utc
+  end
+
+  def webauthn_params
+    params2 = params
+    params2.delete(:session)
+    params2
+      .permit(
+        :type, :id, :rawId,
+        { user: [:remember_me] },
+        { response: %i[authenticatorData clientDataJSON signature userHandle] },
+        { clientExtensionResults: {} }
+      )
   end
 end

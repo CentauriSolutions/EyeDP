@@ -1,6 +1,0 @@
-<p class="card-text text-success">Your device was registered successfully. Please enter a name to identify your registered FIDO U2F device in future.</p>
-<%= bootstrap_form_for(@device, as: :fido_usf_device, url: user_fido_usf_registration_path(), method: :patch) do |f| %>
-  <%= hidden_field_tag :id, @device.id %>
-  <%= f.text_field :name  %>
-  <%= f.submit _('Confirm Name'), class: "btn btn-success" %>
-<%- end %>

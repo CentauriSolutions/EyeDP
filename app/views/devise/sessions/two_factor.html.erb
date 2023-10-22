@@ -22,9 +22,9 @@
       <% end %>
     <% end %>
 
-    <% if @user.two_factor_u2f_enabled? %>
+    <% if @user.two_factor_u2f_enabled? || @user.two_factor_webauthn_enabled? %>
     <h2>Authenticate key</h2>
-    <button class="btn btn-success" onclick="enable_u2f()" autofocus>Use security token</button>
+    <button class="btn btn-success" id="run_webauthn" autofocus>Use security token</button>
     <p id="description" class="d-none">Please insert one of your registered keys and press the button within 15 seconds</p>
     <p id="waiting" class="d-none">Waiting...</p>
     <p id="error" class="d-none"></p>
@@ -37,41 +37,12 @@
     <% end %>
   </div>
 </div>
-<%= javascript_tag nonce: true do -%>
-  var appId = <%= @app_id.to_json.html_safe %>;
-  var signRequests = <%= @sign_requests.to_json.html_safe %>;
-  var challenge = <%= @challenge.to_json.html_safe %>;
-  var $waiting = document.getElementById('waiting');
-  var $error = document.getElementById('error');
-  var errorMap = {
-    1: 'Unknown error, try again',
-    2: "Bad request error, try again" ,
-    3: "This key isn't supported, please try another one",
-    4: 'The device is is not registered, please register first.',
-    5: 'Authentication timed out. Please reload to try again.'
-  };
-  var setError = function(code) {
-    $waiting.className += ' d-none';
-    $error.className = $error.className.replace(/\bd-none\b/g, '');
-    $error.innerHTML = errorMap[code];
-  };
-  function enable_u2f(){
-    $waiting.className -= ' d-none';
-    document.getElementById('description').className -= ' d-none';
-    u2f.sign(appId, challenge, signRequests, function(signResponse) {
-      var form, reg;
 
-      if (signResponse.errorCode) {
-        return setError(signResponse.errorCode);
-      }
-
-      form = document.forms[<%= @user.two_factor_otp_enabled? ? 1 : 0 %>];
-      response = document.querySelector('[name="user[device_response]"]');
-
-      response.value = JSON.stringify(signResponse);
-
-      form.submit();
-    }, 15);
-  }
 <% end -%>
-<% end -%>
+<%- if @options %>
+<script type="text/javascript">
+var options = <%= @options.to_json.html_safe %>;
+var remember_me = <%= resource_params.fetch(:remember_me, 0) %>;
+</script>
+<%- end %>
+<%= javascript_include_tag 'new_webauthn', type: 'module' %>

@@ -4,6 +4,54 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   sudo
 
+  def new_webauthn # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    current_user.update!(webauthn_id: WebAuthn.generate_user_id) unless current_user.webauthn_id
+    respond_to do |f|
+      f.json do
+        options = WebAuthn::Credential.options_for_create(
+          user: { id: current_user.webauthn_id, name: current_user.username },
+          exclude: current_user.credentials.map(&:external_id)
+        )
+
+        # Store the newly generated challenge somewhere so you can have it
+        # for the verification phase.
+        session[:creation_challenge] = options.challenge
+        render json: options
+      end
+      f.html
+    end
+  end
+
+  def create_webauthn # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    webauthn_credential = relying_party.verify_registration(
+      webauthn_params,
+      session[:creation_challenge]
+    )
+
+    credential = current_user.credentials.find_or_initialize_by(
+      external_id: Base64.strict_encode64(webauthn_credential.raw_id)
+    )
+    if credential.update(
+      nickname: webauthn_params[:credential_nickname],
+      public_key: webauthn_credential.public_key,
+      sign_count: webauthn_credential.sign_count,
+      last_authenticated_at: Time.zone.now
+    )
+      render json: { status: 'ok' }, status: :ok
+    else
+      render json: "Couldn't add your Security Key", status: :unprocessable_entity
+    end
+  rescue WebAuthn::Error => e
+    render json: "Verification failed: #{e.message}", status: :unprocessable_entity
+  ensure
+    session.delete('current_registration')
+  end
+
+  def delete_webauthn
+    Credential.where(user_id: current_user.id, id: params[:id]).delete_all
+    redirect_to profile_authentication_devices_path
+  end
+
   def new_2fa
     current_user.otp_secret = User.generate_otp_secret(32) unless current_user.two_factor_otp_enabled?
     current_user.save!
@@ -56,5 +104,17 @@ class UsersController < ApplicationController
 
   def issuer_host
     Setting.idp_base
+  end
+
+  protected
+
+  def webauthn_params
+    params
+      .permit(
+        :type, :id, :rawId, :credential_nickname,
+        { user: [:id] },
+        { response: [:clientDataJSON, :attestationObject, { transports: [] }] },
+        { clientExtensionResults: {} }
+      )
   end
 end

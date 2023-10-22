@@ -33,6 +33,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :emails, dependent: :destroy
   has_many :access_tokens, dependent: :destroy
 
+  has_many :credentials, dependent: :destroy
+
   alias_attribute :real_name, :name
 
   devise :two_factor_authenticatable,
@@ -83,6 +85,10 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   notify_for %i[create update destroy], check: :notify_if
 
   USERNAME_PATTERN = Regexp.new(/\A[a-zA-Z]+([a-zA-Z]|\d|-|_|\.)*\Z/).freeze
+
+  after_initialize do
+    self.webauthn_id ||= WebAuthn.generate_user_id
+  end
 
   def self.send_reset_password_instructions(attributes = {}) # rubocop:disable Metrics/CyclomaticComplexity
     recoverables = find_or_initialize_with_errors([:address], {
@@ -309,7 +315,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def two_factor_enabled?
-    two_factor_otp_enabled? || two_factor_u2f_enabled?
+    two_factor_otp_enabled? || two_factor_u2f_enabled? || two_factor_webauthn_enabled?
   end
 
   def two_factor_otp_enabled?
@@ -322,6 +328,10 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     else
       fido_usf_devices.exists?
     end
+  end
+
+  def two_factor_webauthn_enabled?
+    credentials.any?
   end
 
   private
