@@ -57,8 +57,6 @@
     <%- else %>
       <%= link_to _('Enable TOTP 2FA'), new_user_2fa_registration_path, class: 'btn btn-primary' %>
     <%- end %>
-    <%= link_to t('devise.registrations.register_u2f'), new_user_webauthn_registration_path, class: "btn btn-primary" %>
-
     <%= link_to t('devise.registrations.register_webauthn'), new_user_webauthn_registration_path, class: "btn btn-primary" %>
     <%= form_tag user_2fa_codes_path, {style: 'display: inline-block', method: :post} do |f| %>
       <%= submit_tag _('Regenerate recovery codes'), class: 'btn btn-danger' %>
