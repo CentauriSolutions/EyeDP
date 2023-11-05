@@ -9,15 +9,15 @@
           <%= hidden_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value || false %>
           <%= check_box_tag "custom_data[#{custom_datum.name}]", true, custom_datum.value, disabled: disabled %>
         <%- when 'array' %>
-          <div id="<%= custom_datum.name.gsub(' ', '_') %>">
+          <div id="<%= custom_datum.name.gsub(/[^0-9a-z]/i, '_') %>">
             <%- if custom_datum.value %>
               <%- custom_datum.value.each do |value| %>
-                <div class="input-group" id="input-group-<%= custom_datum.name.gsub(' ', '_') %>-<%= value.gsub('.', '_') %>">
+                <div class="input-group" id="input-group-<%= custom_datum.name.gsub(/[^0-9a-z]/i, '_') %>-<%= value.gsub(/[^0-9a-z]/i, '_') %>">
                   <%= text_field_tag "custom_data[#{custom_datum.name}][]", value, class: 'form-control', disabled: disabled %>
 
                   <%- unless disabled %>
                     <div class="input-group-append">
-                      <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-<%= custom_datum.name.gsub(' ', '_') %>-<%= value.gsub('.', '_') %>">Remove</button>
+                      <button type="button" class="btn btn-danger" onclick="remove_element(this)" data-target="input-group-<%= custom_datum.name.gsub(/[^0-9a-z]/i, '_') %>-<%= value.gsub(/[^0-9a-z]/i, '_') %>">Remove</button>
                     </div>
                     <%- end %>
                 </div>
@@ -28,7 +28,7 @@
             <%- end %>
           </div>
           <%- unless disabled %>
-            <button  type="button" onclick="add_field(this)" data-name="custom_data[<%= custom_datum.name %>]" data-target="<%= custom_datum.name.gsub(' ', '_') %>" class="btn btn-dark btn-sm"><%= fa_icon 'plus' %> Add Item</button>
+            <button  type="button" onclick="add_field(this)" data-name="custom_data[<%= custom_datum.name %>]" data-target="<%= custom_datum.name.gsub(/[^0-9a-z]/i, '_') %>" class="btn btn-dark btn-sm"><%= fa_icon 'plus' %> Add Item</button>
           <%- end %>
         <%- when 'integer' %>
           <%= number_field_tag "custom_data[#{custom_datum.name}]", custom_datum.value, class: 'form-control', disabled: disabled %>
