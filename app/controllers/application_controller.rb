@@ -144,8 +144,7 @@ class ApplicationController < ActionController::Base # rubocop:disable Metrics/C
     WebAuthn::RelyingParty.new(
       # This value needs to match `window.location.origin` evaluated by
       # the User Agent during registration and authentication ceremonies.
-      origin: "#{Rails.env.production? && !ENV['DISABLE_SSL'] ? 'https' : 'http'}://#{Setting.idp_base}",
-
+      origin: Setting.idp_base,
       # Relying Party name for display purposes
       name: Setting.html_title_base
     )
