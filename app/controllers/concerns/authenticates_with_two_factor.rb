@@ -126,7 +126,7 @@ module AuthenticatesWithTwoFactor # rubocop:disable Metrics/ModuleLength
   def handle_two_factor_failure(user, method)
     # user.increment_failed_attempts!
     Rails.logger.warn("Failed Login: user=#{user.username} ip=#{request.remote_ip} method=#{method}")
-    flash.now[:alert] = format(_('Authentication via %{method} device failed.'), method: method) # rubocop:disable Style/FormatStringToken
+    flash.now[:alert] = format(_('Authentication via %{method} device failed.'), method:) # rubocop:disable Style/FormatStringToken
     prompt_for_two_factor(user)
   end
 

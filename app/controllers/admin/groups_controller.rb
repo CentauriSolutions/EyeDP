@@ -13,7 +13,7 @@ class Admin::GroupsController < AdminController
 
   def update_custom_attributes # rubocop:disable Metrics/MethodLength
     custom_groupdata_params.each do |name, value|
-      custom_type = CustomGroupDataType.where(name: name).first
+      custom_type = CustomGroupDataType.where(name:).first
       custom_datum = CustomGroupdatum.where(
         group_id: @model.id,
         custom_group_data_type: custom_type

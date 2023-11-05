@@ -6,7 +6,7 @@ namespace :eyedp do
     username = args[:username] || 'admin'
     password = SecureRandom.hex
     puts "Creating user '#{username}' with password: '#{password}'"
-    user = User.create(username: username, email: 'admin@localhost', password: password)
+    user = User.create(username:, email: 'admin@localhost', password:)
     user.groups << Group.where(name: 'administrators').find
   end
 end

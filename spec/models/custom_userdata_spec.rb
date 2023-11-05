@@ -9,7 +9,7 @@ RSpec.describe CustomUserdatum, type: :model do
   it { should be_audited }
 
   it 'A user can have a custom user data' do
-    data = CustomUserdatum.create!(user: user, custom_userdata_type: custom_bool, value: false)
+    data = CustomUserdatum.create!(user:, custom_userdata_type: custom_bool, value: false)
     expect(data.name).to eq('has_pets')
     expect(data.value).to be false
   end

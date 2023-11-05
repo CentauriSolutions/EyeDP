@@ -25,7 +25,7 @@ RSpec.describe Profile::AccountActivityController, type: :controller do
 
     it 'shows logins' do
       Login.create!(
-        user: user,
+        user:,
         service_provider: app,
         auth_type: 'Existing Login'
       )

@@ -27,7 +27,7 @@ class Api::UsersController < ApiController # rubocop:disable Metrics/ClassLength
     if user.update(user_params)
       address = user_params.delete(:email)
       if address && (address != old_email)
-        email = user.emails.find_by(address: address)
+        email = user.emails.find_by(address:)
         email.primary = true
         email.save
         email = user.emails.find_by(address: old_email)
@@ -75,7 +75,7 @@ class Api::UsersController < ApiController # rubocop:disable Metrics/ClassLength
     error_messages = []
     ActiveRecord::Base.transaction do
       user_data_params.each do |name, value|
-        custom_type = CustomUserdataType.where(name: name).first
+        custom_type = CustomUserdataType.where(name:).first
         custom_datum = CustomUserdatum.where(
           user_id: user.id,
           custom_userdata_type: custom_type
@@ -93,7 +93,7 @@ class Api::UsersController < ApiController # rubocop:disable Metrics/ClassLength
     if error_messages.any?
       render json: {
         status: 'error',
-        error_messages: error_messages
+        error_messages:
       }, status: :unprocessable_entity
     else
       render json: {

@@ -29,7 +29,7 @@ class RegistrationsController < Devise::RegistrationsController
     resource_updated = update_resource(resource, account_update_params)
     address = account_update_params.delete(:email)
     if address && (address != old_email)
-      email = resource.emails.find_by(address: address)
+      email = resource.emails.find_by(address:)
       if email.confirmed?
         email.primary = true
         email.save

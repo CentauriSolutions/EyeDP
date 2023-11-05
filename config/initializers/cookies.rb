@@ -9,7 +9,7 @@ unless Rails.env.test?
                                           tld_length: 2,
                                           secure: Rails.env.production? && !ENV['DISABLE_SSL'],
                                           servers: [{
-                                            url: url,
+                                            url:,
                                             serializer: JSON
                                           }]
 end

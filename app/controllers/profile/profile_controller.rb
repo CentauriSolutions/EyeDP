@@ -7,7 +7,7 @@ class Profile::ProfileController < ApplicationController
 
   def update # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     custom_userdata_params.each do |name, value|
-      custom_type = CustomUserdataType.where(name: name).first
+      custom_type = CustomUserdataType.where(name:).first
       custom_datum = CustomUserdatum.where(
         user_id: current_user.id,
         custom_userdata_type: custom_type

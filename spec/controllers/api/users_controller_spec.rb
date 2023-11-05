@@ -168,7 +168,7 @@ RSpec.describe Api::UsersController, type: :controller do
       context 'custom_data' do
         let(:custom_userdata_type) { CustomUserdataType.create(name: 'favorite pet', custom_type: 'string') }
         let(:custom_userdatum) do
-          CustomUserdatum.create!(user: user, custom_userdata_type: custom_userdata_type, value: 'cat')
+          CustomUserdatum.create!(user:, custom_userdata_type:, value: 'cat')
         end
         context 'without access' do
           it 'cannot get attribute values' do
@@ -205,7 +205,7 @@ RSpec.describe Api::UsersController, type: :controller do
 
           it 'can set boolean attribute values' do
             t = CustomUserdataType.create(name: 'awesome', custom_type: 'boolean')
-            CustomUserdatum.create!(user: user, custom_userdata_type: t, value: false)
+            CustomUserdatum.create!(user:, custom_userdata_type: t, value: false)
             api_key.update(custom_data: ['awesome'])
             put :update_user_data, params: { user_id: user.id, api_key: api_key.key, attributes: { 'awesome': true } }
             expect(response.status).to eq(200)

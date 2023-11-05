@@ -11,7 +11,7 @@ module StubRequests
   # (see: Gitlab::UrlBlocker).
   #
   def stub_full_request(url, ip_address: IP_ADDRESS_STUB, port: 80, method: :get)
-    stub_dns(url, ip_address: ip_address, port: port)
+    stub_dns(url, ip_address:, port:)
 
     url = stubbed_hostname(url, hostname: ip_address)
     WebMock.stub_request(method, url)

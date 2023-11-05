@@ -32,7 +32,7 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
       scopes: application.scopes,
       token: Doorkeeper::OAuth::Helpers::UniqueToken.generate,
       expires_in: 2.hours,
-      application: application,
+      application:,
       redirect_uri: application.redirect_uri
     )
   end
@@ -41,7 +41,7 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
     Doorkeeper.config.access_token_model.create(
       resource_owner_id: user.id,
       scopes: 'openid profile',
-      application: application
+      application:
     )
   end
 
@@ -123,7 +123,7 @@ RSpec.describe 'OpenID Connect Flow', type: :request do
       let(:custom_bool) { CustomUserdataType.create(name: 'has_pets', custom_type: 'boolean') }
 
       before do
-        CustomUserdatum.create!(user: user, custom_userdata_type: custom_bool, value: false)
+        CustomUserdatum.create!(user:, custom_userdata_type: custom_bool, value: false)
 
         user.groups << users_group
       end

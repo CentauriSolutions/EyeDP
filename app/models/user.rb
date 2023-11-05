@@ -112,10 +112,10 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def notification_attributes
     {
-      id: id,
-      name: name,
-      username: username,
-      email: email,
+      id:,
+      name:,
+      username:,
+      email:,
       disabled: disabled?,
       expired: expired?
     }
@@ -279,7 +279,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def self.by_id_and_login(id, login)
-    where(id: id).database_authentication_rel({ login: login })
+    where(id:).database_authentication_rel({ login: })
   end
 
   def self.database_authentication_rel(conditions)

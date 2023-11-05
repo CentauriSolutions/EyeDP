@@ -24,7 +24,7 @@ class WebHookService
     execution_duration = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start_time
     WebHookLog.create(
       web_hook: hook,
-      execution_duration: execution_duration,
+      execution_duration:,
       request_data: data,
       response_data: response.body,
       response_headers: response.headers,
@@ -62,7 +62,7 @@ class WebHookService
                      body: data,
                      headers: build_headers,
                      verify: hook.enable_ssl_verification,
-                     basic_auth: basic_auth,
+                     basic_auth:,
                      **request_options)
   end
 
@@ -72,7 +72,7 @@ class WebHookService
       username: CGI.unescape(parsed_url.user),
       password: CGI.unescape(parsed_url.password.presence || '')
     }
-    make_request(post_url, basic_auth: basic_auth)
+    make_request(post_url, basic_auth:)
   end
 
   def build_headers

@@ -159,7 +159,7 @@ RSpec.describe SessionsController, type: :controller do
           let(:user) do
             user = User.create!(username: 'example', email: 'test@localhost', password: 'test123456')
             user.confirm!
-            Email.create!(address: 'test2@localhost', user: user).confirm
+            Email.create!(address: 'test2@localhost', user:).confirm
             user
           end
 
@@ -176,7 +176,7 @@ RSpec.describe SessionsController, type: :controller do
           end
 
           it 'requires additional emails to be confirmed for login' do
-            Email.create!(address: 'test3@localhost', user: user)
+            Email.create!(address: 'test3@localhost', user:)
             post(:create, params: { user: { login: 'test3@localhost', password: 'test123456' } })
             expect(subject.current_user).to be_nil
             expect(controller)
@@ -198,7 +198,7 @@ RSpec.describe SessionsController, type: :controller do
       end
 
       def authenticate_2fa(user_params, otp_user_id: user.id)
-        post(:create, params: { user: user_params }, session: { otp_user_id: otp_user_id })
+        post(:create, params: { user: user_params }, session: { otp_user_id: })
       end
 
       context 'remember_me field' do
