@@ -6,6 +6,7 @@ class DashboardController < ApplicationController
   def home
     @template = Liquid::Template.parse(Setting.dashboard_template)
     @applications = (saml_apps + openid_apps).sort_by(&:order)
+    respond_to { |format| format.any { render 'home', formats: [:html] } }
   end
 
   def template_variables # rubocop:disable Metrics/MethodLength

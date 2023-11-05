@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::Base # rubocop:disable Metrics/ClassLength
   protect_from_forgery with: :exception, prepend: true
   # before_action :authenticate_user!
 
@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
   before_action :store_user_location!, if: :storable_location?
 
   before_action :set_flash_on_restrictions, if: -> { current_user }
+
+  respond_to :html, :json
 
   # The callback which stores the current location must be added before you authenticate the user
   # as `authenticate_user!` (or whatever your resource is) will halt the filter chain and redirect
@@ -136,5 +138,16 @@ class ApplicationController < ActionController::Base
 
     uri.path = redirect_to.path if app.allow_path_in_redirects
     uri.to_s
+  end
+
+  def relying_party
+    WebAuthn::RelyingParty.new(
+      # This value needs to match `window.location.origin` evaluated by
+      # the User Agent during registration and authentication ceremonies.
+      origin: "#{Rails.env.production? && !ENV['DISABLE_SSL'] ? 'https' : 'http'}://#{Setting.idp_base}",
+
+      # Relying Party name for display purposes
+      name: Setting.html_title_base
+    )
   end
 end

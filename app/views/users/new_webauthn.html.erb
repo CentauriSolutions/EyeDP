@@ -1,0 +1,21 @@
+<%= render  partial: 'profile/heading' %>
+<div class="row">
+  <div class="col-md-9 col-lg-10">
+    <h2>Register new device</h2>
+  </div>
+</div>
+<div class="alert alert-warning" style="display: none" id="init-error">
+  <p><%= _('Initialisation error') %></p>
+</div>
+<div class="row">
+  <table class="table table-striped">
+    <tr>
+      <td>Device Name</td>
+      <td><input type="text" id="credential_nickname" name="credential_nickname" class="form-control" /></td>
+    </tr>
+    <tr><td>
+      <a href="#" id="register-webauthn" class="btn btn-primary">Register</a>
+    </td></tr>
+  </table>
+</div>
+<%= javascript_include_tag 'new_webauthn', type: 'module' %>

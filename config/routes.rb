@@ -88,6 +88,11 @@ Rails.application.routes.draw do
   post 'users/2fa', to: 'users#create_2fa', as: 'user_two_factor_auth'
   post 'users/2fa/codes', to: 'users#codes', as: 'user_2fa_codes'
   delete '/users/2fa', to: 'users#disable_2fa'
+
+  get '/users/webauthn', to: 'users#new_webauthn', as: 'new_user_webauthn_registration'
+  get '/users/verify_webauthn', to: 'users#verify_webauthn'
+  post '/users/webauthn', to: 'users#create_webauthn'
+  delete '/users/webauthn', to: 'users#delete_webauthn', as: 'user_webauthn_registration'
   # SAMLv2 IdP
   get '/saml/auth' => 'saml_idp#create'
   post '/saml/auth' => 'saml_idp#create'

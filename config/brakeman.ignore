@@ -3,6 +3,26 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "0d397b68a35ce834a819fc2cea25c7f87b866af69522552878057fc36de75b43",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/admin_controller.rb",
+      "line": 118,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "rel.where(\"#{\"#{key} ilike :query\"}\", :query => (\"%#{params[:search]}%\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AdminController",
+        "method": "filter"
+      },
+      "user_input": "key",
+      "confidence": "Weak",
+      "note": "Only user provided parameter is passed with prepared statement"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "758ccf9becbd15fe137b40d2ac5592ff9a17b57fecf2b2b184f17f09120143e4",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -19,6 +39,26 @@
       "user_input": "JSON.parse(event, :object_class => (NotificationEvent)).model_type",
       "confidence": "Medium",
       "note": "A NotificationEvent is only created in code, via an admin action (creating, updating ,or deleting certain models). The specific fields noted (model_type and event_type) are generated from the model's class name and the lifeclcye callback name."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "8b34b86172779236c878dc632831a2c2c19a6aa2e10bf46424811fe79e12de0e",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/admin/users_controller.rb",
+      "line": 241,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "rel.joins(:emails).where(\"#{case key\nwhen \"email\" then\n  \"emails.address ilike :query\"\nelse\n  \"#{key} ilike :query\"\nend}\", :query => (\"%#{params[:search]}%\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::UsersController",
+        "method": "filter"
+      },
+      "user_input": "case key\nwhen \"email\" then\n  \"emails.address ilike :query\"\nelse\n  \"#{key} ilike :query\"\nend",
+      "confidence": "Weak",
+      "note": ""
     },
     {
       "warning_type": "Redirect",
@@ -47,7 +87,7 @@
       "check_name": "EOLRuby",
       "message": "Support for Ruby 2.7.6 ended on 2023-03-31",
       "file": "Gemfile.lock",
-      "line": 305,
+      "line": 315,
       "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
       "code": null,
       "render_path": null,
@@ -86,8 +126,70 @@
       "user_input": null,
       "confidence": "High",
       "note": "Rendering an admin-editable template into an admin-only page."
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "b0e78553e12950f66f3164d2313a7e57647e1cccc0da7326640f55325384b3b9",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/profile/show.html.erb",
+      "line": 8,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Liquid::Template.parse(Setting.registered_home_template).render(template_variables)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ProfileController",
+          "method": "show",
+          "line": 9,
+          "file": "app/controllers/profile_controller.rb",
+          "rendered": {
+            "name": "profile/show",
+            "file": "app/views/profile/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "profile/show"
+      },
+      "user_input": "Setting.registered_home_template",
+      "confidence": "Weak",
+      "note": "Admin controlled content"
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "d8b56afa5b1bbeadb976a865bfe5b32a3cc33c198ac523fb44b8868ff95b31fa",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/dashboard/home.html.erb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Liquid::Template.parse(Setting.dashboard_template).render(template_variables)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "DashboardController",
+          "method": "home",
+          "line": 9,
+          "file": "app/controllers/dashboard_controller.rb",
+          "rendered": {
+            "name": "dashboard/home",
+            "file": "app/views/dashboard/home.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "dashboard/home"
+      },
+      "user_input": "Setting.dashboard_template",
+      "confidence": "Weak",
+      "note": "Admin controller content"
     }
   ],
-  "updated": "2023-04-26 14:41:18 -0400",
+  "updated": "2023-11-05 09:13:37 -0500",
   "brakeman_version": "5.2.1"
 }
