@@ -11,7 +11,7 @@ function getCSRFToken() {
   }
 }
 
-function callback(url, body) {
+function callback(url, body, redirect_url) {
   fetch(url, {
     method: "POST",
     body: JSON.stringify(body),
@@ -23,7 +23,7 @@ function callback(url, body) {
     credentials: 'same-origin'
   }).then(function(response) {
     if (response.ok) {
-      window.location.replace("/profile/authentication_devices")
+      window.location.replace(redirect_url)
     } else if (response.status < 500) {
       console.log(response)
       response.text().then(alert);
@@ -35,8 +35,9 @@ function callback(url, body) {
 
 function create_webauthn(callbackUrl, credentialOptions) {
   WebAuthnJSON.create({ "publicKey": credentialOptions }).then(function(credential) {
-    callback(callbackUrl, credential);
+    callback(callbackUrl, credential, "/profile/authentication_devices");
   }).catch(function(error) {
+    $('#init-error').toggle();
     console.log(error);
 
   });
@@ -48,9 +49,9 @@ function get_webauthn(credentialOptions) {
   console.log(credentialOptions)
   WebAuthnJSON.get({ "publicKey": credentialOptions }).then(function(credential) {
     console.log(credential)
-    callback(`/users/sign_in?user[remember_me]=${remember_me}`, credential);
+    callback(`/users/sign_in?user[remember_me]=${remember_me}`, credential, "/");
   }).catch(function(error) {
-    alert(error);
+    $('#auth-error').toggle();
   });
 
   console.log("Getting public key credential...");

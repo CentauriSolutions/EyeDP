@@ -24,6 +24,9 @@
 
     <% if @user.two_factor_u2f_enabled? || @user.two_factor_webauthn_enabled? %>
     <h2>Authenticate key</h2>
+    <div class="alert alert-warning" style="display: none" id="auth-error">
+      <p><%= _('Authentication error') %></p>
+    </div>
     <button class="btn btn-success" id="run_webauthn" autofocus>Use security token</button>
     <p id="description" class="d-none">Please insert one of your registered keys and press the button within 15 seconds</p>
     <p id="waiting" class="d-none">Waiting...</p>
