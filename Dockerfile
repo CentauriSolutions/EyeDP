@@ -8,9 +8,8 @@ RUN groupadd -g 1000 appuser && \
 
 RUN apt-get update -qq && apt-get install -y git build-essential libpq-dev graphviz
 
-# gpg keys listed at https://github.com/nodejs/node#release-team
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
+# INSTALL NODE
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$16.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && sudo apt-get update && sudo apt-get install -yqq nodejs
 
 RUN mkdir /eyedp
 
