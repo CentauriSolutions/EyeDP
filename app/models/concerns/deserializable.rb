@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Deserializable
-  SEPARATOR_REGEXP = /[\n,;]+/.freeze
+  SEPARATOR_REGEXP = /[\n,;]+/
 
   # takes a string and returns a typed thing
   def deserialize(value, custom_type) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

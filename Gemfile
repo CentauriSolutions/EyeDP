@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 2.7'
+ruby '~> 3.1'
 
 gem 'acts_as_tree'
 
@@ -58,7 +58,7 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap4'
 
 # These version requirements are copied up from doorkeeper-openid_connect
-gem 'doorkeeper', '>= 5.2', '< 5.5'
+gem 'doorkeeper', '>= 5.5', '< 5.7'
 gem 'doorkeeper-openid_connect'
 
 gem 'sentry-rails'

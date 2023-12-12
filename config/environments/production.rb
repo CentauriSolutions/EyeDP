@@ -59,7 +59,7 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
 
   # Use a different cache store in production.
   url = ENV['REDIS_URL'] || 'redis://localhost:6379'
-  config.cache_store = :redis_cache_store, { url: url }
+  config.cache_store = :redis_cache_store, { url: }
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque

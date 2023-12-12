@@ -64,7 +64,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
     end
     return unless address && address != old_email
 
-    email = @model.emails.find_by(address: address)
+    email = @model.emails.find_by(address:)
     email.primary = true
     email.confirm
     email.save
@@ -149,7 +149,7 @@ class Admin::UsersController < AdminController # rubocop:disable Metrics/ClassLe
 
   def update_custom_attributes # rubocop:disable Metrics/MethodLength
     custom_userdata_params.each do |name, value|
-      custom_type = CustomUserdataType.where(name: name).first
+      custom_type = CustomUserdataType.where(name:).first
       custom_datum = CustomUserdatum.where(
         user_id: @model.id,
         custom_userdata_type: custom_type

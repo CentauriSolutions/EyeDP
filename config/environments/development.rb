@@ -20,7 +20,7 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
 
     url = ENV['REDIS_URL'] || 'redis://localhost:6379'
-    config.cache_store = :redis_cache_store, { url: url }
+    config.cache_store = :redis_cache_store, { url: }
 
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}"

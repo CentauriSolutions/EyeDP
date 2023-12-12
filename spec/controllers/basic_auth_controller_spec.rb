@@ -149,7 +149,7 @@ RSpec.describe BasicAuthController, type: :controller do
 
   describe 'with access tokens' do
     it 'allows access' do
-      token = AccessToken.create!(user: user)
+      token = AccessToken.create!(user:)
 
       user.groups << Group.create!(name: 'my_group', permissions: [permission], permit_token: true)
       request.headers['EyeDP-Authorize'] = token.token
@@ -160,7 +160,7 @@ RSpec.describe BasicAuthController, type: :controller do
     end
 
     it 'denies expired access' do
-      token = AccessToken.create!(user: user, expires_at: 2.days.ago)
+      token = AccessToken.create!(user:, expires_at: 2.days.ago)
 
       user.groups << Group.create!(name: 'my_group', permissions: [permission], permit_token: true)
       request.headers['EyeDP-Authorize'] = token.token
@@ -170,7 +170,7 @@ RSpec.describe BasicAuthController, type: :controller do
       expect(token.last_used_at).to be_nil
     end
     it 'denies access without group access' do
-      token = AccessToken.create!(user: user)
+      token = AccessToken.create!(user:)
 
       user.groups << Group.create!(name: 'my_group', permissions: [permission], permit_token: false)
       request.headers['EyeDP-Authorize'] = token.token

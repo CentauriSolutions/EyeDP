@@ -410,7 +410,7 @@ RSpec.describe Admin::UsersController, type: :controller do
         render_views
 
         it 'can reset a password with multiple emails' do
-          Email.create(user: user, address: 'user2@localhost', confirmed_at: Time.now.utc)
+          Email.create(user:, address: 'user2@localhost', confirmed_at: Time.now.utc)
           expect do
             perform_enqueued_jobs do
               post(:reset_password, params: { user_id: user.id })
@@ -421,8 +421,8 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         it 'only sends a reset link to confirmed emails' do
-          Email.create(user: user, address: 'user2@localhost', confirmed_at: Time.now.utc)
-          Email.create(user: user, address: 'user3@localhost')
+          Email.create(user:, address: 'user2@localhost', confirmed_at: Time.now.utc)
+          Email.create(user:, address: 'user3@localhost')
           expect do
             perform_enqueued_jobs do
               post(:reset_password, params: { user_id: user.id })
@@ -443,7 +443,7 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         it 'can send a welcome email with multiple emails' do
-          Email.create(user: user, address: 'user2@localhost', confirmed_at: Time.now.utc)
+          Email.create(user:, address: 'user2@localhost', confirmed_at: Time.now.utc)
           expect do
             perform_enqueued_jobs do
               post(:resend_welcome_email, params: { user_id: user.id })
@@ -454,8 +454,8 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         it 'only sends a welcome email to confirmed emails' do
-          Email.create(user: user, address: 'user2@localhost', confirmed_at: Time.now.utc)
-          Email.create(user: user, address: 'user3@localhost')
+          Email.create(user:, address: 'user2@localhost', confirmed_at: Time.now.utc)
+          Email.create(user:, address: 'user3@localhost')
           expect do
             perform_enqueued_jobs do
               post(:resend_welcome_email, params: { user_id: user.id })

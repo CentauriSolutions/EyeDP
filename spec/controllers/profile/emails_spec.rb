@@ -21,7 +21,7 @@ RSpec.describe Profile::EmailsController, type: :controller do
     end
 
     it 'can delete additional emails' do
-      email = Email.create!(user: user, address: 'test2@Localhost', confirmed_at: Time.zone.now)
+      email = Email.create!(user:, address: 'test2@Localhost', confirmed_at: Time.zone.now)
       expect(user.emails.count).to eq(2)
       delete :destroy, params: { id: email.id }
       user.reload
@@ -29,7 +29,7 @@ RSpec.describe Profile::EmailsController, type: :controller do
     end
 
     it 'cannot delete primary email' do
-      Email.create!(user: user, address: 'test2@Localhost', confirmed_at: Time.zone.now)
+      Email.create!(user:, address: 'test2@Localhost', confirmed_at: Time.zone.now)
       expect(user.emails.count).to eq(2)
       delete :destroy, params: { id: user.primary_email_record.id }
       user.reload

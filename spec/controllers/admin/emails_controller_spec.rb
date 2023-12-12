@@ -55,7 +55,7 @@ RSpec.describe Admin::EmailsController, type: :controller do
         end
 
         it 'can resend the confirmation email' do
-          email = Email.create(user: user, address: 'user2@localhost')
+          email = Email.create(user:, address: 'user2@localhost')
           expect do
             perform_enqueued_jobs do
               post(:resend_confirmation, params: { user_id: user.id, email_id: email.id })
@@ -66,7 +66,7 @@ RSpec.describe Admin::EmailsController, type: :controller do
         end
 
         it "can confirm a user's email" do
-          email = Email.create(user: user, address: 'user2@localhost')
+          email = Email.create(user:, address: 'user2@localhost')
           post(:confirm, params: { user_id: user.id, email_id: email.id })
           expect(response.status).to eq(302)
           expect(flash[:notice]).to match('Email was successfully confirmed.')
