@@ -576,6 +576,7 @@ DEPENDENCIES
   rails-i18n
   redis (~> 4.0)
   redis-actionpack
+  rexml (~> 3.2, >= 3.2.5)
   rqrcode
   rspec-rails (~> 4)
   rubocop

@@ -90,6 +90,8 @@ gem 'sidekiq'
 
 gem 'sudo_rails'
 
+gem 'rexml', '~> 3.2', '>= 3.2.5'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
