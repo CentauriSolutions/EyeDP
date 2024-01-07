@@ -12,8 +12,8 @@ gem 'acts_as_tree'
 # gem 'mysql2', '~> 0.4.10', group: :mysql
 gem 'pg', '~> 1.1', group: :postgresql
 
-gem 'puma', '~> 4.3'
-gem 'rails', '~> 6.0'
+gem 'puma', '~> 5.6', '>= 5.6.7'
+gem 'rails', '~> 6.1'
 gem 'sass-rails', '~> 6.0'
 
 # There is no explicit dependency on Nokogiri in EyeDP but this is being
