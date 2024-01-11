@@ -185,6 +185,18 @@ session: { otp_user_id: user.id, otp_started: (Time.now.utc - 10.minutes).to_s }
         expect(flash.now[:alert]).to eq('It took too long to verify your authentication device. Please try again')
       end
 
+      it 'locks a user after many incorrect OTP attempts' do
+        expect(user.access_locked?).not_to be_truthy
+        started_at = Time.now.utc.to_s
+        11.times do
+          post(:create, params: { user: { remember_me: '0', otp_attempt: 123_456 } },
+session: { otp_user_id: user.id, otp_started: started_at })
+        end
+        # binding.pry
+        user.reload
+        expect(user.access_locked?).to be_truthy
+      end
+
       it 'redirects to a known application' do
         allow(controller).to receive(:find_user).and_return(user)
         Application.create!(uid: 'test', internal: true, redirect_uri: 'https://example.com', name: 'test')
