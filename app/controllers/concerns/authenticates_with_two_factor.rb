@@ -34,6 +34,7 @@ module AuthenticatesWithTwoFactor # rubocop:disable Metrics/ModuleLength
 
     return handle_expired_attempt if attempt_expired?
 
+    handle_locked_user(user) if user.lock_strategy_enabled?(:failed_attempts) && user.send(:attempts_exceeded?)
     if user_params[:otp_attempt].present? && session[:otp_user_id]
       authenticate_with_two_factor_via_otp(user)
     elsif user_params[:device_response].present? && session[:otp_user_id]
@@ -55,7 +56,7 @@ module AuthenticatesWithTwoFactor # rubocop:disable Metrics/ModuleLength
       user.save!
       sign_in(user, message: :two_factor_authenticated, event: :authentication)
     else
-      # user.increment_failed_attempts!
+      user.increment_failed_attempts
       Rails.logger.warn("Failed Login: user=#{user.username} ip=#{request.remote_ip} method=OTP")
       flash.now[:alert] = _('Invalid two-factor code.')
       prompt_for_two_factor(user)
@@ -124,7 +125,6 @@ module AuthenticatesWithTwoFactor # rubocop:disable Metrics/ModuleLength
   end
 
   def handle_two_factor_failure(user, method)
-    # user.increment_failed_attempts!
     Rails.logger.warn("Failed Login: user=#{user.username} ip=#{request.remote_ip} method=#{method}")
     flash.now[:alert] = format(_('Authentication via %{method} device failed.'), method:) # rubocop:disable Style/FormatStringToken
     prompt_for_two_factor(user)
@@ -143,6 +143,13 @@ module AuthenticatesWithTwoFactor # rubocop:disable Metrics/ModuleLength
     session.delete(:user_password_hash)
     session.delete(:challenge)
     reset_session if purge
+  end
+
+  def handle_locked_user(user)
+    user.lock_access!
+
+    clear_two_factor_attempt!
+    redirect_to new_user_session_path, alert: _('An error occurred. Please sign in again.')
   end
 
   def handle_changed_user(_user)
